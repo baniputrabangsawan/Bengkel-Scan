@@ -847,6 +847,20 @@ public class MainActivity extends PluginManager
     public void setContentView(View view)
     {
         super.setContentView(view);
+        // Reused diagnostic roots can retain zero top padding on newer Android.
+        // Follow the settings screen's conditional, measured overlap correction.
+        view.post(() -> {
+            View bar = findViewById(androidx.appcompat.R.id.action_bar);
+            if (bar == null || !bar.isShown()) return;
+            int[] location = new int[2];
+            view.getLocationOnScreen(location);
+            int contentTop = location[1];
+            bar.getLocationOnScreen(location);
+            int requiredTop = Math.max(0, location[1] + bar.getHeight() - contentTop);
+            if (view.getPaddingTop() < requiredTop)
+                view.setPadding(view.getPaddingLeft(), requiredTop,
+                        view.getPaddingRight(), view.getPaddingBottom());
+        });
         getListView().setOnTouchListener(toolbarAutoHider);
     }
 
@@ -1732,14 +1746,10 @@ public class MainActivity extends PluginManager
 
     private void setNumCodes(int newNumCodes)
     {
-        // set list background based on MIL status
-        View list = findViewById(R.id.obd_list);
-        if (list != null)
-        {
-            list.setBackgroundResource((newNumCodes & 0x80) != 0
-                    ? R.drawable.mil_on
-                    : R.drawable.mil_off);
-        }
+        // Keep diagnostic text on a plain surface; communicate MIL state with text.
+        View warning = findViewById(R.id.mil_warning);
+        if (warning != null)
+            warning.setVisibility((newNumCodes & 0x80) != 0 ? View.VISIBLE : View.GONE);
         // enable / disable freeze frames based on number of codes
         setMenuItemEnable(R.id.service_freezeframes, (newNumCodes != 0));
     }

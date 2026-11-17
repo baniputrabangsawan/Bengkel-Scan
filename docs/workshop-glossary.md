@@ -91,3 +91,16 @@ _Avoid_: Foto, Data Saat Kerusakan
 - `SHOW_CLEAR_FAULT_CODES`: hidden until service-linked audit logging is available.
 
 Hidden displays are also blocked when restoring old UI selections. DTC long-press web search remains available and needs an internet connection. Database/service recording is not implemented by this menu cleanup.
+
+## Placeholder branding
+
+Rename the app only through `app_name` in `res/values/strings.xml`.
+The active vector placeholders retain the resource names `logo`, `ic_launcher`,
+`ic_launcher_background`, `ic_launcher_foreground`, and `ic_launcher_monochrome`
+in the `drawable-anydpi` and `mipmap-anydpi` directories. The existing adaptive
+icon definition remains in `mipmap-anydpi-v26`. Replace these resources with
+workshop artwork later. Original raster assets and upstream credits remain.
+
+`AppTheme` still uses `Theme.Material3.DayNight`. Light and dark color resources
+define readable surfaces; the Check Engine state uses a text banner rather than
+a diagnostic-list background image. No measurement values or ECU requests change.

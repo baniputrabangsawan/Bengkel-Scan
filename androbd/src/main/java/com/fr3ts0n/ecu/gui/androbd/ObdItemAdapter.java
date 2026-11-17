@@ -223,7 +223,9 @@ class ObdItemAdapter extends ArrayAdapter<Object>
         Number max = (Number) currPv.get(EcuDataPv.FID_MAX);
         int pid = currPv.getAsInt(EcuDataPv.FID_PID);
         // Get display color ...
-        int pidColor = ColorAdapter.getItemColor(currPv);
+        int pidColor = WorkshopFeatures.SHOW_ADVANCED_FEATURES
+                ? ColorAdapter.getItemColor(currPv)
+                : getContext().getColor(R.color.workshop_primary);
 
         try
         {

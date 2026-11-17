@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="row_activated">#80808080</color>
+    <color name="row_activated">#D9EDF2</color>
+    <color name="workshop_primary">#164E63</color>
+    <color name="workshop_on_primary">#FFFFFF</color>
+    <color name="workshop_surface">#FFFFFF</color>
+    <color name="workshop_on_surface">#111827</color>
+    <color name="workshop_secondary_text">#374151</color>
+    <color name="workshop_surface_variant">#EDF2F4</color>
+    <color name="workshop_outline">#64748B</color>
+    <color name="workshop_warning_surface">#FEE2E2</color>
+    <color name="workshop_warning_text">#7F1D1D</color>
+    <color name="workshop_icon_background">#164E63</color>
+    <color name="workshop_icon_foreground">#FFFFFF</color>
 </resources>

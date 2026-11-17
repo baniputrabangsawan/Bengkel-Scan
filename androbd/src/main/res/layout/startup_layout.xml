@@ -9,13 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#20FFFFFF"
+        android:background="?attr/colorSurface"
         android:orientation="vertical"
         android:gravity="center">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
             android:adjustViewBounds="true"
             android:maxWidth="240dp"
             android:maxHeight="240dp"
@@ -36,11 +36,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
-        android:background="#40000000">
+        android:background="?attr/colorSurfaceVariant">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:clickable="true"
             android:contentDescription="@string/url_app_mainpage"
             android:focusable="true"
@@ -53,6 +54,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:clickable="true"
             android:contentDescription="@string/url_app_releases"
             android:enabled="true"
@@ -66,21 +68,23 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="8dp"
             android:gravity="center"
             android:text="@string/copyright_fr3ts0n"
-            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textSize="14sp"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:clickable="true"
             android:contentDescription="@string/url_app_translation"
             android:focusable="true"
             android:gravity="center"
             android:onClick="browseClickedUrl"
             android:text="@string/translation_credits"
-            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textSize="14sp"
             />
     </LinearLayout>
 

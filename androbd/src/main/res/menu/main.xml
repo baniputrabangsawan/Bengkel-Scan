@@ -16,12 +16,14 @@
     <item
         android:id="@+id/secure_connect_scan"
         android:icon="@drawable/action_connect"
+        app:iconTint="?attr/colorControlNormal"
         android:title="@string/action_connect"
         android:visible="true"
         app:showAsAction="always" />
     <item
         android:id="@+id/disconnect"
         android:icon="@drawable/action_disconnect"
+        app:iconTint="?attr/colorControlNormal"
         android:title="@string/disconnect"
         android:visible="false"
         app:showAsAction="always" />
@@ -65,6 +67,7 @@
     <item
         android:id="@+id/obd_services"
         android:icon="@android:drawable/ic_menu_more"
+        app:iconTint="?attr/colorControlNormal"
         android:enabled="false"
         android:title="@string/obd_services"
         app:showAsAction="ifRoom">

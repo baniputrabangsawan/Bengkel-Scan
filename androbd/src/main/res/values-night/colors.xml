@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="row_activated">#224C57</color>
+    <color name="workshop_primary">#67E8F9</color>
+    <color name="workshop_on_primary">#111827</color>
+    <color name="workshop_surface">#111827</color>
+    <color name="workshop_on_surface">#F9FAFB</color>
+    <color name="workshop_secondary_text">#D1D5DB</color>
+    <color name="workshop_surface_variant">#1F2937</color>
+    <color name="workshop_outline">#9CA3AF</color>
+    <color name="workshop_warning_surface">#450A0A</color>
+    <color name="workshop_warning_text">#FECACA</color>
+</resources>

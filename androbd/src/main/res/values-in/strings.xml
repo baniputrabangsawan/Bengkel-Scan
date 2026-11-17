@@ -131,7 +131,7 @@
     <string name="reset_default">Bawaan</string>
     <string name="update_period_s">Interval pembaruan [s]</string>
     <string name="translation_credits">Diterjemahkan oleh Jalalkun</string>
-    <string name="app_description">Aplikasi diagnostik kendaraan Android OBD untuk adaptor Bluetooth ELM327</string>
+    <string name="app_description">Alat bantu pemeriksaan kendaraan untuk bengkel</string>
     <string name="obd_data">Data Langsung</string>
     <string name="obd_clearcodes">Hapus Kode Kerusakan</string>
     <string name="items_for_display">Parameter data yang ditampilkan</string>
