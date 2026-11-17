@@ -108,6 +108,7 @@ public class SettingsActivity extends AppCompatActivity
 		// Apply locale before calling super.onCreate()
 		applyLocale(this);
 		super.onCreate(savedInstanceState);
+		setTitle(R.string.settings);
 
 		if (savedInstanceState == null)
 		{
@@ -194,6 +195,10 @@ public class SettingsActivity extends AppCompatActivity
 		{
 			prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
+			if (!WorkshopFeatures.SHOW_ADVANCED_FEATURES
+					&& ("screen_development_options".equals(rootKey)
+					|| "screen_csv_export_options".equals(rootKey)))
+				rootKey = null;
 			setPreferencesFromResource(R.xml.settings, rootKey);
 
 			for (String key : extKeys)
@@ -215,6 +220,22 @@ public class SettingsActivity extends AppCompatActivity
 			updateNetworkSelections();
 			setPrefClickListener(KEY_BITCOIN);
 			setPrefClickListener(KEY_OPEN_LOG_DIR);
+
+			if (!WorkshopFeatures.SHOW_ADVANCED_FEATURES)
+			{
+				for (String key : new String[] {"screen_development_options",
+						"screen_csv_export_options", "USE_LAST_SETTINGS"})
+				{
+					Preference hidden = findPreference(key);
+					if (hidden != null) hidden.setVisible(false);
+				}
+				for (String key : new String[] {"elm_custom_init_cmds", "autohide_toolbar"})
+				{
+					Preference hidden = findPreference(key);
+					if (hidden != null && hidden.getParent() != null)
+						hidden.getParent().setVisible(false);
+				}
+			}
 		}
 
 		/**

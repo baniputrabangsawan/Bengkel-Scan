@@ -40,6 +40,7 @@
     <item
         android:id="@+id/service_testcontrol"
         android:title="@string/service_testcontrol"
+        android:visible="false"
         android:icon="@drawable/ic_slideshow"/>
     
     <!-- Fault Code Management -->
@@ -50,5 +51,6 @@
     <item
         android:id="@+id/service_clearcodes"
         android:title="@string/obd_clearcodes"
+        android:visible="false"
         android:icon="@drawable/ic_delete"/>
 </menu>

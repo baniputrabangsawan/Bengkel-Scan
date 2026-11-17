@@ -81,3 +81,13 @@ _Avoid_: Pengukuran beban, beban pengukuran
 **Tangkapan Layar**:
 An image captured from the display. Keep this separate from ECU freeze-frame data.
 _Avoid_: Foto, Data Saat Kerusakan
+
+## Workshop visibility
+
+`WorkshopFeatures.java` contains build-time switches, never user preferences:
+
+- `SHOW_ADVANCED_FEATURES`: charts, gauges, HUD, customization, legacy recording menus, and advanced settings. Hidden by default. Existing data and protocol implementations remain.
+- `SHOW_ACTUATOR_TEST_CONTROLS`: actuator UI, independent of advanced displays. Hidden by default; do not enable for normal workshop use.
+- `SHOW_CLEAR_FAULT_CODES`: hidden until service-linked audit logging is available.
+
+Hidden displays are also blocked when restoring old UI selections. DTC long-press web search remains available and needs an internet connection. Database/service recording is not implemented by this menu cleanup.

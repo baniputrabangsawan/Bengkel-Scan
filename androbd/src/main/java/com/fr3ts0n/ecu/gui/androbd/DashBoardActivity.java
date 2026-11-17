@@ -281,6 +281,7 @@ public class DashBoardActivity extends AppCompatActivity
 	@Override
 	public boolean onItemLongClick(int position)
 	{
+		if (!WorkshopFeatures.SHOW_ADVANCED_FEATURES) return false;
 		// Set data item to be customized
 		EcuDataPv pv = adapter.getItem(position);
 		EcuDataItem item = EcuDataItems.byMnemonic.get(pv.get(EcuDataPv.FID_MNEMONIC));

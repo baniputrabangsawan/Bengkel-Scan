@@ -912,6 +912,10 @@ public class MainActivity extends PluginManager
         // Inflate the OBD services submenu for diagnostic functions
         getMenuInflater().inflate(R.menu.obd_services, menu.findItem(R.id.obd_services).getSubMenu());
         MainActivity.menu = menu;
+        for (int id : new int[] {R.id.save, R.id.load, R.id.day_night_mode,
+                R.id.plugin_manager, R.id.reset_preselections, R.id.service_testcontrol,
+                R.id.service_clearcodes})
+            setMenuItemVisible(id, WorkshopFeatures.showMenuItem(id));
         // update menu item status for current conversion system
         setConversionSystem(EcuDataItem.cnvSystem);
         
@@ -937,6 +941,7 @@ public class MainActivity extends PluginManager
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
+        if (!WorkshopFeatures.showMenuItem(id)) return true;
         {
             // Display and UI Management
             if(id == R.id.day_night_mode) {
@@ -1044,6 +1049,7 @@ public class MainActivity extends PluginManager
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu)
     {
+        if (!WorkshopFeatures.SHOW_ADVANCED_FEATURES) return false;
         MenuInflater inflater = mode.getMenuInflater();
         inflater.inflate(R.menu.context_graph, menu);
         return true;
@@ -1059,6 +1065,7 @@ public class MainActivity extends PluginManager
     public boolean onActionItemClicked(ActionMode mode, MenuItem item)
     {
         int id = item.getItemId();
+        if (!WorkshopFeatures.SHOW_ADVANCED_FEATURES) return true;
 
         if(id == R.id.chart_selected) {
             setDataViewMode(DATA_VIEW_MODE.CHART);
@@ -1416,6 +1423,7 @@ public class MainActivity extends PluginManager
              * ->Long click on an item starts the single item dashboard activity
              */
             case ObdProt.OBD_SVC_DATA:
+                if (!WorkshopFeatures.SHOW_ADVANCED_FEATURES) return false;
                 pv = (EcuDataPv) getListAdapter().getItem(position);
                 /* only numeric values may be shown as graph/dashboard */
                 if (pv.get(EcuDataPv.FID_VALUE) instanceof Number)
@@ -1459,6 +1467,7 @@ public class MainActivity extends PluginManager
                 break;
 
             case ObdProt.OBD_SVC_CTRL_MODE:
+                if (!WorkshopFeatures.SHOW_ACTUATOR_TEST_CONTROLS) return false;
                 pv = (EcuDataPv) getListAdapter().getItem(position);
                 // Confirm & perform OBD test control ...
                 confirmObdTestControl(pv.get(EcuDataPv.FID_DESCRIPT).toString(),
@@ -1787,7 +1796,7 @@ public class MainActivity extends PluginManager
             MenuItem item = menu.findItem(id);
             if (item != null)
             {
-                item.setVisible(visible);
+                item.setVisible(visible && WorkshopFeatures.showMenuItem(id));
             }
         }
     }
@@ -2363,6 +2372,9 @@ public class MainActivity extends PluginManager
      */
     private void setObdService(int newObdService, CharSequence menuTitle)
     {
+        if (!WorkshopFeatures.SHOW_ACTUATOR_TEST_CONTROLS
+                && newObdService == ObdProt.OBD_SVC_CTRL_MODE)
+            newObdService = ObdProt.OBD_SVC_NONE;
         // remember this as current OBD service
         obdService = newObdService;
         ignoreNrcs = false;
@@ -2686,6 +2698,7 @@ public class MainActivity extends PluginManager
      */
     private void runObdTestControl(String testControlName, int service, int tid)
     {
+        if (!WorkshopFeatures.SHOW_ACTUATOR_TEST_CONTROLS) return;
         // start desired test TID
         char[] emptyBuffer = {};
         CommService.elm.writeTelegram(emptyBuffer, service, tid);
@@ -2714,6 +2727,7 @@ public class MainActivity extends PluginManager
      */
     private void setDataViewMode(DATA_VIEW_MODE dataViewMode)
     {
+        if (!WorkshopFeatures.SHOW_ADVANCED_FEATURES && dataViewMode != DATA_VIEW_MODE.LIST) return;
         // if this is a real change ...
         if (dataViewMode != this.dataViewMode)
         {
