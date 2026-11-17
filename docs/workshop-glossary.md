@@ -104,3 +104,12 @@ workshop artwork later. Original raster assets and upstream credits remain.
 `AppTheme` still uses `Theme.Material3.DayNight`. Light and dark color resources
 define readable surfaces; the Check Engine state uses a text banner rather than
 a diagnostic-list background image. No measurement values or ECU requests change.
+
+## Attribution
+
+`Pengaturan` → `Tentang Aplikasi` explains that the workshop fork is based on
+AndrOBD by fr3ts0n under GNU GPL-3.0 and links to the original project.
+The existing author copyright, design, translation, dependency, and license
+entries remain. The root `LICENSE` is unchanged. Attribution and the short
+license notice are readable offline; opening external project/license links
+requires a connection.

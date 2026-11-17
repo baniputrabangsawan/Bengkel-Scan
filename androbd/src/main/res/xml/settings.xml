@@ -332,11 +332,19 @@
         android:key="screen_app_info"
         android:icon="@drawable/ic_info"
         android:summary="@string/app_version"
-        android:title="@string/app_name"
+        android:title="@string/about_title"
         >
         <Preference
             android:icon="@drawable/ic_info"
             android:title="@string/app_name"
+            android:summary="@string/about_based_on">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/url_app_mainpage"/>
+        </Preference>
+        <Preference
+            android:icon="@drawable/ic_info"
+            android:title="@string/upstream_project_name"
             android:summary="@string/copyright_fr3ts0n"
             >
             <intent
@@ -372,6 +380,7 @@
         <PreferenceScreen
             android:key="screen_license"
             android:icon="@drawable/ic_scale"
+            android:summary="@string/about_license_notice"
             android:title="@string/license"
             >
             <Preference

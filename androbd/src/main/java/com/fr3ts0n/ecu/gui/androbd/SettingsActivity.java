@@ -256,6 +256,7 @@ public class SettingsActivity extends AppCompatActivity
 		public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
 		{
 			super.onViewCreated(view, savedInstanceState);
+			requireActivity().setTitle(getPreferenceScreen().getTitle());
 			view.post(() -> fixUnpaddedListContainer(view));
 		}
 

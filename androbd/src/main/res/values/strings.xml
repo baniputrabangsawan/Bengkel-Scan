@@ -331,7 +331,7 @@ period of time while the ECU recalibrates itself.
     <string name="url_donation_bitcoin" translatable="false">bitcoin://19UApzsc5eDJ5VNDNYCA1bpszPnkcpWeFP</string>
     <string name="url_donation_liberapay" translatable="false">https://liberapay.com/AndrOBD/donate</string>
     <string name="graphic_design">Graphic design</string>
-    <string name="design_credits" translatable="false">2018 by @anaufalm</string>
+    <string name="design_credits">2018 by @anaufalm</string>
     <string name="long_press_dfc_hint">Long press DFC for online search …</string>
     <string-array name="csv_field_delim_options" translatable="false">
         <item>@string/tab</item>
