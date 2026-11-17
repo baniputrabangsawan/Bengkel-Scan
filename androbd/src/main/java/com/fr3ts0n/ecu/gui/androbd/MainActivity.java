@@ -56,6 +56,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.window.OnBackInvokedCallback;
 
@@ -527,11 +528,9 @@ public class MainActivity extends PluginManager
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        // instantiate superclass
-        super.onCreate(savedInstanceState);
-
-        // Apply locale before anything else
+        // Apply the selected language before the activity builds its UI.
         SettingsActivity.applyLocale(this);
+        super.onCreate(savedInstanceState);
 
         // get preferences
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -2027,7 +2026,9 @@ public class MainActivity extends PluginManager
             // remember previous mode
             // set new mode
             this.mode = mode;
-            setStatus(mode.toString());
+            setStatus(mode == MODE.DEMO ? R.string.demo
+                    : mode == MODE.FILE ? R.string.saved_data
+                    : mode == MODE.ONLINE ? R.string.CONNECTING : R.string.DISCONNECTED);
 
             // Update menu visibility after mode change
             updateMenuVisibility();
@@ -2294,7 +2295,7 @@ public class MainActivity extends PluginManager
                     finalFiles[which]);
                 loadDataFromUri(uri);
             })
-            .setNegativeButton(android.R.string.cancel, null)
+            .setNegativeButton(R.string.button_cancel, null)
             .show();
     }
 
@@ -2397,6 +2398,19 @@ public class MainActivity extends PluginManager
         ff_selector.setAdapter(mDfcAdapter);
         ff_selector.setVisibility(
                 newObdService == ObdProt.OBD_SVC_FREEZEFRAME ? View.VISIBLE : View.GONE);
+        TextView help = findViewById(R.id.diagnosis_help);
+        if (help != null)
+        {
+            int helpText = newObdService == ObdProt.OBD_SVC_FREEZEFRAME
+                    ? R.string.freeze_frame_hint
+                    : newObdService == ObdProt.OBD_SVC_DATA
+                    ? R.string.live_data_hint : R.string.diagnosis_hint;
+            help.setText(helpText);
+            help.setVisibility(newObdService == ObdProt.OBD_SVC_DATA
+                    || newObdService == ObdProt.OBD_SVC_FREEZEFRAME
+                    || newObdService == ObdProt.OBD_SVC_READ_CODES
+                    ? View.VISIBLE : View.GONE);
+        }
         // set corresponding list adapter
         switch (newObdService)
         {
@@ -2627,7 +2641,7 @@ public class MainActivity extends PluginManager
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(R.string.obd_clearcodes)
                 .setMessage(R.string.obd_clear_info)
-                .setPositiveButton(android.R.string.yes,
+                .setPositiveButton(R.string.button_yes,
                         new DialogInterface.OnClickListener()
                         {
                             @Override
@@ -2639,7 +2653,7 @@ public class MainActivity extends PluginManager
                                 CommService.elm.setService(ObdProt.OBD_SVC_READ_CODES);
                             }
                         })
-                .setNegativeButton(android.R.string.no, null)
+                .setNegativeButton(R.string.button_no, null)
                 .show();
     }
 
@@ -2653,7 +2667,7 @@ public class MainActivity extends PluginManager
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle(testControlName)
                 .setMessage(R.string.obd_test_confirm)
-                .setPositiveButton(android.R.string.yes,
+                .setPositiveButton(R.string.button_yes,
                         new DialogInterface.OnClickListener()
                         {
                             @Override
@@ -2662,7 +2676,7 @@ public class MainActivity extends PluginManager
                                 runObdTestControl(testControlName, service, tid);
                             }
                         })
-                .setNegativeButton(android.R.string.no, null)
+                .setNegativeButton(R.string.button_no, null)
                 .show();
     }
 
@@ -2681,7 +2695,7 @@ public class MainActivity extends PluginManager
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(testControlName)
                 .setMessage(R.string.obd_test_progress)
-                .setPositiveButton(android.R.string.ok,
+                .setPositiveButton(R.string.button_ok,
                         new DialogInterface.OnClickListener()
                         {
                             @Override

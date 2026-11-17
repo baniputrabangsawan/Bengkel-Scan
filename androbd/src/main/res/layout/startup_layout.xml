@@ -10,6 +10,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="#20FFFFFF"
+        android:orientation="vertical"
         android:gravity="center">
 
         <ImageView
@@ -20,6 +21,14 @@
             android:maxHeight="240dp"
             android:contentDescription="@string/logo"
             android:src="@drawable/logo" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:gravity="center"
+            android:text="@string/scanner_connection_help"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
     <LinearLayout

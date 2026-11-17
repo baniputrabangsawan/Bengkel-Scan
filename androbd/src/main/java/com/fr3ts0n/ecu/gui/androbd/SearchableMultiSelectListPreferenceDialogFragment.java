@@ -84,7 +84,7 @@ public class SearchableMultiSelectListPreferenceDialogFragment
         items = new CharSequence[entries.length + 1];
         values = new CharSequence[entryValues.length + 1];
 
-        items[0] = "Select All";
+        items[0] = getString(R.string.select_all);
         values[0] = "SELECT_ALL";
 
         System.arraycopy(entries, 0, items, 1, entries.length);
@@ -100,7 +100,7 @@ public class SearchableMultiSelectListPreferenceDialogFragment
         }
 
         final EditText search = new EditText(getContext());
-        search.setHint("Search...");
+        search.setHint(R.string.search_hint);
 
         final ListView listView = new ListView(getContext());
 

@@ -167,11 +167,7 @@ class FileHelper
 			oStr.close();
 			fStr.close();
 
-			@SuppressLint("DefaultLocale")
-			String msg = String.format("%s %d Bytes to %s",
-				context.getString(R.string.saved),
-				outFile.length(),
-				mPath);
+			String msg = context.getString(R.string.saved_file_message, outFile.length(), mPath);
 			log.info(msg);
 			Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 		} catch (Exception e)
@@ -236,7 +232,7 @@ class FileHelper
 			}
 			inStr = context.getContentResolver().openInputStream(uri);
 			numBytesLoaded = inStr != null ? inStr.available() : 0;
-			msg = context.getString(R.string.loaded).concat(String.format(" %d Bytes", numBytesLoaded));
+			msg = context.getString(R.string.loaded_file_message, numBytesLoaded);
 			ObjectInputStream oIn = new ObjectInputStream(inStr);
 			/* ensure that measurement page is activated
 			   to avoid deletion of loaded data afterwards */

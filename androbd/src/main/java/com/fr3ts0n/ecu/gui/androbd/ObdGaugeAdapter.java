@@ -138,7 +138,9 @@ class ObdGaugeAdapter extends RecyclerView.Adapter<ObdGaugeAdapter.GaugeViewHold
 		// Taint background with PID color
 		holder.itemView.setBackgroundColor(pidColor & 0x10FFFFFF);
 		// set new values for display
-		holder.tvDescr.setText(String.valueOf(currPv.get(EcuDataPv.FID_DESCRIPT)));
+		holder.tvDescr.setText(ObdUiLabels.label(context,
+			String.valueOf(currPv.get(EcuDataPv.FID_MNEMONIC)),
+			String.valueOf(currPv.get(EcuDataPv.FID_DESCRIPT))));
 
 		Number minValue = (Number) currPv.get(EcuDataPv.FID_MIN);
 		Number maxValue = (Number) currPv.get(EcuDataPv.FID_MAX);

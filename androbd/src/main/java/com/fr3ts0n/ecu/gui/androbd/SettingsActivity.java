@@ -49,6 +49,7 @@ import androidx.preference.PreferenceScreen;
 import java.util.Locale;
 
 import com.fr3ts0n.ecu.EcuDataItem;
+import com.fr3ts0n.ecu.EcuDataPv;
 import com.fr3ts0n.ecu.prot.obd.ElmProt;
 import com.fr3ts0n.ecu.prot.obd.ObdProt;
 
@@ -83,22 +84,21 @@ public class SettingsActivity extends AppCompatActivity
 	public static void applyLocale(Activity activity)
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-		String language = prefs.getString(KEY_APP_LANGUAGE, "system");
-		Locale locale;
-		if ("system".equals(language)) {
-			locale = Resources.getSystem().getConfiguration().locale;
-		} else {
-			locale = new Locale(language);
+		String language = prefs.getString(KEY_APP_LANGUAGE, "id");
+		if (!prefs.getBoolean("workshop_language_initialized", false))
+		{
+			if ("system".equals(language)) language = "id";
+			prefs.edit().putString(KEY_APP_LANGUAGE, language)
+				.putBoolean("workshop_language_initialized", true).apply();
 		}
+		Locale locale = "system".equals(language)
+			? Resources.getSystem().getConfiguration().locale : new Locale(language);
 		Locale.setDefault(locale);
 
 		Resources resources = activity.getResources();
 		Configuration config = resources.getConfiguration();
 		config.setLocale(locale);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-			activity.createConfigurationContext(config);
-		}
 		resources.updateConfiguration(config, resources.getDisplayMetrics());
 	}
 
@@ -408,11 +408,12 @@ public class SettingsActivity extends AppCompatActivity
 			if (pref == null) return;
 			CommService.MEDIUM[] values = CommService.MEDIUM.values();
 			CharSequence[] titles = new CharSequence[values.length];
+			String[] mediumLabels = getResources().getStringArray(R.array.comm_medium_labels);
 			CharSequence[] keys = new CharSequence[values.length];
 			int i = 0;
 			for (CommService.MEDIUM proto : values)
 			{
-				titles[i] = proto.toString();
+				titles[i] = mediumLabels[proto.ordinal()];
 				keys[i] = String.valueOf(proto.ordinal());
 				i++;
 			}
@@ -442,7 +443,8 @@ public class SettingsActivity extends AppCompatActivity
 			int i = 0;
 			for (EcuDataItem currItem : items)
 			{
-				titles[i] = currItem.label;
+				titles[i] = ObdUiLabels.label(requireContext(),
+					String.valueOf(currItem.pv.get(EcuDataPv.FID_MNEMONIC)), currItem.label);
 				keys[i] = currItem.toString();
 				selections.add(currItem.toString());
 				i++;

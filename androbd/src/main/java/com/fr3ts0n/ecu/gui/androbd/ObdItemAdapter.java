@@ -81,6 +81,15 @@ class ObdItemAdapter extends ArrayAdapter<Object>
      */
     static boolean allowDataUpdates = true;
     private final transient SharedPreferences prefs;
+    private ObdUiValues valueLabels;
+
+    String statusText(String value)
+    {
+        String language = getContext().getResources().getConfiguration().locale.getLanguage();
+        if (valueLabels == null || !valueLabels.language.equals(language))
+            valueLabels = new ObdUiValues(getContext());
+        return valueLabels.status(value);
+    }
 
 
     public ObdItemAdapter(Context context, int resource, PvList pvs)
@@ -201,7 +210,10 @@ class ObdItemAdapter extends ArrayAdapter<Object>
         // fill view fields with data
         
         // description text
-        holder.tvDescr.setText(String.valueOf(currPv.get(EcuDataPv.FID_DESCRIPT)));
+        Object mnemonic = currPv.get(EcuDataPv.FID_MNEMONIC);
+        holder.tvDescr.setText(ObdUiLabels.label(getContext(),
+                mnemonic instanceof String ? (String) mnemonic : null,
+                String.valueOf(currPv.get(EcuDataPv.FID_DESCRIPT))));
         
         // format value string
         String fmtText;
@@ -226,6 +238,9 @@ class ObdItemAdapter extends ArrayAdapter<Object>
                 // set formatted text
                 fmtText = cnv.physToPhysFmtString((Number) colVal,
                                                   (String) currPv.get(EcuDataPv.FID_FORMAT));
+                if (cnv instanceof com.fr3ts0n.ecu.HashConversion
+                        || cnv instanceof com.fr3ts0n.ecu.BitmapConversion)
+                    fmtText = statusText(fmtText);
             } else
             {
                 // plain format

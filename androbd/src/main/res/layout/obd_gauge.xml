@@ -31,6 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="center_horizontal"
-        android:text="TextView" />
+        android:text="@string/obd_data" />
 
 </LinearLayout>

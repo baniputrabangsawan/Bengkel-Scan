@@ -94,6 +94,7 @@ public final class UsbDeviceListActivity extends AppCompatActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
+		SettingsActivity.applyLocale(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.usb_list);
 
@@ -142,12 +143,11 @@ public final class UsbDeviceListActivity extends AppCompatActivity
 			final UsbSerialDriver driver = port.getDriver();
 			final UsbDevice device = driver.getDevice();
 
-			final String title = String.format("USB: 0x%04x/0x%04x",
-			                                   device.getVendorId(),
-			                                   device.getProductId());
+			final String title = getString(R.string.usb_device_title,
+			                              device.getVendorId(), device.getProductId());
 			final String subtitle = driver.getClass().getSimpleName();
 
-			holder.text.setText(String.format("%s\n%s", title, subtitle));
+			holder.text.setText(getString(R.string.device_list_entry, title, subtitle));
 			holder.itemView.setOnClickListener(v -> onPortSelected(port));
 		}
 

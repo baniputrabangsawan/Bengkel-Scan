@@ -1,99 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="copied_to_clipboard">Disalin ke papan klip</string>
-    <string name="title_connecting">Menghubungkan…</string>
-    <string name="title_connected_to">Terhubung %s</string>
+    <string name="title_connecting">Menghubungkan Alat Scan…</string>
+    <string name="title_connected_to">Terhubung ke %s</string>
     <string name="logo">Logo</string>
-    <string name="back_again_to_exit">Tekan kembali lagi untuk menutup aplikasi ini</string>
-    <string name="action_connect">Hubungkan</string>
+    <string name="back_again_to_exit">Tekan Kembali sekali lagi untuk menutup aplikasi</string>
+    <string name="action_connect">Hubungkan Alat Scan</string>
     <string name="obd_none">Tidak ada layanan</string>
-    <string name="obd_services">Layanan OBD</string>
-    <string name="obd_veh_info">Info Kendaraan OBD</string>
-    <string name="service_freezeframes">Bingkai Pembekuan OBD</string>
-    <string name="service_testcontrol">Kontrol test OBD</string>
-    <string name="obd_codes">Kode kesalahan OBD</string>
-    <string name="obd_permanentcodes">Kode kesalahan OBD (permanen)</string>
-    <string name="obd_pendingcodes">Kesalahan kode OBD (tertunda)</string>
-    <string name="obd_test_progress">Kontrol tes OBD sedang berlangsung.
-\n Silakan periksa reaksi kendaraan.</string>
-    <string name="select_device">Pilih adapter</string>
-    <string name="none_paired">Tidak ada Perangkat yang Disandingkan</string>
-    <string name="none_found">Tidak ada Perangkat Ditemukan</string>
-    <string name="title_paired_devices">Perangkat Disandingkan</string>
+    <string name="obd_services">Pemeriksaan Kendaraan</string>
+    <string name="obd_veh_info">Informasi Kendaraan</string>
+    <string name="service_freezeframes">Data Saat Kerusakan</string>
+    <string name="service_testcontrol">Uji Aktuator OBD</string>
+    <string name="obd_codes">Kode Kerusakan</string>
+    <string name="obd_permanentcodes">Kode Kerusakan Permanen</string>
+    <string name="obd_pendingcodes">Kode Kerusakan Tertunda</string>
+    <string name="obd_test_progress">Uji aktuator OBD sedang berlangsung.\nPerhatikan respons kendaraan.</string>
+    <string name="select_device">Pilih Alat Scan</string>
+    <string name="none_paired">Belum ada perangkat yang dipasangkan</string>
+    <string name="none_found">Tidak ada perangkat yang ditemukan</string>
+    <string name="title_paired_devices">Perangkat yang Dipasangkan</string>
     <string name="send_to">Kirim ke</string>
-    <string name="share">bagikan</string>
+    <string name="share">Bagikan</string>
     <string name="time">Waktu [s]</string>
-    <string name="chart">Bagan</string>
-    <string name="demo_stopped">Mode DEMO telah berhenti</string>
-    <string name="demo_started">Mode DEMO dimulai</string>
-    <string name="snapshot">foto</string>
-    <string name="save">Hemat pengukuran</string>
-    <string name="load">Pengukuran beban</string>
+    <string name="chart">Grafik</string>
+    <string name="demo_stopped">Mode Latihan dihentikan</string>
+    <string name="demo_started">Mode Latihan dijalankan</string>
+    <string name="snapshot">Tangkapan Layar</string>
+    <string name="save">Simpan Hasil Pemeriksaan</string>
+    <string name="load">Buka Hasil Pemeriksaan</string>
     <string name="saved_data">Data Tersimpan</string>
-    <string name="loaded">dimuat</string>
+    <string name="loaded">dibuka</string>
     <string name="saved">tersimpan</string>
-    <string name="connected_to">"Menghubungkan ke "</string>
-    <string name="demo">Demo…</string>
-    <string name="saving_data">Menyimpan data …</string>
-    <string name="loading_data">Memuat data …</string>
+    <string name="connected_to">"Terhubung ke "</string>
+    <string name="demo">Mode Latihan…</string>
+    <string name="saving_data">Menyimpan hasil pemeriksaan…</string>
+    <string name="loading_data">Membuka hasil pemeriksaan…</string>
     <string name="dashboard">Dasbor</string>
-    <string name="hud">Tampilan Head Up</string>
-    <string name="filter">Filter dipilih</string>
+    <string name="hud">Tampilan Pantul Kaca (HUD)</string>
+    <string name="filter">Tampilkan yang Dipilih</string>
     <string name="settings">Pengaturan</string>
     <string name="common_settings">Pengaturan umum</string>
     <string name="measure_system_description">Sistem satuan pengukuran (metrik/imperial)</string>
-    <string name="measure_system">Unit pengukuran</string>
-    <string name="debugging">Men-debug</string>
-    <string name="logging_level">Tingkat pencatatan</string>
-    <string name="logging_level_description">Tingkat detail untuk masuk ke file log debug</string>
-    <string name="last_elm">menghubungkan ulang ke adapter ELM terakhir</string>
-    <string name="last_ecu">menghubungkan ulang ECU terakhir</string>
-    <string name="last_service">layanan OBD terakhir</string>
-    <string name="last_data_items">item data yang terakhir dipilih</string>
-    <string name="last_view_mode">mode tampilan data terakhir</string>
-    <string name="keep_screen_on">Menjaga layar utama tetap menyala</string>
+    <string name="measure_system">Satuan pengukuran</string>
+    <string name="debugging">Debug</string>
+    <string name="logging_level">Tingkat pencatatan log</string>
+    <string name="logging_level_description">Tingkat rincian yang dicatat dalam file log debug</string>
+    <string name="last_elm">Hubungkan kembali Alat Scan ELM terakhir</string>
+    <string name="last_ecu">Hubungkan kembali ECU terakhir</string>
+    <string name="last_service">Layanan OBD terakhir</string>
+    <string name="last_data_items">Data yang terakhir dipilih</string>
+    <string name="last_view_mode">Mode tampilan data terakhir</string>
+    <string name="keep_screen_on">Biarkan layar utama menyala</string>
     <string name="keep_screen_on_description">Jangan matikan layar jika layar utama/data sedang ditampilkan</string>
     <string name="development_options">Opsi pengembangan</string>
-    <string name="dev_opt_description">Pilihan untuk debugging dan kustomisasi</string>
-    <string name="extension_files">File kustomisasi protokol (CSV)</string>
+    <string name="dev_opt_description">Opsi untuk debug dan penyesuaian</string>
+    <string name="extension_files">File penyesuaian protokol (CSV)</string>
     <string name="conversions">Konversi Data</string>
-    <string name="data_items">Item data</string>
+    <string name="data_items">Parameter data</string>
     <string name="select_extension">Pilih file ekstensi .csv …</string>
-    <string name="check_cust_settings">Silakan periksa pengaturan kustomisasi kamu
-\n</string>
+    <string name="check_cust_settings">Periksa pengaturan penyesuaian Anda\n</string>
     <string name="obd_options">Opsi OBD</string>
-    <string name="obd_opt_description">Opsi untuk protokol OBD / komunikasi kendaraan</string>
+    <string name="obd_opt_description">Opsi protokol OBD dan komunikasi dengan kendaraan</string>
     <string name="select_protocol">Protokol OBD pilihan</string>
-    <string name="plugin_manager">Manajer plugin</string>
-    <string name="select_medium">Tipe adapter…</string>
-    <string name="devices_found">%d Perangkat USB ditemukan</string>
-    <string name="min_elm_timeout">Min. Waktu tunggu ELM [ms]</string>
-    <string name="unabletoconnect">Tidak dapat menghubungkan perangkat</string>
-    <string name="connectionlost">Sambungan perangkat terputus</string>
-    <string name="day_night_mode">Mode tampilan Siang/Malam</string>
-    <string name="disable_elm_cmds">Perintah ELM dinonaktifkan</string>
-    <string name="disable_elm_cmds_descr">aktifkan/nonaktifkan perintah ELM</string>
-    <string name="elm_adaptive_timing_descr">Izinkan penanganan pengaturan waktu adaptif pada driver ELM\?</string>
-    <string name="elm_reset_on_nrc">Setel ulang di NRC</string>
-    <string name="elm_reset_on_nrc_descr">Setel ulang adaptor ELM pada kesalahan NRC\?</string>
+    <string name="plugin_manager">Pengelola plugin</string>
+    <string name="select_medium">Jenis Sambungan Alat Scan…</string>
+    <string name="devices_found">%d perangkat USB ditemukan</string>
+    <string name="min_elm_timeout">Batas waktu minimum ELM [ms]</string>
+    <string name="unabletoconnect">Tidak dapat terhubung ke Alat Scan</string>
+    <string name="connectionlost">Sambungan ke Alat Scan terputus</string>
+    <string name="day_night_mode">Mode tampilan siang/malam</string>
+    <string name="disable_elm_cmds">Perintah ELM yang dinonaktifkan</string>
+    <string name="disable_elm_cmds_descr">Aktifkan atau nonaktifkan perintah ELM</string>
+    <string name="elm_adaptive_timing_descr">Izinkan driver ELM menyesuaikan waktu tunggu secara otomatis?</string>
+    <string name="elm_reset_on_nrc">Setel ulang saat terjadi NRC</string>
+    <string name="elm_reset_on_nrc_descr">Setel ulang Alat Scan ELM saat terjadi kesalahan NRC?</string>
     <string name="select_ecu_addr">Pilih alamat ECU…</string>
-    <string name="disconnect">Memutuskan</string>
+    <string name="disconnect">Putuskan Sambungan</string>
     <string name="use_last_settings">Gunakan pengaturan terakhir</string>
-    <string name="common_settings_description">Setelan umum untuk kontrol aplikasi</string>
+    <string name="common_settings_description">Pengaturan umum aplikasi</string>
     <string name="secure_connect">Koneksi aman</string>
     <string name="secure_connect_description">Gunakan koneksi Bluetooth terenkripsi</string>
     <string name="elm_options">Opsi ELM</string>
     <string name="elm_custom_init_descr">Perintah inisialisasi khusus ELM</string>
-    <string name="UNDEFINED">Belum didefinisikan</string>
-    <string name="INITIALIZING">Menginisialisasi…</string>
-    <string name="INITIALIZED">Diinisialisasi</string>
-    <string name="ECU_DETECT">Deteksi ECU…</string>
+    <string name="UNDEFINED">Belum ditentukan</string>
+    <string name="INITIALIZING">Menyiapkan…</string>
+    <string name="INITIALIZED">Siap</string>
+    <string name="ECU_DETECT">Mendeteksi ECU…</string>
     <string name="ECU_DETECTED">ECU terdeteksi</string>
     <string name="CONNECTED">Terhubung</string>
     <string name="NODATA">Tidak ada data</string>
     <string name="DISCONNECTED">Terputus</string>
-    <string name="BUSERROR">kesalahan BUS</string>
-    <string name="DATAERROR">kesalahan DATA</string>
+    <string name="BUSERROR">Kesalahan bus komunikasi</string>
+    <string name="DATAERROR">Kesalahan data</string>
     <string name="RXERROR">Kesalahan RX</string>
     <string name="ERROR">Kesalahan</string>
     <string name="obd_error">Kesalahan protokol OBD</string>
@@ -101,29 +99,29 @@
     <string name="device_address">Alamat IP ELM</string>
     <string name="device_port_description">Port IP jaringan perangkat ELM</string>
     <string name="device_port">Port IP ELM</string>
-    <string name="data_disable_max_description">Jumlah respons data berturut-turut yang tidak valid sebelum item dinonaktifkan</string>
-    <string name="autohide_toolbar_description">Sembunyikan bilah alat secara otomatis setelah penundaan tanpa aktivitas</string>
-    <string name="autohide_delay">Sembunyikan penundaan bilah alat [s]</string>
+    <string name="data_disable_max_description">Jumlah respons data tidak valid berturut-turut sebelum parameter dinonaktifkan</string>
+    <string name="autohide_toolbar_description">Sembunyikan bilah alat secara otomatis setelah tidak ada aktivitas</string>
+    <string name="autohide_delay">Jeda sebelum bilah alat disembunyikan [s]</string>
     <string name="csv_export_options">Opsi ekspor CSV</string>
     <string name="csv_export_description">Opsi untuk memformat file ekspor CSV</string>
-    <string name="csv_field_delimiter">pembatas bidang CSV</string>
-    <string name="csv_field_delimiter_description">Karakter pembatas antara bidang data CSV</string>
-    <string name="csv_rec_delimiter">pembatas catatan CSV</string>
-    <string name="csv_rec_delimiter_description">Karakter pembatas antara catatan data CSV</string>
-    <string name="csv_text_quoted">Teks CSV dikutip</string>
+    <string name="csv_field_delimiter">Pemisah kolom CSV</string>
+    <string name="csv_field_delimiter_description">Karakter pemisah antarkolom data CSV</string>
+    <string name="csv_rec_delimiter">Pemisah baris CSV</string>
+    <string name="csv_rec_delimiter_description">Karakter pemisah antarbaris data CSV</string>
+    <string name="csv_text_quoted">Apit teks CSV dengan tanda kutip</string>
     <string name="tab">TAB</string>
     <string name="comma">KOMA</string>
     <string name="semicolon">TITIK KOMA</string>
     <string name="send_after_export">Kirim setelah ekspor</string>
-    <string name="send_after_export_descr">Prompt untuk mengirim file CSV setelah ekspor\?</string>
-    <string name="toolbar_overlay">Tampilkan sebagai hamparan</string>
-    <string name="toolbar_overlay_sum">Tampilkan bilah alat yang tumpang tindih dengan layar utama</string>
+    <string name="send_after_export_descr">Tawarkan pengiriman file CSV setelah ekspor?</string>
+    <string name="toolbar_overlay">Tampilkan bilah alat di atas data</string>
+    <string name="toolbar_overlay_sum">Tampilkan bilah alat menutupi sebagian layar utama</string>
     <string name="license">Lisensi …</string>
     <string name="donation">Dukung proyek…</string>
-    <string name="libraries">Perpustakaan …</string>
+    <string name="libraries">Pustaka …</string>
     <string name="release_history">Riwayat rilis …</string>
     <string name="graphic_design">Desain Grafis</string>
-    <string name="comm_baudrate">Tingkat baud ELM</string>
+    <string name="comm_baudrate">Kecepatan baud ELM</string>
     <string name="comm_baudrate_description">Kecepatan komunikasi serial USB</string>
     <string name="full_screen_display">Tampilan layar penuh</string>
     <string name="full_screen_display_description">Gunakan layar penuh untuk tampilan aplikasi</string>
@@ -131,70 +129,113 @@
     <string name="customize_display">Sesuaikan tampilan data</string>
     <string name="display_range">Rentang tampilan</string>
     <string name="reset_default">Bawaan</string>
-    <string name="update_period_s">Perbarui periode [s]</string>
+    <string name="update_period_s">Interval pembaruan [s]</string>
     <string name="translation_credits">Diterjemahkan oleh Jalalkun</string>
     <string name="app_description">Aplikasi diagnostik kendaraan Android OBD untuk adaptor Bluetooth ELM327</string>
-    <string name="obd_data">Data OBD</string>
-    <string name="obd_clearcodes">Hapus kode kesalahan</string>
-    <string name="items_for_display">Item data untuk ditampilkan</string>
-    <string name="obd_clear_info">Ini akan mengatur ulang MIL dan menghapus semua informasi diagnostik 
-\nterkait emisi, termasuk:
-\n - Kode masalah diagnostik
-\n - Bekukan data bingkai
-\n - Data uji sensor oksigen
-\n - Status tes pemantauan sistem
-\n - Hasil tes pemantauan on-board
-\n - Jarak yang ditempuh saat MIL diaktifkan
-\n - Jumlah pemanasan sejak DTC dibersihkan
-\n - Jarak yang ditempuh sejak DTC dibersihkan
-\n - Waktu kerja mesin saat MIL diaktifkan
-\n - Waktu sejak DTC dihapus
-\n
-\nDapat terjadi tindakan pembersihan/penyetelan ulang khusus pabrikan lainnya. 
-\nHilangnya data dapat menyebabkan kendaraan berjalan dengan buruk dalam waktu singkat 
-\nsementara ECU melakukan kalibrasi ulang sendiri.</string>
-    <string name="obd_test_confirm">Kontrol tes OBD diminta.
-\n
-\nKontrol tes OBD yang diminta dapat menghasilkan:
-\n- Gerak kendaraan
-\n- Asap knalpot
-\n- Temperatur knalpot tinggi
-\n- Suara mesin yang keras
-\n- Uap bahan bakar
-\n- dll.
-\n
-\nKonfirmasikan untuk melakukan kontrol pengujian ini dengan risiko Anda sendiri di lingkungan pengujian yang aman saja!</string>
+    <string name="obd_data">Data Langsung</string>
+    <string name="obd_clearcodes">Hapus Kode Kerusakan</string>
+    <string name="items_for_display">Parameter data yang ditampilkan</string>
+    <string name="obd_clear_info">Tindakan ini akan menyetel ulang lampu indikator kerusakan (MIL) dan menghapus semua informasi diagnosis terkait emisi, termasuk:\n
+ - Kode Kerusakan\n
+ - Data Saat Kerusakan\n
+ - Data uji sensor oksigen\n
+ - Status uji pemantauan sistem\n
+ - Hasil uji pemantauan di kendaraan (on-board)\n
+ - Jarak tempuh saat lampu MIL menyala\n
+ - Jumlah siklus pemanasan mesin sejak Kode Kerusakan dihapus\n
+ - Jarak tempuh sejak Kode Kerusakan dihapus\n
+ - Lama mesin beroperasi saat lampu MIL menyala\n
+ - Waktu sejak Kode Kerusakan dihapus\n\n
+Tindakan penghapusan atau penyetelan ulang lain yang khusus ditetapkan pabrikan juga dapat terjadi.\n
+Hilangnya data dapat membuat kerja mesin kurang baik untuk sementara waktu selama ECU melakukan kalibrasi ulang.</string>
+    <string name="obd_test_confirm">Uji aktuator OBD diminta.\n\n
+Uji ini dapat menyebabkan:\n
+ - Kendaraan bergerak\n
+ - Asap knalpot\n
+ - Suhu knalpot tinggi\n
+ - Suara mesin keras\n
+ - Uap bahan bakar\n
+ - Risiko lainnya\n\n
+Lakukan uji ini hanya di tempat pengujian yang aman. Dengan melanjutkan, Anda menyetujui pelaksanaan uji dengan menanggung risikonya sendiri!</string>
     <string name="metric">metrik</string>
     <string name="imperial">imperial</string>
-    <string name="items_for_display_descr">Pilih semua item data yang akan ditampilkan…</string>
-    <string name="select_fault_code">Pilih kode kesalahan …</string>
-    <string name="extension_loading">Pemuatan kustomisasi</string>
-    <string name="elm_timeout_descr">Batas waktu minimum dalam [md] untuk menunggu tanggapan ELM</string>
-    <string name="elm_adaptive_timing">Pengaturan waktu adaptif ELM</string>
-    <string name="reset_preselections">Setel ulang pra-pemilihan terakhir</string>
-    <string name="use_last_settings_description">Gunakan pengaturan terakhir saat pengaktifan (alamat BT, alamat ECU, Item tampilan...)</string>
+    <string name="items_for_display_descr">Pilih parameter data yang ingin ditampilkan…</string>
+    <string name="select_fault_code">Pilih Kode Kerusakan…</string>
+    <string name="extension_loading">Memuat penyesuaian</string>
+    <string name="elm_timeout_descr">Batas waktu minimum untuk menunggu respons ELM, dalam milidetik [ms]</string>
+    <string name="elm_adaptive_timing">Waktu tunggu adaptif ELM</string>
+    <string name="reset_preselections">Hapus pilihan terakhir</string>
+    <string name="use_last_settings_description">Gunakan pengaturan terakhir saat aplikasi dibuka (alamat Bluetooth, alamat ECU, parameter yang ditampilkan…)</string>
     <string name="CONNECTING">Menghubungkan…</string>
-    <string name="elm_custom_init">Init kustom ELM</string>
-    <string name="STOPPED">Terhenti</string>
+    <string name="elm_custom_init">Inisialisasi khusus ELM</string>
+    <string name="STOPPED">Dihentikan</string>
     <string name="autohide_toolbar">Sembunyikan bilah alat</string>
-    <string name="data_disable_max">Batas penonaktifan item data</string>
-    <string name="autohide_delay_description">Penundaan dalam hitungan detik tanpa aktivitas, sebelum Toolbar disembunyikan</string>
-    <string name="csv_text_quoted_description">Bidang teks CSV disertakan dalam tanda kutip</string>
-    <string name="libraries_sum">Perpustakaan yang digunakan dalam proyek…</string>
-    <string name="long_press_dfc_hint">Tekan lama DFC untuk pencarian online…</string>
+    <string name="data_disable_max">Batas respons tidak valid</string>
+    <string name="autohide_delay_description">Lama tanpa aktivitas, dalam detik, sebelum bilah alat disembunyikan</string>
+    <string name="csv_text_quoted_description">Apit kolom teks CSV dengan tanda kutip</string>
+    <string name="libraries_sum">Pustaka yang digunakan dalam proyek…</string>
+    <string name="long_press_dfc_hint">Tekan lama Kode Kerusakan untuk mencari di web…</string>
     <string name="configure">Atur</string>
-    <string name="select_ble_device">Pilih adaptor BLE</string>
-    <string name="no_obd_files_found">Tidak ditemukan berkas OBD</string>
-    <string name="open_log_dir">Buka direktori log</string>
+    <string name="select_ble_device">Pilih Alat Scan BLE</string>
+    <string name="no_obd_files_found">Tidak ada file OBD yang ditemukan</string>
+    <string name="open_log_dir">Buka folder log</string>
     <string name="open_log_dir_description">Buka folder log di pengelola file</string>
-    <string name="log_dir_not_found">Direktori log tidak ditemukan — aktifkan pencatatan log dan jalankan ulang aplikasi terlebih dahulu</string>
-    <string name="log_dir_no_app">Tidak ditemukan pengelola file — jalur telah disalin ke papan klip</string>
-    <string name="no_paired_devices">Tidak ditemukan perangkat yang terhubung. Silakan hubungkan perangkat terlebih dahulu di pengaturan Bluetooth.</string>
+    <string name="log_dir_not_found">Folder log tidak ditemukan — aktifkan pencatatan log, lalu buka ulang aplikasi terlebih dahulu</string>
+    <string name="log_dir_no_app">Pengelola file tidak ditemukan — lokasi folder disalin ke papan klip</string>
+    <string name="no_paired_devices">Belum ada perangkat yang dipasangkan. Pasangkan Alat Scan di pengaturan Bluetooth terlebih dahulu.</string>
     <string name="no_ble_devices_found">Tidak ditemukan perangkat di sekitar.</string>
     <string name="no_usb_devices_found">Tidak ditemukan perangkat USB.</string>
     <string name="theme_mode">Tema</string>
-    <string name="theme_mode_description">Ikuti tema sistem, atau paksa tampilan terang atau gelap</string>
+    <string name="theme_mode_description">Ikuti tema sistem, atau gunakan tampilan terang atau gelap</string>
     <string name="language_selection_description">Pilih bahasa aplikasi</string>
-    <string name="language_system_default">Pengaturan default sistem</string>
-    <string name="restart_required">Lakukan restart untuk menerapkan perubahan bahasa</string>
+    <string name="language_system_default">Ikuti bahasa sistem</string>
+    <string name="restart_required">Buka ulang aplikasi untuk menerapkan perubahan bahasa</string>
+    <string-array name="theme_mode_entries">
+        <item>Ikuti sistem</item>
+        <item>Terang</item>
+        <item>Gelap</item>
+    </string-array>
+    <string-array name="logging_options_display">
+        <item>OFF — tanpa pencatatan log</item>
+        <item>SEVERE — hanya kesalahan</item>
+        <item>WARNING — kesalahan dan peringatan</item>
+        <item>INFO — informasi diagnosis standar</item>
+        <item>CONFIG — pesan konfigurasi</item>
+        <item>FINE — rincian debug (dapat memengaruhi kinerja)</item>
+        <item>FINER — rincian debug lebih lengkap</item>
+        <item>FINEST — rincian maksimum (dapat memengaruhi kinerja)</item>
+        <item>ALL — semua pesan</item>
+    </string-array>
+    <!-- Keep legal license names unchanged. -->
+    <string name="app_license_sum">Hubungkan ke sistem OBD kendaraan Anda\n
+        * GNU General Public License v3.0</string>
+    <string name="lib_usb_serial_sum">Pustaka untuk sambungan serial USB\n
+        * GNU Lesser General Public License v2.1</string>
+    <string name="lib_achart_sum">Pustaka grafik untuk Android\n
+        * Apache 2.0 license</string>
+    <string name="lib_speedview_sum">Tampilan meter untuk Android\n
+        * Apache 2.0 license</string>
+    <!-- Workshop guidance and formatted messages -->
+    <string name="select_all">Pilih Semua</string>
+    <string name="search_hint">Cari…</string>
+    <string name="scanner_connection_help">Pasang alat scan ke soket OBD kendaraan. Putar kunci kontak ke ON, lalu pilih Hubungkan Alat Scan.</string>
+    <string name="diagnosis_hint">Kode Kerusakan adalah petunjuk diagnosis, bukan kepastian bahwa komponen tertentu rusak. Periksa gejala, kabel, dan hasil pengujian sebelum mengganti komponen.</string>
+    <string name="live_data_hint">Data Langsung menampilkan bacaan sensor dan nilai dari ECU saat ini. Bandingkan bacaan dengan spesifikasi kendaraan dan kondisi pengoperasiannya.</string>
+    <string name="freeze_frame_hint">Data Saat Kerusakan merekam kondisi kendaraan saat gangguan terdeteksi. Gunakan data ini untuk memahami kapan gangguan terjadi.</string>
+    <string name="saved_file_message">Hasil pemeriksaan disimpan: %1$d byte di %2$s</string>
+    <string name="loaded_file_message">Hasil pemeriksaan dibuka: %1$d byte</string>
+    <string name="device_list_entry">%1$s\n%2$s</string>
+    <string name="usb_device_title">USB: 0x%1$04x/0x%2$04x</string>
+    <string name="button_yes">Ya</string>
+    <string name="button_no">Tidak</string>
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Batal</string>
+    <!-- Display labels in DEMO, BLUETOOTH, BLE, USB, NETWORK order. -->
+    <string-array name="comm_medium_labels">
+        <item>Mode Latihan</item>
+        <item>Bluetooth</item>
+        <item>Bluetooth Hemat Energi (BLE)</item>
+        <item>USB</item>
+        <item>Wi-Fi</item>
+    </string-array>
 </resources>

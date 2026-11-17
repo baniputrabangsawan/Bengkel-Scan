@@ -78,6 +78,36 @@ period of time while the ECU recalibrates itself.
     <string name="dashboard">Dashboard</string>
     <string name="hud">Head Up Display</string>
     <string name="filter">Filter selected</string>
+    <!-- Workshop guidance and formatted messages -->
+    <string name="select_all">Select all</string>
+    <string name="search_hint">Search…</string>
+    <string name="scanner_connection_help">Plug the scan tool into the vehicle OBD socket. Turn the ignition to ON, then select Connect.</string>
+    <string name="diagnosis_hint">A fault code is a diagnostic clue, not proof that a particular part has failed. Check the symptoms, wiring, and test results before replacing parts.</string>
+    <string name="live_data_hint">Live data shows current sensor readings and ECU values. Compare readings with the vehicle specifications and operating conditions.</string>
+    <string name="freeze_frame_hint">Freeze frame data records the vehicle conditions when a fault was detected. Use it to help understand when the fault occurred.</string>
+    <string name="saved_file_message">Saved %1$d bytes to %2$s</string>
+    <string name="loaded_file_message">Loaded %1$d bytes</string>
+    <string name="device_list_entry">%1$s\n%2$s</string>
+    <string name="usb_device_title">USB: 0x%1$04x/0x%2$04x</string>
+    <string name="button_yes">Yes</string>
+    <string name="button_no">No</string>
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+    <!-- Display constants; do not localize units or numeric values. -->
+    <string name="range_initial_min" translatable="false">0.0</string>
+    <string name="range_initial_max" translatable="false">100.0</string>
+    <string name="update_period_min" translatable="false">0</string>
+    <string name="update_period_max" translatable="false">100</string>
+    <string name="unit_per_minute" translatable="false">/min</string>
+    <string name="unit_seconds" translatable="false">s</string>
+    <!-- Display labels in DEMO, BLUETOOTH, BLE, USB, NETWORK order. -->
+    <string-array name="comm_medium_labels">
+        <item>Demo</item>
+        <item>Bluetooth</item>
+        <item>Bluetooth LE</item>
+        <item>USB</item>
+        <item>Wi-Fi</item>
+    </string-array>
     <!-- Settings -->
     <string name="settings">Settings</string>
     <string name="common_settings">Common settings</string>
@@ -185,7 +215,7 @@ period of time while the ECU recalibrates itself.
         <item>Light</item>
         <item>Dark</item>
     </string-array>
-    <string-array name="theme_mode_values">
+    <string-array name="theme_mode_values" translatable="false">
         <item>system</item>
         <item>light</item>
         <item>dark</item>
@@ -271,7 +301,7 @@ period of time while the ECU recalibrates itself.
     <string name="libraries">Libraries …</string>
     <string name="libraries_sum">Libraries used in project …</string>
     <string name="release_history">Release history …</string>
-    <string name="app_license_sum" translatable="false">
+    <string name="app_license_sum">
         Connect to your car\'s OBD system\n
         * GNU General Public License v3.0
     </string>
@@ -280,20 +310,26 @@ period of time while the ECU recalibrates itself.
     <string name="url_app_releases" translatable="false">https://github.com/fr3ts0n/AndrOBD/releases/</string>
     <string name="url_app_translation" translatable="false">https://hosted.weblate.org/projects/androbd/strings/</string>
     <string name="lib_usb_serial" translatable="false">usb-serial-for-android</string>
-    <string name="lib_usb_serial_sum" translatable="false">
+    <string name="lib_usb_serial_sum">
         Library for USB serial connections\n
         * GNU Lesser General Public License v2.1
     </string>
     <string name="lib_achart" translatable="false">AChartEngine</string>
-    <string name="lib_achart_sum" translatable="false">
+    <string name="lib_achart_sum">
         Charting library for Android\n
         * Apache 2.0 license
     </string>
     <string name="lib_speedview" translatable="false">SpeedView</string>
-    <string name="lib_speedview_sum" translatable="false">
+    <string name="lib_speedview_sum">
         Beautiful gauges for Android\n
         * Apache 2.0 license
     </string>
+    <string name="donation_paypal_title" translatable="false">PayPal.me</string>
+    <string name="donation_bitcoin_title" translatable="false">Bitcoin</string>
+    <string name="donation_liberapay_title" translatable="false">LiberaPay</string>
+    <string name="url_donation_paypal" translatable="false">https://PayPal.me/fr3ts0n</string>
+    <string name="url_donation_bitcoin" translatable="false">bitcoin://19UApzsc5eDJ5VNDNYCA1bpszPnkcpWeFP</string>
+    <string name="url_donation_liberapay" translatable="false">https://liberapay.com/AndrOBD/donate</string>
     <string name="graphic_design">Graphic design</string>
     <string name="design_credits" translatable="false">2018 by @anaufalm</string>
     <string name="long_press_dfc_hint">Long press DFC for online search …</string>
@@ -336,10 +372,11 @@ period of time while the ECU recalibrates itself.
     </string-array>
 
     <!-- Language selection -->
-    <string name="language_selection" translatable="false">Language / Язык / Lingua</string>
+    <string name="language_selection" translatable="false">Bahasa / Language</string>
     <string name="language_selection_description">Select application language</string>
     <string name="language_system_default">System default</string>
     <string name="language_english" translatable="false">English</string>
+    <string name="language_indonesian" translatable="false">Bahasa Indonesia</string>
     <string name="language_estonian" translatable="false">Eesti</string>
     <string name="language_tamil" translatable="false">நாகர்</string>
     <string name="language_portugal" translatable="false">Português</string>
@@ -353,6 +390,7 @@ period of time while the ECU recalibrates itself.
     <string-array name="language_options" translatable="false">
         <item>@string/language_system_default</item>
         <item>@string/language_english</item>
+        <item>@string/language_indonesian</item>
         <item>@string/language_estonian</item>
         <item>@string/language_tamil</item>
         <item>@string/language_portugal</item>
@@ -366,6 +404,7 @@ period of time while the ECU recalibrates itself.
     <string-array name="language_values" translatable="false">
         <item>system</item>
         <item>en</item>
+        <item>id</item>
         <item>et</item>
         <item>ta</item>
         <item>pt</item>

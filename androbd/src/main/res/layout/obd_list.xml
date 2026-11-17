@@ -7,6 +7,14 @@
     android:orientation="vertical"
     android:background="@drawable/mil_off">
 
+    <TextView
+        android:id="@+id/diagnosis_help"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="gone" />
+
     <Spinner
         android:id="@+id/ff_selector"
         android:layout_width="match_parent"

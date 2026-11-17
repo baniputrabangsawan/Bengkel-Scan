@@ -60,6 +60,7 @@ public class PidCustomization
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        SettingsActivity.applyLocale(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pid_customization);
 
@@ -97,7 +98,9 @@ public class PidCustomization
     {
         super.onResume();
         TextView tv = findViewById(R.id.data_item);
-        tv.setText((String)item.pv.get(EcuDataPv.FID_DESCRIPT));
+        tv.setText(ObdUiLabels.label(this,
+                String.valueOf(item.pv.get(EcuDataPv.FID_MNEMONIC)),
+                String.valueOf(item.pv.get(EcuDataPv.FID_DESCRIPT))));
 
         // Color selection
         Integer color = ColorAdapter.getItemColor(item.pv);

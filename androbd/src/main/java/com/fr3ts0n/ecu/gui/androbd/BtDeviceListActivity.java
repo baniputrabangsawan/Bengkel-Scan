@@ -70,6 +70,7 @@ public class BtDeviceListActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		SettingsActivity.applyLocale(this);
 		super.onCreate(savedInstanceState);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -173,7 +174,7 @@ public class BtDeviceListActivity extends AppCompatActivity
 			} else {
 				displayName = dev.getName();
 			}
-			holder.text.setText(String.format("%s\n%s", displayName, dev.getAddress()));
+			holder.text.setText(getString(R.string.device_list_entry, displayName, dev.getAddress()));
 			holder.itemView.setOnClickListener(v -> onDeviceSelected(dev));
 		}
 
