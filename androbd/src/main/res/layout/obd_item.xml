@@ -2,58 +2,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/workshop_row_height"
-    android:background="?android:activatedBackgroundIndicator"
+    android:background="@drawable/result_row_surface"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/obd_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/workshop_label_size"
-        android:textColor="?android:attr/textColorSecondary"
-        android:ellipsize="end"
-        android:maxLines="4" />
+        android:textSize="14sp"
+        android:textColor="@color/workshop_secondary_text"
+        android:lineSpacingMultiplier="1.15" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/obd_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:layout_marginTop="6dp"
+        android:textSize="24sp"
+        android:textColor="@color/workshop_on_surface"
+        android:fontFamily="sans-serif-medium"
+        android:fontFeatureSettings="tnum"
+        android:gravity="start"
+        android:lineSpacingMultiplier="1.15" />
 
-        <TextView
-            android:id="@+id/obd_units"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/workshop_value_size"
-            android:textColor="?android:attr/textColorPrimary"
-            android:ellipsize="end"
-            android:maxLines="1" />
+    <TextView
+        android:id="@+id/obd_units"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textSize="14sp"
+        android:textColor="@color/workshop_secondary_text"
+        android:lineSpacingMultiplier="1.15" />
 
-        <TextView
-            android:id="@+id/obd_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/workshop_value_size"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textStyle="bold"
-            android:gravity="end" />
-
-        <ImageView
-            android:id="@+id/obd_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:visibility="gone"
-            android:src="@drawable/ic_code" />
-
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/obd_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:visibility="gone"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_code" />
 
     <ProgressBar
         android:id="@+id/bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="4dp"
+        android:layout_marginTop="12dp"
         android:visibility="gone"
         android:max="100" />
 

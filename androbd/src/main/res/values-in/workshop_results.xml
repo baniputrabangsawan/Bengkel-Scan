@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="result_status_stored">Tersimpan</string>
+    <string name="result_status_pending">Tertunda</string>
+    <string name="result_status_permanent">Permanen</string>
+    <string name="result_no_codes_scope">Tidak ada kode yang dilaporkan untuk permintaan ini. Hasil ini bukan jaminan bahwa semua sistem kendaraan bebas gangguan.</string>
+</resources>

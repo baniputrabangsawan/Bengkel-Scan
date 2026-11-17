@@ -22,6 +22,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.fr3ts0n.ecu.EcuCodeItem;
@@ -30,7 +31,6 @@ import com.fr3ts0n.pvs.IndexedProcessVar;
 import com.fr3ts0n.pvs.PvList;
 
 import java.util.Collection;
-import java.util.Objects;
 
 /**
  * Adapter to display OBD DFCs
@@ -39,6 +39,26 @@ import java.util.Objects;
  */
 public class DfcItemAdapter extends ObdItemAdapter
 {
+	private static final class CodeViewHolder
+	{
+		final boolean compact;
+		final TextView code;
+		final TextView description;
+		final TextView status;
+		final TextView context;
+		final ImageView icon;
+
+		CodeViewHolder(View view, boolean compact)
+		{
+			this.compact = compact;
+			code = view.findViewById(R.id.obd_units);
+			description = view.findViewById(R.id.obd_label);
+			status = view.findViewById(R.id.result_status);
+			context = view.findViewById(R.id.result_context);
+			icon = view.findViewById(R.id.obd_icon);
+		}
+	}
+
 	public DfcItemAdapter(Context context, int resource, PvList pvs)
 	{
 		super(context, resource, pvs);
@@ -56,43 +76,59 @@ public class DfcItemAdapter extends ObdItemAdapter
 	@Override
 	public View getView(int position, View v, ViewGroup parent)
 	{
-		// get data PV
+		return bindCode(position, v, parent, parent instanceof Spinner, false);
+	}
+
+	private View bindCode(int position, View view, ViewGroup parent,
+	                      boolean compact, boolean dropDown)
+	{
 		IndexedProcessVar currPv = (IndexedProcessVar) getItem(position);
-
-		if (v == null)
+		CodeViewHolder holder;
+		if (view == null || !(view.getTag() instanceof CodeViewHolder)
+				|| ((CodeViewHolder) view.getTag()).compact != compact)
 		{
-			v = mInflater.inflate(R.layout.obd_item, parent, false);
+			view = mInflater.inflate(compact ? R.layout.dtc_selection : R.layout.dtc_item,
+					parent, false);
+			holder = new CodeViewHolder(view, compact);
+			view.setTag(holder);
+		}
+		else
+		{
+			holder = (CodeViewHolder) view.getTag();
 		}
 
-		// Show icon
-		ImageView ivIcon = v.findViewById(R.id.obd_icon);
-		ivIcon.setImageResource(R.drawable.ic_code);
-		try
+		String code = String.valueOf(currPv.get(EcuCodeItem.FID_CODE));
+		boolean noCodes = "P0000".equals(code);
+		Object status = currPv.get(EcuCodeItem.FID_STATUS);
+		int service = status instanceof Number ? ((Number) status).intValue() : -1;
+		int statusLabel = 0;
+		int icon = R.drawable.ic_code;
+		switch (service)
 		{
-			// Show icon based on code status (pending/permanent/normal)
-			Integer svc = (Integer)currPv.get(EcuCodeItem.FID_STATUS);
-			switch(svc)
-			{
-				case ObdProt.OBD_SVC_PENDINGCODES:
-					ivIcon.setImageResource(R.drawable.ic_history);
-					break;
-
-				case ObdProt.OBD_SVC_PERMACODES:
-					ivIcon.setImageResource(android.R.drawable.ic_dialog_alert);
-					break;
-			}
+			case ObdProt.OBD_SVC_READ_CODES:
+				statusLabel = R.string.result_status_stored;
+				break;
+			case ObdProt.OBD_SVC_PENDINGCODES:
+				statusLabel = R.string.result_status_pending;
+				icon = R.drawable.ic_history;
+				break;
+			case ObdProt.OBD_SVC_PERMACODES:
+				statusLabel = R.string.result_status_permanent;
+				icon = android.R.drawable.ic_dialog_alert;
+				break;
 		}
-		catch(Exception ex) { /* ignore */ }
 
-		ivIcon.setVisibility(View.VISIBLE);
-
-		TextView tvDescr = v.findViewById(R.id.obd_label);
-		TextView tvValue = v.findViewById(R.id.obd_units);
-
-		tvValue.setText(String.valueOf(Objects.requireNonNull(currPv).get(EcuCodeItem.FID_CODE)));
-		tvDescr.setText(statusText(String.valueOf(currPv.get(EcuCodeItem.FID_DESCRIPT))));
-
-		return v;
+		holder.code.setText(code);
+		holder.code.setVisibility(noCodes ? View.GONE : View.VISIBLE);
+		holder.icon.setImageResource(icon);
+		holder.icon.setVisibility(noCodes ? View.GONE : View.VISIBLE);
+		holder.status.setText(statusLabel == 0 ? "" : getContext().getString(statusLabel));
+		holder.status.setVisibility(!noCodes && statusLabel != 0 ? View.VISIBLE : View.GONE);
+		holder.description.setText(statusText(String.valueOf(currPv.get(EcuCodeItem.FID_DESCRIPT))));
+		// Keep the selected value compact; the dialog retains the complete description.
+		holder.description.setVisibility(!compact || dropDown || noCodes ? View.VISIBLE : View.GONE);
+		holder.context.setVisibility(noCodes ? View.VISIBLE : View.GONE);
+		return view;
 	}
 
 	/* (non-Javadoc)
@@ -101,6 +137,6 @@ public class DfcItemAdapter extends ObdItemAdapter
 	@Override
 	public View getDropDownView(int position, View v, ViewGroup parent)
 	{
-		return getView(position, v, parent);
+		return bindCode(position, v, parent, true, true);
 	}
 }

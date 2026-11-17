@@ -10,4 +10,6 @@
     <color name="workshop_outline">#9CA3AF</color>
     <color name="workshop_warning_surface">#450A0A</color>
     <color name="workshop_warning_text">#FECACA</color>
+    <color name="workshop_page_background">#0B1220</color>
+    <color name="workshop_border">#334155</color>
 </resources>

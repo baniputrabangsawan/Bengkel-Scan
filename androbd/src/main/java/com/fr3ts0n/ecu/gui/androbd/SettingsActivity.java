@@ -34,10 +34,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
@@ -61,6 +58,7 @@ import java.util.logging.Logger;
 public class SettingsActivity extends AppCompatActivity
 	implements PreferenceFragmentCompat.OnPreferenceStartScreenCallback
 {
+	static final String EXTRA_PREFERENCE_ROOT = "workshop_preference_root";
 	// Preference keys referenced from outside this class (MainActivity, ObdItemAdapter) -
 	// kept at this level, unlike the Settings-internal-only keys below, so those external
 	// call sites don't need to change.
@@ -108,13 +106,22 @@ public class SettingsActivity extends AppCompatActivity
 		// Apply locale before calling super.onCreate()
 		applyLocale(this);
 		super.onCreate(savedInstanceState);
+		ModernUiUtils.applyScreenInsets(this);
 		setTitle(R.string.settings);
 
 		if (savedInstanceState == null)
 		{
+			SettingsFragment fragment = new SettingsFragment();
+			String root = getIntent().getStringExtra(EXTRA_PREFERENCE_ROOT);
+			if ("screen_app_info".equals(root) || "screen_obd_options".equals(root))
+			{
+				Bundle arguments = new Bundle();
+				arguments.putString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT, root);
+				fragment.setArguments(arguments);
+			}
 			getSupportFragmentManager()
 				.beginTransaction()
-				.replace(android.R.id.content, new SettingsFragment())
+				.replace(android.R.id.content, fragment)
 				.commit();
 		}
 	}
@@ -238,67 +245,13 @@ public class SettingsActivity extends AppCompatActivity
 			}
 		}
 
-		/**
-		 * Each time a nested PreferenceScreen is entered or backed out of, this fragment's
-		 * view is destroyed and a new one created (FragmentTransaction.replace()). Something
-		 * in the framework/AppCompat already positions list_container correctly below the
-		 * status bar and action bar for a freshly created fragment - but that mechanism
-		 * doesn't reliably re-run for every (re)created instance, occasionally leaving
-		 * list_container at y=0, rendered under the status bar and action bar. Only patch
-		 * it when that's actually happened (current position is at/near the top) - the
-		 * expected offset is already correct far more often than not, and blindly adding
-		 * padding regardless would double it up on top of whatever positioned it correctly
-		 * in the first place. Posted rather than applied inline, both so the view has a
-		 * real on-screen position to check yet, and so the action bar has its final
-		 * measured height.
-		 */
 		@Override
 		public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
 		{
 			super.onViewCreated(view, savedInstanceState);
 			requireActivity().setTitle(getPreferenceScreen().getTitle());
-			view.post(() -> fixUnpaddedListContainer(view));
 		}
 
-		private void fixUnpaddedListContainer(@NonNull View fragmentView)
-		{
-			View listContainer = fragmentView.findViewById(android.R.id.list_container);
-			if (listContainer == null) return;
-
-			int statusBarHeight = 0;
-			WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(fragmentView);
-			if (insets != null)
-			{
-				statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
-			}
-
-			int actionBarHeight = 0;
-			if (requireActivity() instanceof AppCompatActivity)
-			{
-				ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-				if (actionBar != null)
-				{
-					actionBarHeight = actionBar.getHeight();
-				}
-			}
-			int expectedTop = statusBarHeight + actionBarHeight;
-
-			int[] screenLocation = new int[2];
-			listContainer.getLocationOnScreen(screenLocation);
-			int actualTop = screenLocation[1];
-
-			// Comfortably below "unpadded" (0) but still well short of the correct offset -
-			// avoids both a false negative from minor measurement variance and a false
-			// positive that would double-pad an already-correct layout.
-			if (actualTop < statusBarHeight)
-			{
-				listContainer.setPadding(
-					listContainer.getPaddingLeft(),
-					listContainer.getPaddingTop() + (expectedTop - actualTop),
-					listContainer.getPaddingRight(),
-					listContainer.getPaddingBottom());
-			}
-		}
 
 		/**
 		 * Set this fragment as the click listener for a preference, if it exists in the

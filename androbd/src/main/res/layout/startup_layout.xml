@@ -1,97 +1,290 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/workshop_page_background"
+    android:fillViewport="true"
+    android:focusableInTouchMode="true"
+    android:descendantFocusability="beforeDescendants">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="?attr/colorSurface"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <ImageView
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:adjustViewBounds="true"
-            android:maxWidth="240dp"
-            android:maxHeight="240dp"
-            android:contentDescription="@string/logo"
-            android:src="@drawable/logo" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:gravity="center"
-            android:text="@string/scanner_connection_help"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:background="?attr/colorSurfaceVariant">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:clickable="true"
-            android:contentDescription="@string/url_app_mainpage"
-            android:focusable="true"
-            android:gravity="center"
-            android:onClick="browseClickedUrl"
-            android:text="@string/app_name"
-            android:textAppearance="@android:style/TextAppearance.Medium"
-            android:textStyle="bold"/>
+            android:accessibilityHeading="true"
+            android:text="@string/home_heading"
+            android:textAppearance="@style/WorkshopHomeHeading" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:clickable="true"
-            android:contentDescription="@string/url_app_releases"
-            android:enabled="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:onClick="browseClickedUrl"
-            android:text="@string/app_version"
-            android:textAppearance="@android:style/TextAppearance.Small"
-            android:textStyle="bold"/>
+            android:layout_marginTop="8dp"
+            android:text="@string/home_subheading"
+            android:textAppearance="@style/WorkshopHomeHelper" />
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/WorkshopHomePanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_connection_label"
+                    android:textAppearance="@style/WorkshopHomeHelper" />
+
+                <TextView
+                    android:id="@+id/home_connection_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:accessibilityLiveRegion="polite"
+                    android:text="@string/home_status_offline"
+                    android:textAppearance="@style/WorkshopHomeSectionHeading" />
+
+                <TextView
+                    android:id="@+id/home_connection_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/home_offline_detail"
+                    android:textAppearance="@style/WorkshopHomeHelper" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/home_connection_action"
+                    style="@style/WorkshopHomePrimaryAction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:onClick="onWorkshopHomeClick"
+                    android:text="@string/action_connect" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:gravity="center"
-            android:text="@string/copyright_fr3ts0n"
-            android:textSize="14sp"
-            />
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:accessibilityHeading="true"
+            android:text="@string/home_checks_heading"
+            android:textAppearance="@style/WorkshopHomeSectionHeading" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/home_faults"
+                style="@style/WorkshopHomeTile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:onClick="onWorkshopHomeClick">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="@null"
+                        android:importantForAccessibility="no"
+                        app:srcCompat="@drawable/ic_code"
+                        app:tint="@color/workshop_primary" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/obd_codes"
+                        android:textAppearance="@style/WorkshopHomeTileTitle" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/home_faults_hint"
+                        android:textAppearance="@style/WorkshopHomeHelper" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/home_live"
+                style="@style/WorkshopHomeTile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:onClick="onWorkshopHomeClick">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="@null"
+                        android:importantForAccessibility="no"
+                        app:srcCompat="@drawable/ic_visibility"
+                        app:tint="@color/workshop_primary" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/obd_data"
+                        android:textAppearance="@style/WorkshopHomeTileTitle" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/home_live_hint"
+                        android:textAppearance="@style/WorkshopHomeHelper" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/home_freeze"
+                style="@style/WorkshopHomeTile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:onClick="onWorkshopHomeClick">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="@null"
+                        android:importantForAccessibility="no"
+                        app:srcCompat="@drawable/ic_history"
+                        app:tint="@color/workshop_primary" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/service_freezeframes"
+                        android:textAppearance="@style/WorkshopHomeTileTitle" />
+
+                    <TextView
+                        android:id="@+id/home_freeze_hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/home_freeze_unavailable_hint"
+                        android:textAppearance="@style/WorkshopHomeHelper" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/home_vehicle"
+                style="@style/WorkshopHomeTile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:onClick="onWorkshopHomeClick">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="@null"
+                        android:importantForAccessibility="no"
+                        app:srcCompat="@drawable/ic_info"
+                        app:tint="@color/workshop_primary" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/obd_veh_info"
+                        android:textAppearance="@style/WorkshopHomeTileTitle" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/home_vehicle_hint"
+                        android:textAppearance="@style/WorkshopHomeHelper" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_settings"
+            style="@style/WorkshopHomeSecondaryAction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:onClick="onWorkshopHomeClick"
+            android:text="@string/home_settings_label" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:clickable="true"
-            android:contentDescription="@string/url_app_translation"
-            android:focusable="true"
+            android:layout_marginTop="24dp"
             android:gravity="center"
-            android:onClick="browseClickedUrl"
-            android:text="@string/translation_credits"
-            android:textSize="14sp"
-            />
+            android:text="@string/home_attribution"
+            android:textAppearance="@style/WorkshopHomeHelper" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_about"
+            style="@style/WorkshopHomeTextAction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onWorkshopHomeClick"
+            android:text="@string/home_about_label" />
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:importantForAccessibility="noHideDescendants"
+            android:visibility="gone" />
     </LinearLayout>
-
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="invisible"/>
-
-</LinearLayout>
+</ScrollView>

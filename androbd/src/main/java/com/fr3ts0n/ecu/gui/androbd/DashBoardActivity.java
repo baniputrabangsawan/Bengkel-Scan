@@ -209,6 +209,7 @@ public class DashBoardActivity extends AppCompatActivity
 		// set the desired content screen
 		int resId = getIntent().getIntExtra(RES_ID, R.layout.dashboard);
 		setContentView(resId);
+		ModernUiUtils.applyScreenInsets(this);
 		grid = findViewById(R.id.dashboardGrid);
 		gridLayoutManager = new GridLayoutManager(this, 1);
 		grid.setLayoutManager(gridLayoutManager);

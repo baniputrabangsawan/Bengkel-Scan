@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_heading">Start a check</string>
+    <string name="home_subheading">Connect your scan tool, then choose a check.</string>
+    <string name="home_connection_label">Scan tool connection</string>
+    <string name="home_status_offline">Scan tool not connected</string>
+    <string name="home_status_demo">Demo mode</string>
+    <string name="home_status_online">Scan tool connected</string>
+    <string name="home_offline_detail">Connect an ELM327 scan tool to read vehicle data.</string>
+    <string name="home_demo_detail">Sample data only, not results from your vehicle.</string>
+    <string name="home_online_detail">Choose a check to read data available from your vehicle.</string>
+    <string name="home_demo_connection_action">Set up scan tool</string>
+    <string name="home_checks_heading">Choose a check</string>
+    <string name="home_faults_hint">Read fault codes</string>
+    <string name="home_live_hint">View sensor readings</string>
+    <string name="home_freeze_available_hint">Data saved with a fault</string>
+    <string name="home_freeze_unavailable_hint">Read fault codes first</string>
+    <string name="home_vehicle_hint">View vehicle details</string>
+    <string name="home_settings_label">Settings</string>
+    <string name="home_attribution">Based on AndrOBD · GPL-3.0</string>
+    <string name="home_about_label">About the app</string>
+</resources>

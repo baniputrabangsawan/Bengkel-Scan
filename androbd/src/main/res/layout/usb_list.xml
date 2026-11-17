@@ -21,15 +21,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@color/workshop_page_background"
               android:orientation="vertical">
 
     <TextView
         android:id="@+id/num_found"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#666"
-        android:textColor="#fff"
-        android:paddingLeft="5dp"
+        android:background="@color/workshop_surface_variant"
+        android:textColor="@color/workshop_secondary_text"
+        android:textSize="14sp"
+        android:padding="16dp"
         />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -42,13 +44,16 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/deviceList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="12dp"
+            android:clipToPadding="false"
             />
 
         <TextView
@@ -58,6 +63,7 @@
             android:layout_gravity="center"
             android:textSize="18sp"
             android:padding="16dp"
+            android:textColor="@color/workshop_secondary_text"
             android:gravity="center"
             android:visibility="gone"
             />

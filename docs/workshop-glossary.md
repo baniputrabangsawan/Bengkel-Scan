@@ -113,3 +113,35 @@ The existing author copyright, design, translation, dependency, and license
 entries remain. The root `LICENSE` is unchanged. Attribution and the short
 license notice are readable offline; opening external project/license links
 requires a connection.
+
+## Workshop dashboard and result presentation
+
+The home screen now exposes scanner state and four direct read-only diagnostic
+actions. A disconnected state disables those actions; demo state explicitly
+identifies sample data. Freeze-frame availability follows the existing menu
+state and explains when fault codes must be read first. Home buttons route to
+the existing diagnostic handlers, not a second protocol implementation.
+
+Fault-code rows separate code, original description, and actual stored/pending/
+permanent state. Unknown-code descriptions remain unchanged; the existing
+Indonesian fallback is retained. A no-code response is not presented as proof
+that the entire vehicle is healthy. Freeze-frame selection stays compact, with
+complete descriptions available in the selection dialog.
+
+Readiness/enum values wrap as text without numeric progress bars. Numeric
+readings retain their values, units, and ranges. Material3 DayNight, upstream
+credits, and all workshop safety flags remain in place.
+
+Visual references reviewed through Mobbin:
+
+- [Mercedes-Benz vehicle status](https://mobbin.com/screens/56a361b4-84db-48cf-a4f4-58e398914361?utm_source=other&utm_medium=ai-assistant&utm_source_platform=mcp): grouped actions with explicit icon and label.
+- [Fitbit connection screen](https://mobbin.com/screens/e57381d9-bfff-44c8-993b-a1896f60a39d?utm_source=other&utm_medium=ai-assistant&utm_source_platform=mcp): clear connection state and next action.
+
+These references guide hierarchy and grouping only. No third-party screenshots,
+logos, tracking, or new runtime dependencies are included in the app.
+
+System-bar and toolbar spacing is applied once to each activity's content root
+by `ModernUiUtils.applyScreenInsets`. The theme does not apply
+`fitsSystemWindows` to every child: doing so can erase XML padding from cards
+and headings. Reused diagnostic views and nested preferences share the same
+root treatment, without changing scanner transport behavior.

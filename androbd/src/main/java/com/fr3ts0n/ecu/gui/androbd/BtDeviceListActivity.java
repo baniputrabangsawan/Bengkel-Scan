@@ -90,6 +90,8 @@ public class BtDeviceListActivity extends AppCompatActivity
 		setResult(RESULT_CANCELED);
 		// Setup the window
 		setContentView(R.layout.device_list);
+		setTitle(this instanceof BleDeviceListActivity ? R.string.select_ble_device : R.string.select_device);
+		ModernUiUtils.applyScreenInsets(this);
 
 		// Get the local Bluetooth adapter
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();

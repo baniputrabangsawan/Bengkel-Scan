@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,10 +61,10 @@ class ObdItemAdapter extends ArrayAdapter<Object>
      * Improves ListView performance significantly
      */
     private static class ViewHolder {
-        TextView tvDescr;
-        TextView tvValue;
-        TextView tvUnits;
-        ProgressBar progressBar;
+        final TextView tvDescr;
+        final TextView tvValue;
+        final TextView tvUnits;
+        final ProgressBar progressBar;
         
         ViewHolder(View convertView) {
             tvDescr = convertView.findViewById(R.id.obd_label);
@@ -198,7 +199,7 @@ class ObdItemAdapter extends ArrayAdapter<Object>
         // get data PV
         EcuDataPv currPv = (EcuDataPv) getItem(position);
 
-        if (convertView == null)
+        if (convertView == null || !(convertView.getTag() instanceof ViewHolder))
         {
             convertView = mInflater.inflate(R.layout.obd_item, parent, false);
             holder = new ViewHolder(convertView);
@@ -221,11 +222,13 @@ class ObdItemAdapter extends ArrayAdapter<Object>
         Object cnvObj = currPv.get(EcuDataPv.FID_CNVID);
         Number min = (Number) currPv.get(EcuDataPv.FID_MIN);
         Number max = (Number) currPv.get(EcuDataPv.FID_MAX);
-        int pid = currPv.getAsInt(EcuDataPv.FID_PID);
         // Get display color ...
         int pidColor = WorkshopFeatures.SHOW_ADVANCED_FEATURES
                 ? ColorAdapter.getItemColor(currPv)
                 : getContext().getColor(R.color.workshop_primary);
+        boolean textValue = !(colVal instanceof Number);
+        // Reset recycled state before formatting, including the exception fallback.
+        holder.progressBar.setVisibility(View.GONE);
 
         try
         {
@@ -238,10 +241,11 @@ class ObdItemAdapter extends ArrayAdapter<Object>
                 Conversion cnv;
                 cnv = ((Conversion[]) cnvObj)[EcuDataItem.cnvSystem];
                 // set formatted text
+                textValue = textValue || cnv instanceof com.fr3ts0n.ecu.HashConversion
+                        || cnv instanceof com.fr3ts0n.ecu.BitmapConversion;
                 fmtText = cnv.physToPhysFmtString((Number) colVal,
                                                   (String) currPv.get(EcuDataPv.FID_FORMAT));
-                if (cnv instanceof com.fr3ts0n.ecu.HashConversion
-                        || cnv instanceof com.fr3ts0n.ecu.BitmapConversion)
+                if (textValue)
                     fmtText = statusText(fmtText);
             } else
             {
@@ -250,16 +254,15 @@ class ObdItemAdapter extends ArrayAdapter<Object>
             }
 
             // set progress bar only on numeric values with min/max limits
-            if (min != null
+            if (!textValue
+                    && min != null
                     && max != null
+                    && max.doubleValue() > min.doubleValue()
                     && colVal instanceof Number)
             {
                 holder.progressBar.setVisibility(ProgressBar.VISIBLE);
                 holder.progressBar.getProgressDrawable().setColorFilter(pidColor, PorterDuff.Mode.SRC_IN);
                 holder.progressBar.setProgress((int) (100 * ((((Number) colVal).doubleValue() - min.doubleValue()) / (max.doubleValue() - min.doubleValue()))));
-            } else
-            {
-                holder.progressBar.setVisibility(ProgressBar.GONE);
             }
 
         } catch (Exception ex)
@@ -267,8 +270,11 @@ class ObdItemAdapter extends ArrayAdapter<Object>
             fmtText = String.valueOf(colVal);
         }
         // set value
+        holder.tvValue.setTextSize(TypedValue.COMPLEX_UNIT_SP, textValue ? 16 : 24);
         holder.tvValue.setText(fmtText);
-        holder.tvUnits.setText(currPv.getUnits());
+        String units = currPv.getUnits();
+        holder.tvUnits.setText(units);
+        holder.tvUnits.setVisibility(units == null || units.isEmpty() ? View.GONE : View.VISIBLE);
 
         return convertView;
     }

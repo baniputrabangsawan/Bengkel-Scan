@@ -196,6 +196,7 @@ public class ChartActivity extends AppCompatActivity
 		setUpChartData(positions);
 		// make chart visible
 		setContentView(chartView);
+		ModernUiUtils.applyScreenInsets(this);
 		// limit selected PIDs to selection
 		MainActivity.setFixedPids(pidNumbers);
 		// if auto hiding selected ...

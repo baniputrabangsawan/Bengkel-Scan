@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="result_status_stored">Stored</string>
+    <string name="result_status_pending">Pending</string>
+    <string name="result_status_permanent">Permanent</string>
+    <string name="result_no_codes_scope">No codes were reported for this request. This does not confirm that every vehicle system is fault-free.</string>
+</resources>

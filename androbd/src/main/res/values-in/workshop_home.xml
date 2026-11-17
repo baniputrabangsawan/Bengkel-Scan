@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_heading">Mulai pemeriksaan</string>
+    <string name="home_subheading">Hubungkan alat scan, lalu pilih pemeriksaan.</string>
+    <string name="home_connection_label">Koneksi alat scan</string>
+    <string name="home_status_offline">Alat scan belum terhubung</string>
+    <string name="home_status_demo">Mode Latihan</string>
+    <string name="home_status_online">Alat scan terhubung</string>
+    <string name="home_offline_detail">Pasang alat scan ke soket OBD dan putar kontak ke ON, lalu hubungkan alat.</string>
+    <string name="home_demo_detail">Data contoh, bukan hasil pemeriksaan kendaraan Anda.</string>
+    <string name="home_online_detail">Pilih pemeriksaan untuk membaca data yang tersedia dari kendaraan.</string>
+    <string name="home_demo_connection_action">Atur Alat Scan</string>
+    <string name="home_checks_heading">Pilih pemeriksaan</string>
+    <string name="home_faults_hint">Baca kode gangguan</string>
+    <string name="home_live_hint">Lihat pembacaan sensor</string>
+    <string name="home_freeze_available_hint">Data saat gangguan</string>
+    <string name="home_freeze_unavailable_hint">Baca kode kerusakan dahulu</string>
+    <string name="home_vehicle_hint">Lihat detail kendaraan</string>
+    <string name="home_settings_label">Pengaturan</string>
+    <string name="home_attribution">Berbasis AndrOBD · GPL-3.0</string>
+    <string name="home_about_label">Tentang aplikasi</string>
+</resources>

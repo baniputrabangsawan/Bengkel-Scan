@@ -5,6 +5,8 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="12dp"
+        android:clipToPadding="false"
         />
 
     <TextView
@@ -14,6 +16,7 @@
         android:layout_gravity="center"
         android:textSize="18sp"
         android:padding="16dp"
+        android:textColor="@color/workshop_secondary_text"
         android:gravity="center"
         android:visibility="gone"
         />

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_status_connecting">Menghubungkan alat scan…</string>
+    <string name="home_connecting_detail">Tunggu sebentar saat aplikasi menghubungkan alat scan.</string>
+    <string name="home_start_demo">Mulai Mode Latihan</string>
+    <string name="home_demo_stopped_detail">Coba data contoh tanpa alat scan atau kendaraan.</string>
+</resources>

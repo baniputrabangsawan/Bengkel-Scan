@@ -18,15 +18,51 @@
 
 package com.fr3ts0n.ecu.gui.androbd;
 
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 /**
  * Utility class for resource optimization and modern UI practices
  * Compatible with Android 4.1+
  */
 public class ModernUiUtils {
+
+    /** Keep XML padding intact and apply system/app-bar spacing once at the content root. */
+    public static void applyScreenInsets(Activity activity) {
+        View root = activity.findViewById(android.R.id.content);
+        if (root == null || root.getTag(R.id.workshop_insets_applied) != null) return;
+        root.setTag(R.id.workshop_insets_applied, Boolean.TRUE);
+        final int left = root.getPaddingLeft();
+        final int top = root.getPaddingTop();
+        final int right = root.getPaddingRight();
+        final int bottom = root.getPaddingBottom();
+        final int[] location = new int[2];
+        ViewCompat.setOnApplyWindowInsetsListener(root, (view, insets) -> {
+            view.post(() -> {
+                WindowInsetsCompat current = ViewCompat.getRootWindowInsets(view);
+                Insets safe = (current == null ? insets : current).getInsets(
+                        WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+                view.getLocationOnScreen(location);
+                int contentTop = location[1];
+                int overlap = Math.max(0, safe.top - contentTop);
+                View bar = activity.findViewById(androidx.appcompat.R.id.action_bar);
+                if (bar != null && bar.isShown()) {
+                    bar.getLocationOnScreen(location);
+                    overlap = Math.max(overlap, location[1] + bar.getHeight() - contentTop);
+                }
+                view.setPadding(left + safe.left, top + overlap,
+                        right + safe.right, bottom + safe.bottom);
+            });
+            return insets;
+        });
+        root.post(() -> ViewCompat.requestApplyInsets(root));
+    }
 
     /**
      * Optimize ListView performance with modern techniques

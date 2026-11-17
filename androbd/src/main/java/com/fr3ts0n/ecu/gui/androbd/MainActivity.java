@@ -847,21 +847,9 @@ public class MainActivity extends PluginManager
     public void setContentView(View view)
     {
         super.setContentView(view);
-        // Reused diagnostic roots can retain zero top padding on newer Android.
-        // Follow the settings screen's conditional, measured overlap correction.
-        view.post(() -> {
-            View bar = findViewById(androidx.appcompat.R.id.action_bar);
-            if (bar == null || !bar.isShown()) return;
-            int[] location = new int[2];
-            view.getLocationOnScreen(location);
-            int contentTop = location[1];
-            bar.getLocationOnScreen(location);
-            int requiredTop = Math.max(0, location[1] + bar.getHeight() - contentTop);
-            if (view.getPaddingTop() < requiredTop)
-                view.setPadding(view.getPaddingLeft(), requiredTop,
-                        view.getPaddingRight(), view.getPaddingBottom());
-        });
+        ModernUiUtils.applyScreenInsets(this);
         getListView().setOnTouchListener(toolbarAutoHider);
+        updateWorkshopHome();
     }
 
     /**
@@ -939,6 +927,97 @@ public class MainActivity extends PluginManager
         return true;
     }
 
+    /** Route the home dashboard through the existing diagnostic menu actions. */
+    public void onWorkshopHomeClick(View view)
+    {
+        int id = view.getId();
+        if (!view.isEnabled()) return;
+        if (id == R.id.home_about || id == R.id.home_settings
+                || (id == R.id.home_connection_action && getMode() == MODE.DEMO))
+        {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            if (id == R.id.home_about)
+                intent.putExtra(SettingsActivity.EXTRA_PREFERENCE_ROOT, "screen_app_info");
+            else if (id == R.id.home_connection_action)
+                intent.putExtra(SettingsActivity.EXTRA_PREFERENCE_ROOT, "screen_obd_options");
+            startActivityForResult(intent, REQUEST_SETTINGS);
+            return;
+        }
+        if (id == R.id.home_connection_action && getMode() == MODE.OFFLINE
+                && CommService.medium == CommService.MEDIUM.DEMO)
+        {
+            setMode(MODE.DEMO);
+            return;
+        }
+        if (menu == null) return;
+        int menuId;
+        if (id == R.id.home_connection_action)
+            menuId = getMode() == MODE.ONLINE ? R.id.disconnect : R.id.secure_connect_scan;
+        else if (id == R.id.home_faults) menuId = R.id.service_codes;
+        else if (id == R.id.home_live) menuId = R.id.service_data;
+        else if (id == R.id.home_freeze) menuId = R.id.service_freezeframes;
+        else if (id == R.id.home_vehicle) menuId = R.id.service_vid_data;
+        else return;
+        MenuItem action = menu.findItem(menuId);
+        if (action != null && action.isEnabled()) onOptionsItemSelected(action);
+    }
+
+    private void updateWorkshopHome()
+    {
+        TextView status = findViewById(R.id.home_connection_status);
+        if (status == null) return;
+        TextView detail = findViewById(R.id.home_connection_detail);
+        TextView connection = findViewById(R.id.home_connection_action);
+        boolean demo = getMode() == MODE.DEMO;
+        boolean connected = getMode() == MODE.ONLINE && mCommService != null
+                && mCommService.getState() == CommService.STATE.CONNECTED;
+        if (demo)
+        {
+            status.setText(R.string.home_status_demo);
+            detail.setText(R.string.home_demo_detail);
+            connection.setText(R.string.home_demo_connection_action);
+        }
+        else if (connected)
+        {
+            status.setText(R.string.home_status_online);
+            detail.setText(R.string.home_online_detail);
+            connection.setText(R.string.disconnect);
+        }
+        else if (getMode() == MODE.ONLINE)
+        {
+            status.setText(R.string.home_status_connecting);
+            detail.setText(R.string.home_connecting_detail);
+            connection.setText(R.string.disconnect);
+        }
+        else
+        {
+            status.setText(R.string.home_status_offline);
+            boolean demoConfigured = CommService.medium == CommService.MEDIUM.DEMO;
+            detail.setText(demoConfigured ? R.string.home_demo_stopped_detail
+                    : R.string.home_offline_detail);
+            connection.setText(demoConfigured ? R.string.home_start_demo : R.string.action_connect);
+        }
+        MenuItem services = menu == null ? null : menu.findItem(R.id.obd_services);
+        boolean available = (demo || connected) && services != null && services.isEnabled();
+        setHomeActionEnabled(R.id.home_faults, R.id.service_codes, available);
+        setHomeActionEnabled(R.id.home_live, R.id.service_data, available);
+        setHomeActionEnabled(R.id.home_freeze, R.id.service_freezeframes, available);
+        setHomeActionEnabled(R.id.home_vehicle, R.id.service_vid_data, available);
+        TextView freezeHint = findViewById(R.id.home_freeze_hint);
+        if (freezeHint != null)
+            freezeHint.setText(findViewById(R.id.home_freeze).isEnabled()
+                    ? R.string.home_freeze_available_hint : R.string.home_freeze_unavailable_hint);
+    }
+
+    private void setHomeActionEnabled(int viewId, int menuId, boolean available)
+    {
+        View action = findViewById(viewId);
+        MenuItem item = menu == null ? null : menu.findItem(menuId);
+        boolean enabled = available && item != null && item.isEnabled();
+        action.setEnabled(enabled);
+        action.setAlpha(enabled ? 1f : 0.65f);
+    }
+
     /**
      * Handler for Options menu selection
      * 
@@ -955,6 +1034,11 @@ public class MainActivity extends PluginManager
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
+        if (id == android.R.id.home)
+        {
+            setObdService(ObdProt.OBD_SVC_NONE, null);
+            return true;
+        }
         if (!WorkshopFeatures.showMenuItem(id)) return true;
         {
             // Display and UI Management
@@ -1192,7 +1276,14 @@ public class MainActivity extends PluginManager
             // settings finished
             case REQUEST_SETTINGS:
             {
-                // change handling done by callbacks
+                if (getMode() == MODE.DEMO && CommService.medium != CommService.MEDIUM.DEMO)
+                {
+                    setMode(MODE.OFFLINE);
+                    initSelectedMode();
+                }
+                else if (getMode() == MODE.OFFLINE && CommService.medium == CommService.MEDIUM.DEMO)
+                    setMode(MODE.DEMO);
+                updateWorkshopHome();
             }
             break;
 
@@ -1785,6 +1876,7 @@ public class MainActivity extends PluginManager
                 }
             }
         }
+        updateWorkshopHome();
     }
 
     /**
@@ -1842,6 +1934,7 @@ public class MainActivity extends PluginManager
                 // Default visibility for other modes
                 break;
         }
+        updateWorkshopHome();
     }
 
     /**
@@ -2270,6 +2363,7 @@ public class MainActivity extends PluginManager
             // show action bar to make state change visible
             unHideActionBar();
         }
+        updateWorkshopHome();
     }
 
     /**
@@ -2399,6 +2493,7 @@ public class MainActivity extends PluginManager
         final ActionBar ab = getSupportActionBar();
         if (ab != null)
         {
+            ab.setDisplayHomeAsUpEnabled(newObdService != ObdProt.OBD_SVC_NONE);
             // title specified ... show it
             if (menuTitle != null)
             {

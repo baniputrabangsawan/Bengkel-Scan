@@ -63,6 +63,7 @@ public class PidCustomization
         SettingsActivity.applyLocale(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pid_customization);
+        ModernUiUtils.applyScreenInsets(this);
 
         btnOk       = findViewById(R.id.btnOk);
         btnCancel   = findViewById(R.id.btnCancel);

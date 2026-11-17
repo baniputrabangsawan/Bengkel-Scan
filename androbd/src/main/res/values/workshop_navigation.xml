@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_status_connecting">Connecting to scanner…</string>
+    <string name="home_connecting_detail">Wait while the app connects to the scanner.</string>
+    <string name="home_start_demo">Start demo</string>
+    <string name="home_demo_stopped_detail">Try the sample readings without a scanner or vehicle.</string>
+</resources>

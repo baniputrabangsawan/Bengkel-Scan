@@ -12,4 +12,6 @@
     <color name="workshop_warning_text">#7F1D1D</color>
     <color name="workshop_icon_background">#164E63</color>
     <color name="workshop_icon_foreground">#FFFFFF</color>
+    <color name="workshop_page_background">#F5F7FA</color>
+    <color name="workshop_border">#DAE2E8</color>
 </resources>

@@ -97,6 +97,8 @@ public final class UsbDeviceListActivity extends AppCompatActivity
 		SettingsActivity.applyLocale(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.usb_list);
+		setTitle(R.string.select_device);
+		ModernUiUtils.applyScreenInsets(this);
 
 		mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
 		RecyclerView mListView = findViewById(R.id.deviceList);
