@@ -4,7 +4,7 @@
 
 Fork ini menyederhanakan antarmuka agar mekanik mudah membaca Kode Kerusakan, Data Langsung, Data Saat Kerusakan, dan Informasi Kendaraan. Sasaran penggunaannya adalah bengkel kecil dengan satu ponsel bersama, terutama untuk kendaraan diesel yang mendukung OBD-II.
 
-- **Branch pengembangan:** [`bengkel-custom`](https://github.com/baniputrabangsawan/AndrOBD/tree/bengkel-custom).
+- **Branch pengembangan:** [`bengkel-custom`](https://github.com/baniputrabangsawan/Bengkel-Scan/tree/bengkel-custom).
 - **Platform:** Android 6.0 / API 23 atau lebih baru.
 - **Bahasa:** Indonesia secara bawaan; English dan pilihan bahasa upstream tetap tersedia.
 - **Koneksi:** Bluetooth Classic, Bluetooth Low Energy (BLE), USB serial melalui OTG, serta Wi-Fi melalui TCP.
@@ -125,8 +125,8 @@ Sesuaikan `JAVA_HOME` jika lokasi JDK berbeda. Baca dan terima lisensi SDK sendi
 
 ```bash
 git clone --branch bengkel-custom --recurse-submodules \
-  https://github.com/baniputrabangsawan/AndrOBD.git
-cd AndrOBD
+  https://github.com/baniputrabangsawan/Bengkel-Scan.git
+cd Bengkel-Scan
 git submodule update --init --recursive
 ```
 
