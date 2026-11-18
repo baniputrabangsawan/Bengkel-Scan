@@ -58,14 +58,20 @@ public class DiagnosisKnowledgeInstrumentedTest {
         DiagnosisKnowledge knowledge = loader.load();
         assertEquals(1, knowledge.schemaVersion);
         assertEquals("", loader.warning());
-        assertEquals(1, knowledge.complaints.size());
+        for (String complaintId : new String[]{"cold_start", "hot_start", "black_smoke", "white_smoke",
+                "blue_smoke", "power_loss", "overheating", "engine_knock", "oil_pressure_warning",
+                "fuel_leak", "not_charging", "brake_problem", "steering_problem", "suspension_noise",
+                "speed_vibration", "other"}) assertNotNull(knowledge.findComplaint(complaintId));
         assertNotNull(knowledge.findComplaint("cold_start"));
         assertNotNull(knowledge.findSound("slow_cranking"));
         assertNull(knowledge.findSound("slow_cranking").audioFile);
-        assertEquals(3, knowledge.findComplaint("cold_start").questions.size());
-        assertTrue(knowledge.findComplaint("cold_start").causes.size() >= 2);
-        for (DiagnosisKnowledge.Cause cause : knowledge.findComplaint("cold_start").causes) {
-            assertFalse(cause.verified);
+        for (DiagnosisKnowledge.Complaint item : knowledge.complaints) {
+            assertTrue(item.questions.size() >= 3 && item.questions.size() <= 6);
+            for (DiagnosisKnowledge.Cause cause : item.causes) {
+                assertFalse("Starter content must not claim mechanic review: " + cause.id, cause.verified);
+                if ("HIGH".equals(cause.dangerLevel))
+                    assertTrue(cause.warning.contains("Jangan dikendarai sebelum diperiksa"));
+            }
         }
         DiagnosisKnowledge restored = DiagnosisKnowledgeLoader.parse(
                 DiagnosisKnowledgeLoader.encode(knowledge));
@@ -88,7 +94,7 @@ public class DiagnosisKnowledgeInstrumentedTest {
         extra.put("sounds", new JSONArray());
         loader.importExtra(source(extra.toString()));
         DiagnosisKnowledge merged = loader.load();
-        assertEquals(1, merged.complaints.size());
+        assertEquals(loader.loadBundled().complaints.size(), merged.complaints.size());
         assertEquals("Keluhan pengganti", merged.findComplaint("cold_start").title);
         assertNotNull(merged.findSound("slow_cranking"));
         assertTrue(merged.revision.contains("uji-pengganti"));
@@ -125,8 +131,8 @@ public class DiagnosisKnowledgeInstrumentedTest {
         sound.put("id", "additional_sound");
         loader.importExtra(source(extra.toString()));
         DiagnosisKnowledge merged = loader.load();
-        assertEquals(2, merged.complaints.size());
-        assertEquals(2, merged.sounds.size());
+        assertEquals(loader.loadBundled().complaints.size() + 1, merged.complaints.size());
+        assertEquals(loader.loadBundled().sounds.size() + 1, merged.sounds.size());
         assertNotNull(merged.findComplaint("additional_start"));
         assertNotNull(merged.findSound("additional_sound"));
     }

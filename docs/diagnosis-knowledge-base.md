@@ -323,3 +323,10 @@ Putar/jeda memakai `MediaPlayer`. Satu bunyi diputar pada satu waktu; meninggalk
 - Setelah isi suatu penyebab ditinjau dan disetujui mekanik senior, ubah `verified` penyebab itu menjadi `true` dan naikkan `revision`. Konfirmasi pada kasus kendaraan tidak otomatis menyetujui isi panduan.
 - Cadangkan ZIP, impor JSON hasil tinjauan melalui menu, lalu coba pilihan yang cocok/tidak cocok/belum diperiksa. Pastikan kasus lama masih menampilkan snapshot dan buktinya sendiri.
 
+
+## Isi awal diesel mekanis
+
+Revisi `draf-diesel-injeksi-mekanis-tanpa-komputer-2026-11-18` menyediakan 16 keluhan, 49 pertanyaan, 65 kemungkinan penyebab, dan 11 jenis bunyi tanpa audio. Semua kemungkinan memakai `verified: false`; ini bahan tinjauan mekanik senior, bukan manual kendaraan yang sudah disahkan.
+
+Cakupan: sulit hidup dingin/panas (termasuk starter tidak memutar mesin), asap hitam/putih/biru, tenaga turun, panas berlebih, ketukan mesin, peringatan tekanan oli, kebocoran solar, aki tidak terisi, rem, kemudi, bunyi suspensi, getaran saat berjalan, dan keluhan lainnya. Pemeriksaan menargetkan diesel injeksi mekanis tanpa ECU; tidak mensyaratkan kode kerusakan, alat scan, atau data sensor komputer. Turbo, busi pijar, dan perlengkapan tambahan hanya berlaku bila kendaraan memilikinya.
+
