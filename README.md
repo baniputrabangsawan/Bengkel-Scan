@@ -2,7 +2,7 @@
 
 **Aplikasi pemeriksaan OBD-II berbahasa Indonesia untuk bengkel, dikembangkan dari [AndrOBD](https://github.com/fr3ts0n/AndrOBD) karya fr3ts0n dan para kontributornya.**
 
-Fork ini menyederhanakan antarmuka agar mekanik mudah membaca Kode Kerusakan, Data Langsung, Data Saat Kerusakan, dan Informasi Kendaraan. Sasaran penggunaannya adalah bengkel kecil dengan satu ponsel bersama, terutama untuk kendaraan diesel yang mendukung OBD-II.
+Fork ini menyederhanakan antarmuka agar mekanik mudah membaca kode, data pemeriksaan, dan riwayat servis, termasuk **kendaraan diesel injeksi mekanis tanpa ECU** melalui checklist gejala. Sasaran penggunaannya adalah bengkel kecil dengan satu ponsel bersama.
 
 - **Branch pengembangan:** [`bengkel-custom`](https://github.com/baniputrabangsawan/Bengkel-Scan/tree/bengkel-custom).
 - **Platform:** Android 6.0 / API 23 atau lebih baru.
@@ -11,7 +11,7 @@ Fork ini menyederhanakan antarmuka agar mekanik mudah membaca Kode Kerusakan, Da
 - **Tanpa kendaraan:** tersedia Mode Latihan dengan data simulasi.
 - **Lisensi:** [GNU GPL-3.0](LICENSE); atribusi upstream tetap dipertahankan.
 
-> **Status saat ini:** aplikasi diagnostik OBD dengan data pelanggan, kendaraan, servis, biaya, catatan diagnosis lintas scanner, dan panduan pemeriksaan offline. Catatan SRS/transmisi diisi mekanik dari alat atau pengujian; bukan akses langsung universal ke modul. Hasil OBD belum tersimpan otomatis ke servis; PDF/invoice belum tersedia.
+> **Status saat ini:** aplikasi diagnostik OBD dengan data pelanggan, kendaraan, servis, biaya, catatan diagnosis lintas scanner, panduan pemeriksaan offline, serta diagnosis terpandu untuk kendaraan tanpa ECU. Semua saran diagnosis adalah **draf yang belum ditinjau mekanik senior**. Hasil OBD belum tersimpan otomatis ke servis; PDF/invoice belum tersedia.
 
 ## Daftar isi
 
@@ -40,6 +40,9 @@ Fork ini menyederhanakan antarmuka agar mekanik mudah membaca Kode Kerusakan, Da
 | Mode Latihan | Data contoh untuk belajar tanpa alat scan dan tanpa kendaraan |
 | Data bengkel | Pelanggan, kendaraan, catatan servis, status/pembayaran, rincian biaya, cadangkan dan pulihkan |
 | Tema | Terang, gelap, dan mengikuti sistem |
+| Diagnosis tanpa alat scan | Checklist gejala untuk diesel injeksi mekanis tanpa ECU, kemungkinan penyebab beralasan, dan bukti pemeriksaan |
+| Panduan Bunyi | Daftar jenis bunyi, pemutaran audio lokal offline, impor rekaman, dan rekaman 15 detik terkait kasus terkonfirmasi |
+| Kasus serupa | Hitungan sederhana kasus terkonfirmasi dengan keluhan dan kendaraan yang sama |
 | Tentang Aplikasi | Kredit AndrOBD, pemberitahuan lisensi, dan tautan proyek asli |
 | Pencarian DTC di web | Tekan lama kode; memerlukan aplikasi pencarian/browser dan internet |
 
@@ -52,7 +55,7 @@ Grafik, gauge/dashboard, HUD, pengaturan tampilan lanjutan, pengelolaan plugin, 
 ### Batas kompatibilitas kendaraan
 
 - Kendaraan harus mempunyai ECU dan mendukung layanan/protokol OBD yang dapat diakses alat ELM327 yang digunakan. Bentuk soket saja tidak membuktikan kompatibilitas.
-- Diesel injeksi mekanis tanpa ECU **tidak dapat didiagnosis melalui OBD**. Checklist gejala untuk kendaraan tersebut masih dalam roadmap.
+- Diesel injeksi mekanis tanpa ECU **tidak dapat dibaca OBD**, tetapi dapat memakai **Diagnosis Tanpa Alat Scan**. Panduan ini hanya draf saran; bunyi serupa tidak membuktikan penyebab sama, dan aplikasi tidak mengenali bunyi secara AI.
 - Truk dengan J1939, konektor khusus, atau protokol pabrikan tidak otomatis didukung. Kabel pengubah bentuk konektor tidak menerjemahkan protokol.
 - ABS, airbag/SRS, transmisi, coding, regenerasi DPF paksa, dan fungsi servis khusus pabrikan **tidak dijanjikan tersedia**. Aplikasi ini bukan pengganti scanner pabrikan.
 - Parameter seperti tekanan rail, turbo, EGR, dan DPF hanya muncul bila kendaraan menyediakan PID yang didukung.
@@ -246,7 +249,7 @@ Kartu **Data bengkel** di beranda membuka daftar pelanggan. Alur pengisian:
 
 Rincian biaya memakai Rupiah bilangan bulat; jumlah mendukung pecahan (misalnya 1,5 jam jasa) dan total dihitung otomatis. Ketuk lama satu item untuk menghapusnya setelah konfirmasi.
 
-**Cadangkan data** menulis seluruh berkas database ke `Android/data/com.fr3ts0n.ecu.gui.androbd/files/backup/workshop-YYYYMMDD-HHmmss.db` dan dapat dibagikan lewat menu Bagikan (WhatsApp, Drive, dan sebagainya). **⋮ → Pulihkan dari berkas** mengganti seluruh data dengan berkas cadangan yang dipilih: ada konfirmasi, berkas divalidasi lebih dahulu, dan data lama disimpan sebagai `workshop.db.before-restore`.
+**Cadangkan data** menghasilkan `.../files/backup/workshop-YYYYMMDD-HHmmss.zip` yang memuat database, foto, dan rekaman diagnosis, serta panduan tambahan yang aktif. Berkas itu dapat dibagikan lewat menu Bagikan. **⋮ → Pulihkan dari berkas** mengganti database dan media sekaligus setelah validasi dan konfirmasi. Cadangan `.db` versi lama tetap didukung, tetapi tidak membawa foto/audio. Cadangan belum dienkripsi; simpan salinan di luar ponsel.
 
 Batasan saat ini: hasil OBD **belum** tersambung otomatis ke catatan servis (fase berikutnya), belum ada PDF/invoice, dan belum ada akun atau sinkronisasi. Satu ponsel adalah satu database; jangan mengisi data dari dua layar sekaligus saat mencadangkan atau memulihkan.
 
@@ -263,6 +266,18 @@ Batasan saat ini: hasil OBD **belum** tersambung otomatis ke catatan servis (fas
 Pencatatan manual tidak tergantung merek scanner. Impor laporan vendor dan koneksi langsung THINK/alat lain tidak ditambahkan tanpa format atau SDK yang terverifikasi. Tidak ada perintah ECU, hapus kode, aktivasi aktuator, atau reset SRS/transmisi pada fitur ini.
 
 Katalog bawaan mencakup P0299/boost rendah, panas berlebih, peringatan SRS, masalah transmisi, serta alur pengumpulan bukti untuk kode yang belum didukung. Sumber offline mencatat kesesuaian dan revisi, antara lain [Garrett Turbo Diagnostics](https://www.garrettmotion.com/turbo-replacement/turbo-diagnostics/), [GM PI1366](https://static.nhtsa.gov/odi/tsbs/2014/MC-10126208-9999.pdf), [Aston Martin OTH-01-1043](https://static.nhtsa.gov/odi/tsbs/2018/MC-10142192-9999.pdf), dan [Toyota 23TA08](https://static.nhtsa.gov/odi/rcl/2023/RCRIT-23V480-8717.pdf). Buletin tersebut bukan manual untuk semua kendaraan bengkel; batas model/VIN tetap ditampilkan.
+
+### Diagnosis tanpa alat scan
+
+Kartu **Diagnosis Tanpa Alat Scan** di beranda, atau tombol yang sama pada rincian servis, membuka checklist untuk diesel injeksi mekanis tanpa ECU. Pilih kelompok keluhan, pilih keluhan, lalu jawab pertanyaan pilihan tunggal. Jawaban **belum diketahui atau belum diperiksa** selalu tersedia dan tidak dianggap kondisi normal.
+
+Setiap **Kemungkinan penyebab** menampilkan tanda, langkah pemeriksaan aman, tingkat bahaya, alasan urutan, dan usulan pekerjaan. Urutan berasal dari bobot serta aturan jawaban di JSON, bukan ML atau peluang statistik. Label **Draf, belum diverifikasi mekanik** tetap tampil sampai isi panduan ditinjau mekanik senior.
+
+Mekanik mencatat **terkonfirmasi** hanya bersama bukti pemeriksaan, atau **disingkirkan** beserta alasannya. Penilaian akhir dapat memakai kemungkinan yang dipilih atau tulisan sendiri. Konfirmasi memerlukan bukti; menyimpan penilaian tidak otomatis menyetujui isi panduan. Foto dapat dilampirkan. **Hasil ini hanya saran. Keputusan akhir ada pada mekanik.**
+
+**Panduan Bunyi** tersedia dari menu **⋮**, kelompok Bunyi, atau formulir penilaian. Pemutaran audio lokal dan rekaman bekerja offline. Rekaman berdurasi maksimal 15 detik, dimulai hanya setelah tombol ditekan dan izin mikrofon diberikan, lalu berhenti ketika layar ditinggalkan. Rekaman harus terkait kasus dengan penilaian akhir yang dikonfirmasi. Aplikasi tidak membuat audio contoh palsu dan tidak mengenali bunyi.
+
+**Kasus serupa** hanya menghitung kasus lain dengan keluhan, model, tahun, dan jenis mesin yang sama serta penilaian akhir terkonfirmasi. Hitungan itu bukan peluang kerusakan. Kelola isi melalui **Impor panduan JSON** pada layar diagnosis; lihat [`docs/diagnosis-knowledge-base.md`](docs/diagnosis-knowledge-base.md) untuk skema, contoh, batas keselamatan, dan checklist tinjauan. Semua isi awal masih draf.
 
 
 ## Jenis sambungan dan cara menghubungkan
@@ -346,11 +361,14 @@ Putuskan koneksi aktif sebelum berpindah alat/jenis sambungan. Dari demo, **Atur
 - **Tersimpan:** kode yang dilaporkan ECU melalui layanan pembacaan kode tersimpan.
 - **Tertunda:** gangguan yang belum memenuhi seluruh kondisi untuk menjadi kode terkonfirmasi.
 - **Permanen:** kode yang penghapusannya mengikuti syarat verifikasi ECU; bukan berarti komponen selamanya tidak dapat diperbaiki.
-- Deskripsi DTC masih menggunakan kamus upstream dan dapat berbahasa Inggris. Terjemahan kamus DTC Indonesia lengkap belum dibuat; teks fallback pabrikan tetap ditampilkan bila tidak ada deskripsi yang dikenali.
+- **3.584 uraian kode bawaan tersedia offline dalam Bahasa Indonesia.** Kode tetap sama; penjelasan membedakan sinyal rangkaian, tekanan, suhu, lokasi sensor, dan status gangguan. Hasil tersimpan yang berisi uraian Inggris juga ditampilkan dalam Bahasa Indonesia untuk kode yang dikenal, tanpa mengubah bukti aslinya.
+- Kode yang belum ada dalam kamus ditandai **arti kode belum tersedia**, bukan dianggap normal atau langsung disebut kode khusus pabrikan. Periksa laporan alat scan dan manual servis kendaraan. Istilah sumber yang ambigu tetap diberi batasan acuan kendaraan.
 - **Tidak ada kode bukan bukti seluruh kendaraan sehat.** Gangguan mekanis, gangguan yang belum terekam, dan sistem yang tidak dijangkau OBD generik masih mungkin ada.
 - Tekan lama kode untuk pencarian web bila diperlukan. Hasil web bukan keputusan diagnosis dan tindakan ini memerlukan internet.
 
 Jangan langsung mengganti komponen berdasarkan nama kode. Periksa keluhan, kabel/konektor, catu daya, kondisi mekanis, dan hasil pengujian sesuai manual servis.
+
+**Membaca istilah:** MAF/VAF adalah pengukur aliran massa/volume udara masuk. **Sinyal rangkaian rendah/tinggi** tidak otomatis berarti tekanan atau suhu rendah/tinggi, dan tidak membuktikan sensornya rusak. **Bank** berarti kelompok silinder; penomoran bank/sensor mengikuti manual kendaraan, bukan selalu kiri/kanan. Kamus B/C/U tidak menambah kemampuan membaca ABS/SRS/bodi melalui alat OBD generik.
 
 ### Data Langsung
 
@@ -602,12 +620,11 @@ Roadmap adalah arah pengembangan, **bukan daftar fitur yang sudah tersedia**.
 | Fase | Cakupan | Status |
 | --- | --- | --- |
 | 0–1 | Build dasar dan pemetaan codebase | Selesai pada lingkungan pengembangan |
-| 2 | Bahasa Indonesia, branding Bengkel Scan, menu sederhana, dan perapian UI | Diimplementasikan; kamus DTC Indonesia ditunda |
-| 3 | Database offline pelanggan, kendaraan, servis, item estimasi; ekspor/backup | Selesai: skema, repository, empat layar pengisian, cadangkan/pulihkan |
-| 4 | Tautan hasil OBD ke servis dan penyimpanan snapshot otomatis | Catatan manual lintas scanner per servis tersedia; snapshot OBD otomatis belum tersedia |
+| 2 | Bahasa Indonesia, branding Bengkel Scan, menu sederhana, dan perapian UI | Selesai, termasuk terjemahan 3.584 uraian kode OBD |
+| 3 | Database offline pelanggan, kendaraan, servis, item estimasi; ekspor/backup | Selesai; cadangan ZIP kini membawa database, foto, dan audio diagnosis |
+| 4 | Tautan hasil OBD ke servis dan penyimpanan snapshot otomatis | Catatan manual lintas scanner dan tautan kasus gejala tersedia; snapshot OBD otomatis belum tersedia |
 | 5 | Laporan/invoice PDF dan berbagi melalui share sheet, termasuk WhatsApp | Belum tersedia |
-| 6 | Checklist gejala diesel dengan knowledge base yang dapat diedit | Panduan pemeriksaan/perbaikan offline bersumber tersedia; editor knowledge base belum tersedia |
-| 7 | Pengukuran APK, memori, startup, lalu optimasi berbasis bukti | Belum dilakukan sebagai fase pengukuran |
+| 6 | Checklist gejala diesel dengan knowledge base yang dapat diedit | Selesai sebagai draf:16 keluhan, pertanyaan, peringkat, bukti, bunyi, impor JSON, dan kasus serupa; belum ditinjau mekanik senior |
 
 Perubahan dikerjakan bertahap. Penyimpanan offline dan riwayat per kendaraan perlu selesai sebelum aplikasi dipakai sebagai satu-satunya sumber catatan bengkel.
 

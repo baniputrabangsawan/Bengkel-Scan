@@ -247,11 +247,19 @@ public final class DiagnosisRepository
                         throw new IllegalArgumentException("invalid_final_evidence");
                 }
                 if (row.isFinal && row.answers.size() != row.complaint.questions.size()) throw new IllegalArgumentException("incomplete_final_case");
+                if (row.isFinal && (row.finalDiagnosis.trim().isEmpty()
+                        || (!row.finalCauseId.isEmpty() && row.complaint.findCause(row.finalCauseId) == null)))
+                    throw new IllegalArgumentException("invalid_final_assessment");
                 for (Photo photo : row.photos) if (!safePhotoPath(photo.relativePath)) throw new IllegalArgumentException("unsafe_photo_path");
             }
         }
         try (Cursor ignored = db.rawQuery("SELECT case_id,cause_id,status,evidence FROM diagnosis_checks LIMIT 0", null)) { ignored.moveToFirst(); }
         try (Cursor ignored = db.rawQuery("SELECT id,case_id,relative_path,caption FROM diagnosis_photos LIMIT 0", null)) { ignored.moveToFirst(); }
+        try (Cursor links = db.rawQuery("SELECT c.id FROM diagnosis_cases c JOIN estimate_items i ON i.id=c.estimate_item_id "
+                + "WHERE c.service_id IS NULL OR c.service_id!=i.service_id LIMIT 1", null))
+        {
+            if (links.moveToFirst()) throw new IllegalArgumentException("invalid_estimate_service_link");
+        }
     }
 
     private static CaseRecord read(SQLiteDatabase db, Cursor cursor)

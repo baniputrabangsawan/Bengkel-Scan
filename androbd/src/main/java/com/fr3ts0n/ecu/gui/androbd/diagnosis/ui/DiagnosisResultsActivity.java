@@ -93,11 +93,18 @@ public class DiagnosisResultsActivity extends AppCompatActivity
         DiagnosisUi.text(this, root, complaint.title, true);
         DiagnosisUi.text(this, root, getString(R.string.diagnosis_confirmed_note), false);
         if (record.isFinal) DiagnosisUi.text(this, root, getString(R.string.diagnosis_case_change_warning), false);
+        String linkedCauseId = getIntent().getStringExtra("diagnosis.cause_id");
+        DiagnosisKnowledge.Cause linkedCause = complaint.findCause(linkedCauseId);
+        if (linkedCause != null)
+            DiagnosisUi.text(this, root, getString(R.string.diagnosis_sound_linked_cause, linkedCause.name), false);
+        if (answers.size() != complaint.questions.size())
+            DiagnosisUi.text(this, root, getString(R.string.diagnosis_complete_questions), true);
         DiagnosisUi.button(this, root, getString(R.string.diagnosis_final_action), view ->
                 startActivity(new Intent(this, DiagnosisCaseActivity.class).putExtra(DiagnosisUi.CASE, record.id)));
         DiagnosisUi.button(this, root, getString(R.string.diagnosis_edit_answers), view ->
                 startActivity(new Intent(this, DiagnosisQuestionsActivity.class).putExtra(DiagnosisUi.CASE, record.id)));
         DiagnosisHistoryPanel.render(this, root, repository, record);
+        DiagnosisServicePanel.render(this, root, record);
         Map<String, CheckStatus> checks = new LinkedHashMap<>();
         for (DiagnosisRepository.Check check : record.checks.values()) checks.put(check.causeId, check.status);
         for (DiagnosisScorer.RankedCause ranked : DiagnosisScorer.rank(complaint, answers, checks))

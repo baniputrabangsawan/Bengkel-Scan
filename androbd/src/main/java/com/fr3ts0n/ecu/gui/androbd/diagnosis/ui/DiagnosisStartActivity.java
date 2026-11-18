@@ -45,7 +45,27 @@ public class DiagnosisStartActivity extends AppCompatActivity
         if (state == null && knowledge != null && getIntent().hasExtra(DiagnosisUi.COMPLAINT))
         {
             DiagnosisKnowledge.Complaint complaint = knowledge.findComplaint(getIntent().getStringExtra(DiagnosisUi.COMPLAINT));
-            if (complaint != null) open(complaint);
+            if (complaint != null)
+            {
+                String causeId = getIntent().getStringExtra("diagnosis.cause_id");
+                if (causeId != null && complaint.findCause(causeId) != null)
+                {
+                    try
+                    {
+                        DiagnosisRepository.CaseRecord saved = repository.create(knowledge, complaint, null);
+                        startActivity(new Intent(this, DiagnosisResultsActivity.class)
+                                .putExtra(DiagnosisUi.CASE, saved.id)
+                                .putExtra("diagnosis.cause_id", causeId));
+                        finish();
+                    }
+                    catch (RuntimeException e)
+                    {
+                        Log.e("Diagnosis", "Sound-linked case creation failed", e);
+                        Toast.makeText(this, R.string.diagnosis_case_save_failed, Toast.LENGTH_LONG).show();
+                    }
+                }
+                else open(complaint);
+            }
         }
     }
 

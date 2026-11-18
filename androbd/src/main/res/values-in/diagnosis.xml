@@ -36,4 +36,6 @@
     <string name="diagnosis_category_brakes_steering">Rem dan kemudi</string>
     <string name="diagnosis_category_other">Lainnya</string>
     <string name="diagnosis_empty_category">Panduan untuk kelompok ini belum tersedia di katalog yang aktif.</string>
+    <string name="diagnosis_sound_linked_cause">Terkait bunyi yang dipilih: %1$s. Kemiripan bunyi bukan bukti penyebabnya sama; periksa langkah dan bukti pada kemungkinan ini.</string>
+    <string name="diagnosis_complete_questions">Jawab pertanyaan melalui Ubah jawaban sebelum menyimpan penilaian akhir.</string>
 </resources>

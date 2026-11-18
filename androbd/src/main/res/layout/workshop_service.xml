@@ -35,6 +35,14 @@
                 android:layout_marginTop="12dp"
                 android:text="@string/diagnostic_entry" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/workshop_guided_diagnosis"
+                style="@style/WorkshopHomeSecondaryAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/diagnosis_start_title" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

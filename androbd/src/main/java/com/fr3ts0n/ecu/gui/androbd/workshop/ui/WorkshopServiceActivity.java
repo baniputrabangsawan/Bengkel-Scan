@@ -82,6 +82,10 @@ public class WorkshopServiceActivity extends AppCompatActivity
 		findViewById(R.id.workshop_diagnostics).setOnClickListener(view ->
 				startActivity(new Intent(this, WorkshopDiagnosticsActivity.class)
 						.putExtra(WorkshopUi.EXTRA_SERVICE_ID, service.id)));
+		findViewById(R.id.workshop_guided_diagnosis).setOnClickListener(view ->
+				startActivity(new Intent(this,
+						com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.DiagnosisStartActivity.class)
+						.putExtra(WorkshopUi.EXTRA_SERVICE_ID, service.id)));
 
 		status = findViewById(R.id.workshop_status);
 		ArrayAdapter<String> statuses = new ArrayAdapter<>(this,

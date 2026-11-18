@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnosis_link_title">Hubungkan dengan servis dan estimasi</string>
+    <string name="diagnosis_link_notice">Saran pekerjaan hanya usulan. Menambahkan estimasi tidak berarti pelanggan menyetujui pekerjaan atau mekanik mengonfirmasi penyebab. Jumlah dan harga harus diisi sendiri; aplikasi tidak menentukan tarif.</string>
+    <string name="diagnosis_link_loading">Memuat hubungan servis…</string>
+    <string name="diagnosis_link_none">Kasus ini belum terhubung dengan servis.</string>
+    <string name="diagnosis_link_choose">Pilih servis yang sudah ada</string>
+    <string name="diagnosis_link_change">Ganti hubungan servis</string>
+    <string name="diagnosis_link_customer">Pilih pelanggan</string>
+    <string name="diagnosis_link_vehicle">Pilih kendaraan</string>
+    <string name="diagnosis_link_service">Pilih kunjungan servis</string>
+    <string name="diagnosis_link_customer_row">%1$s · %2$s · pelanggan #%3$d</string>
+    <string name="diagnosis_link_vehicle_row">%1$s · %2$s · kendaraan #%3$d</string>
+    <string name="diagnosis_link_service_row">Servis #%1$d · %2$s\n%3$s</string>
+    <string name="diagnosis_link_no_customers">Belum ada pelanggan. Buat pelanggan, kendaraan, dan servis melalui menu bengkel terlebih dahulu.</string>
+    <string name="diagnosis_link_no_vehicles">Pelanggan ini belum memiliki kendaraan. Pilih pelanggan lain atau tambahkan kendaraan melalui menu bengkel.</string>
+    <string name="diagnosis_link_no_services">Kendaraan ini belum memiliki kunjungan servis. Tambahkan servis melalui menu bengkel terlebih dahulu.</string>
+    <string name="diagnosis_link_preview">Pelanggan: %1$s (#%2$d)\nNomor polisi: %3$s\nModel: %4$s\nServis: #%5$d\nTanggal kunjungan: %6$s\nKeluhan servis: %7$s</string>
+    <string name="diagnosis_link_confirm_title">Periksa tujuan hubungan</string>
+    <string name="diagnosis_link_confirm_notice">Pastikan pelanggan, nomor polisi, dan tanggal di atas sesuai kasus ini. Hubungan ini juga mengisi identitas kendaraan kasus dari data servis.</string>
+    <string name="diagnosis_link_confirm">Hubungkan kasus ini</string>
+    <string name="diagnosis_link_missing_data">Belum dicatat</string>
+    <string name="diagnosis_link_cancel">Batal</string>
+    <string name="diagnosis_link_close">Tutup</string>
+    <string name="diagnosis_link_failed">Data servis atau estimasi tidak dapat diproses. Periksa hubungan servis dan buka ulang panel. Tidak ada penambahan estimasi yang disimpan sebagian.</string>
+    <string name="diagnosis_link_final_required">Simpan penilaian akhir kasus terlebih dahulu sebelum menawarkan pekerjaan ke estimasi.</string>
+    <string name="diagnosis_link_estimate_action">Tinjau usulan pekerjaan untuk estimasi</string>
+    <string name="diagnosis_link_estimate_title">Usulan pekerjaan — belum disetujui</string>
+    <string name="diagnosis_link_suggestion">Nama pekerjaan diambil dari saran penyebab yang dipilih dan boleh diubah. Ini bukan perintah mengganti komponen.</string>
+    <string name="diagnosis_link_manual">Penilaian khusus: isi nama pekerjaan sendiri sesuai pemeriksaan mekanik.</string>
+    <string name="diagnosis_link_description">Nama / uraian pekerjaan</string>
+    <string name="diagnosis_link_kind">Jenis baris estimasi</string>
+    <string name="diagnosis_link_kind_labour">Jasa</string>
+    <string name="diagnosis_link_kind_part">Suku cadang</string>
+    <string name="diagnosis_link_quantity">Jumlah (isi sendiri; desimal boleh memakai koma atau titik)</string>
+    <string name="diagnosis_link_price">Harga satuan (Rupiah utuh, tanpa pemisah ribuan; isi 0 jika memang nol)</string>
+    <string name="diagnosis_link_add">Tambahkan usulan ke estimasi</string>
+    <string name="diagnosis_link_description_invalid">Isi uraian pekerjaan, bukan hanya spasi.</string>
+    <string name="diagnosis_link_quantity_invalid">Isi jumlah dengan angka terbatas yang lebih besar dari nol.</string>
+    <string name="diagnosis_link_price_invalid">Isi harga satuan Rupiah dengan bilangan bulat nol atau positif, tanpa pemisah ribuan.</string>
+    <string name="diagnosis_link_saved">Usulan ditambahkan ke estimasi. Persetujuan pelanggan tetap diperlukan.</string>
+    <string name="diagnosis_link_existing">Kasus ini sudah terhubung dengan baris estimasi #%1$d. Tidak ditambahkan lagi. Hubungan servis tidak dapat dipindahkan selama baris ini masih terhubung.</string>
+    <string name="diagnosis_link_existing_item">%1$s\nJenis: %2$s\nJumlah: %3$s\nHarga satuan: Rp %4$s\nTotal baris: Rp %5$s</string>
+    <string name="diagnosis_link_invalid_existing">Baris estimasi yang terhubung tidak sesuai servis ini. Jangan menambahkan ulang; periksa data bengkel terlebih dahulu.</string>
+    <string name="diagnosis_link_service_changed">Penambahan belum berhasil. Hubungan servis mungkin sudah berubah atau data tidak dapat diproses. Tutup formulir dan tinjau kembali pelanggan, nomor polisi, dan tanggal sebelum menambahkan.</string>
+</resources>
