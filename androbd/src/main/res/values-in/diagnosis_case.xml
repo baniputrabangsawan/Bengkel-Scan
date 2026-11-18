@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnosis_case_title">Catatan diagnosis mekanik</string>
+    <string name="diagnosis_check_action">Catat hasil pemeriksaan</string>
+    <string name="diagnosis_check_not_tested">Belum diperiksa</string>
+    <string name="diagnosis_check_confirmed">Terkonfirmasi oleh mekanik</string>
+    <string name="diagnosis_check_ruled_out">Disingkirkan oleh mekanik</string>
+    <string name="diagnosis_check_evidence">Hasil pemeriksaan / bukti</string>
+    <string name="diagnosis_check_evidence_required">Catat pengujian dan hasil yang mendukung konfirmasi. Pilihan ini bukan keputusan otomatis aplikasi.</string>
+    <string name="diagnosis_confirmed_note">Konfirmasi berasal dari pemeriksaan mekanik, bukan dari urutan saran.</string>
+    <string name="diagnosis_save">Simpan</string>
+    <string name="diagnosis_cancel">Batal</string>
+    <string name="diagnosis_final_action">Pilih diagnosis akhir / tambahkan foto</string>
+    <string name="diagnosis_final_choose">Penilaian akhir mekanik</string>
+    <string name="diagnosis_final_custom">Tulis penilaian lain</string>
+    <string name="diagnosis_final_text">Penilaian lain dari mekanik</string>
+    <string name="diagnosis_final_confirmed">Mekanik sudah mengonfirmasi dengan bukti pemeriksaan</string>
+    <string name="diagnosis_final_unconfirmed">Boleh menyimpan sebagai dugaan. Jangan centang konfirmasi jika belum diuji.</string>
+    <string name="diagnosis_case_notes">Catatan / bukti penilaian lain</string>
+    <string name="diagnosis_case_vehicle">Informasi kendaraan kasus ini (opsional; tidak mengubah data kendaraan)</string>
+    <string name="diagnosis_case_model">Model kendaraan</string>
+    <string name="diagnosis_case_year">Tahun kendaraan</string>
+    <string name="diagnosis_case_engine">Jenis / kode mesin yang diketahui</string>
+    <string name="diagnosis_final_required">Pilih penilaian mekanik atau isi penilaian lain.</string>
+    <string name="diagnosis_final_evidence_missing">Konfirmasi belum dapat disimpan. Untuk saran yang dipilih, catat pemeriksaan terkonfirmasi beserta buktinya. Untuk penilaian lain, isi bukti pada catatan.</string>
+    <string name="diagnosis_year_invalid">Isi tahun dengan angka positif, atau kosongkan bila belum diketahui.</string>
+    <string name="diagnosis_case_saved">Catatan diagnosis disimpan.</string>
+    <string name="diagnosis_case_save_failed">Catatan tidak dapat disimpan. Data yang sudah tersimpan tidak dihapus.</string>
+    <string name="diagnosis_photo_add">Tambahkan foto</string>
+    <string name="diagnosis_photo_label">Foto %1$d</string>
+    <string name="diagnosis_photo_error">Foto tidak dapat ditambahkan atau dibuka. Pilih berkas gambar yang dapat dibaca.</string>
+    <string name="diagnosis_photo_close">Tutup foto</string>
+    <string name="diagnosis_case_drafts">Kasus tersimpan / lanjutkan pemeriksaan</string>
+    <string name="diagnosis_case_draft_state">Draf pemeriksaan</string>
+    <string name="diagnosis_case_final_state">Penilaian tersimpan</string>
+    <string name="diagnosis_case_no_records">Belum ada kasus tersimpan.</string>
+    <string name="diagnosis_case_change_warning">Mengubah hasil pemeriksaan menjadikan penilaian kembali draf. Simpan ulang penilaian akhir setelah meninjau buktinya.</string>
+    <string name="diagnosis_case_resume_label">#%1$d · %2$s — %3$s</string>
+    <string name="diagnosis_case_load_failed">Kasus tersimpan belum dapat dibuka. Coba buka kembali halaman ini.</string>
+    <string name="diagnosis_edit_answers">Tinjau / ubah jawaban keluhan</string>
+    <string name="diagnosis_case_discard_title">Tinggalkan penilaian yang belum disimpan?</string>
+    <string name="diagnosis_case_discard_message">Perubahan pada formulir penilaian akan dibuang. Jawaban, hasil pemeriksaan, dan foto yang sudah disimpan tetap tersedia.</string>
+    <string name="diagnosis_case_discard">Buang perubahan</string>
+</resources>

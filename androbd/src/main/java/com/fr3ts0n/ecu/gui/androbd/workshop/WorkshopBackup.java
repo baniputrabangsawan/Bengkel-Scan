@@ -17,6 +17,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import com.fr3ts0n.ecu.gui.androbd.diagnosis.data.DiagnosisRepository;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,12 +56,13 @@ public final class WorkshopBackup
 			throw new IllegalStateException("Cannot create backup directory " + directory);
 		}
 		String stamp = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(new Date());
-		return new File(directory, "workshop-" + stamp + ".db");
+		return new File(directory, "workshop-" + stamp + ".zip");
 	}
 
 	/** Copy the live database to {@code target}, replacing it if present. */
 	public static File export(WorkshopDatabase database, File target) throws IOException
 	{
+		if (target.getName().endsWith(".zip")) return WorkshopArchive.export(database, target);
 		SQLiteDatabase db = database.getWritableDatabase();
 		checkpoint(db);
 		File source = new File(db.getPath());
@@ -88,6 +90,14 @@ public final class WorkshopBackup
 		if (source == null || !source.isFile())
 		{
 			throw new IOException("Backup file not found");
+		}
+		try (InputStream input = new FileInputStream(source))
+		{
+			if (input.read() == 'P' && input.read() == 'K')
+			{
+				WorkshopArchive.restore(database, source);
+				return;
+			}
 		}
 
 		SQLiteDatabase db = database.getWritableDatabase();
@@ -147,7 +157,7 @@ public final class WorkshopBackup
 		}
 	}
 
-	private static void validateAndMigrate(WorkshopDatabase database, File candidate) throws IOException
+	static void validateAndMigrate(WorkshopDatabase database, File candidate) throws IOException
 	{
 		try (SQLiteDatabase check = SQLiteDatabase.openDatabase(candidate.getPath(), null,
 				SQLiteDatabase.OPEN_READWRITE))
@@ -217,6 +227,7 @@ public final class WorkshopBackup
 				while (cursor.moveToNext()) DiagnosticRepository.read(cursor);
 			}
 		}
+		if (version >= 3) DiagnosisRepository.validateDatabase(db);
 		try (Cursor cursor = db.rawQuery("PRAGMA integrity_check", null))
 		{
 			if (!cursor.moveToFirst() || !"ok".equalsIgnoreCase(cursor.getString(0))

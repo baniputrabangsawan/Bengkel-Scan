@@ -15,42 +15,52 @@ import androidx.appcompat.widget.AppCompatRadioButton;
 import com.fr3ts0n.ecu.gui.androbd.R;
 import com.fr3ts0n.ecu.gui.androbd.SettingsActivity;
 import com.fr3ts0n.ecu.gui.androbd.diagnosis.core.DiagnosisKnowledge;
-import com.fr3ts0n.ecu.gui.androbd.diagnosis.data.DiagnosisKnowledgeLoader;
-
-import org.json.JSONObject;
+import com.fr3ts0n.ecu.gui.androbd.diagnosis.data.DiagnosisRepository;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Explicit unknown choices are preserved; unanswered is never interpreted as normal. */
+/** Every explicit choice is persisted before another screen can consume it. */
 public class DiagnosisQuestionsActivity extends AppCompatActivity
 {
     private final Map<String, String> answers = new LinkedHashMap<>();
-    private DiagnosisKnowledge knowledge;
-    private DiagnosisKnowledge.Complaint complaint;
-    private String snapshot;
+    private DiagnosisRepository repository;
+    private DiagnosisRepository.CaseRecord record;
+    private boolean restoringChoice;
 
     @Override protected void onCreate(Bundle state)
     {
         SettingsActivity.applyLocale(this);
         super.onCreate(state);
+        repository = new DiagnosisRepository(this);
+        render();
+    }
+
+    @Override protected void onRestart()
+    {
+        super.onRestart();
+        render();
+    }
+
+    private void render()
+    {
         LinearLayout root = DiagnosisUi.screen(this, R.string.diagnosis_questions_title);
         try
         {
-            snapshot = state == null ? getIntent().getStringExtra(DiagnosisUi.KNOWLEDGE) : state.getString(DiagnosisUi.KNOWLEDGE);
-            knowledge = DiagnosisKnowledgeLoader.parse(snapshot);
-            complaint = knowledge.findComplaint(getIntent().getStringExtra(DiagnosisUi.COMPLAINT));
-            if (complaint == null) throw new IllegalArgumentException("Missing complaint");
-            if (state != null) answers.putAll(DiagnosisUi.answers(state.getString(DiagnosisUi.ANSWERS)));
+            record = repository.get(getIntent().getLongExtra(DiagnosisUi.CASE, -1));
+            if (record == null) throw new IllegalArgumentException("Missing case");
+            answers.clear();
+            answers.putAll(record.answers);
         }
-        catch (Exception e)
+        catch (RuntimeException e)
         {
             Log.e("Diagnosis", "Question state invalid", e);
             DiagnosisUi.text(this, root, getString(R.string.diagnosis_invalid_case), false);
             return;
         }
-        DiagnosisUi.text(this, root, complaint.title, true);
-        for (DiagnosisKnowledge.Question question : complaint.questions)
+        DiagnosisUi.text(this, root, record.complaintTitle, true);
+        if (record.isFinal) DiagnosisUi.text(this, root, getString(R.string.diagnosis_case_change_warning), false);
+        for (DiagnosisKnowledge.Question question : record.complaint.questions)
         {
             DiagnosisUi.text(this, root, question.text, true);
             RadioGroup group = new RadioGroup(this);
@@ -69,29 +79,44 @@ public class DiagnosisQuestionsActivity extends AppCompatActivity
             }
             group.setOnCheckedChangeListener((view, id) -> {
                 View selected = view.findViewById(id);
-                if (selected != null) answers.put(question.id, (String) selected.getTag());
+                if (restoringChoice || selected == null) return;
+                String option = (String) selected.getTag();
+                if (option.equals(answers.get(question.id))) return;
+                Map<String, String> changed = new LinkedHashMap<>(answers);
+                changed.put(question.id, option);
+                try
+                {
+                    DiagnosisRepository.CaseRecord latest = repository.get(record.id);
+                    if (latest == null) throw new IllegalArgumentException("Missing case");
+                    repository.saveProgress(record.id, changed, latest.checks);
+                    answers.clear();
+                    answers.putAll(changed);
+                }
+                catch (RuntimeException e)
+                {
+                    Log.e("Diagnosis", "Draft save failed", e);
+                    Toast.makeText(this, R.string.diagnosis_case_save_failed, Toast.LENGTH_LONG).show();
+                    restoringChoice = true;
+                    group.clearCheck();
+                    for (int i = 0; i < group.getChildCount(); i++)
+                    {
+                        View previous = group.getChildAt(i);
+                        if (previous.getTag().equals(answers.get(question.id))) group.check(previous.getId());
+                    }
+                    restoringChoice = false;
+                }
             });
         }
         DiagnosisUi.button(this, root, getString(R.string.diagnosis_show_results), view -> {
-            if (answers.size() != complaint.questions.size())
+            if (answers.size() != record.complaint.questions.size())
             {
                 Toast.makeText(this, R.string.diagnosis_answer_required, Toast.LENGTH_LONG).show();
                 return;
             }
-            Intent intent = new Intent(this, DiagnosisResultsActivity.class)
-                    .putExtra(DiagnosisUi.COMPLAINT, complaint.id)
-                    .putExtra(DiagnosisUi.KNOWLEDGE, snapshot)
-                    .putExtra(DiagnosisUi.ANSWERS, new JSONObject(answers).toString());
+            Intent intent = new Intent(this, DiagnosisResultsActivity.class).putExtra(DiagnosisUi.CASE, record.id);
             DiagnosisUi.serviceExtra(getIntent(), intent);
             startActivity(intent);
         });
-    }
-
-    @Override protected void onSaveInstanceState(Bundle out)
-    {
-        super.onSaveInstanceState(out);
-        out.putString(DiagnosisUi.KNOWLEDGE, snapshot);
-        out.putString(DiagnosisUi.ANSWERS, new JSONObject(answers).toString());
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item)

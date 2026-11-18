@@ -68,7 +68,7 @@
     <string name="workshop_backup_failed">Gagal mencadangkan: %1$s</string>
     <string name="workshop_restore_menu">Pulihkan dari berkas</string>
     <string name="workshop_restore_title">Pulihkan data?</string>
-    <string name="workshop_restore_message">Seluruh data bengkel saat ini akan diganti dengan berkas cadangan yang dipilih.</string>
+    <string name="workshop_restore_message">Seluruh data bengkel akan diganti. Cadangan ZIP juga mengganti foto, rekaman, dan panduan tambahan. Berkas .db lama hanya memulihkan database dan tidak membawa media.</string>
     <string name="workshop_restore_done">Data berhasil dipulihkan</string>
     <string name="workshop_restore_failed">Gagal memulihkan: %1$s</string>
     <string name="workshop_backup_subject">Cadangan Bengkel Scan</string>

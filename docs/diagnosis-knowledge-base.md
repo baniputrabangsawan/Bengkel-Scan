@@ -289,3 +289,16 @@ Untuk memeriksa tambahan di dalam arsip sebelum memulihkan cadangan, gunakan `Di
 ## Cakupan pengujian perangkat
 
 `androbd/src/androidTest/java/com/fr3ts0n/ecu/gui/androbd/diagnosis/DiagnosisKnowledgeInstrumentedTest.java` memuat aset nyata melalui platform `org.json`, memeriksa perjalanan pulang-pergi model, tambahan pengganti/penambah/bunyi-saja, rujukan bunyi yang disediakan bawaan, ID duplikat di tiap lingkup, rujukan pertanyaan/pilihan/bunyi yang tidak ada, versi skema dan tipe data yang salah, path audio tidak aman, UTF-8 rusak, batas ukuran, peringatan fallback, dan bahwa impor tidak valid tidak menimpa tambahan valid. Berkas impor pengujian dibuka melalui URI `FileProvider` nyata dengan folder khusus sementara, bukan penyimpanan pengguna yang aktif. Pengujian ini tidak mengotomatiskan tampilan pemilih dokumen, tidak membuktikan ketahanan terhadap mati listrik fisik, dan tidak memvalidasi kebenaran isi diagnosis. Penambahan pengujian tidak berarti pengujian sudah dijalankan.
+
+## Penyimpanan kasus dan cadangan media
+
+Kasus menyimpan salinan keluhan, pertanyaan, jawaban, aturan dan bunyi terkait saat dibuat. Mengubah atau mengimpor JSON tidak mengubah pemeriksaan lama. Status `verified` milik isi panduan, bukan status pemeriksaan kendaraan; menyimpan hasil terkonfirmasi tidak mengubah draf panduan menjadi terverifikasi.
+
+Penilaian akhir boleh disimpan sebagai dugaan. Konfirmasi oleh mekanik memerlukan catatan pemeriksaan pada penyebab yang dipilih; penilaian lain memerlukan bukti pada catatan. Mengubah jawaban atau hasil pemeriksaan menjadikan penilaian kembali draf agar bukti baru ditinjau.
+
+Database bengkel versi 3 menambah `diagnosis_cases`, `diagnosis_checks`, dan `diagnosis_photos` secara aditif. Tabel diagnosis scanner tetap terpisah. Model/tahun/jenis mesin kasus adalah snapshot, bukan perubahan otomatis pada data kendaraan.
+
+**Cadangkan data** menghasilkan ZIP berisi database, foto/rekaman pribadi di `files/diagnosis/`, dan `extra.json` yang aktif. Pulihkan mengganti database serta media/panduan tambahan sebagai satu operasi dengan validasi sebelum penggantian dan rollback bila pemasangan gagal. Cadangan `.db` lama tetap dapat dipulihkan, tetapi tidak membawa foto/audio. Simpan ZIP di lokasi lain sebelum mengganti atau menghapus aplikasi. Cadangan belum dienkripsi; jaga akses karena dapat memuat foto dan data pelanggan.
+
+Arsip dibatasi 512 MiB isi terurai dan 10.000 entri. Foto impor dibatasi 20 MiB sebelum dikurangi resolusinya; audio impor dibatasi 32 MiB. Tidak ada berkas audio contoh palsu yang disertakan.
+

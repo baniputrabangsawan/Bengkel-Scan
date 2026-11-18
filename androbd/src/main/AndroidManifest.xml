@@ -116,6 +116,11 @@
             android:exported="false"
             android:label="@string/workshop_services_title" />
         <activity
+            android:name=".diagnosis.ui.DiagnosisCaseActivity"
+            android:exported="false"
+            android:label="@string/diagnosis_case_title"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".diagnosis.ui.DiagnosisStartActivity"
             android:exported="false"
             android:label="@string/diagnosis_start_title" />

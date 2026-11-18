@@ -16,6 +16,7 @@ package com.fr3ts0n.ecu.gui.androbd.workshop;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.fr3ts0n.ecu.gui.androbd.diagnosis.data.DiagnosisRepository;
 
 /**
  * Local workshop database.
@@ -30,13 +31,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class WorkshopDatabase extends SQLiteOpenHelper
 {
 	public static final String DEFAULT_NAME = "workshop.db";
-	static final int SCHEMA_VERSION = 2;
+	static final int SCHEMA_VERSION = 3;
+	final Context appContext;
 
 	private static WorkshopDatabase instance;
 
 	public WorkshopDatabase(Context context, String name)
 	{
 		super(context.getApplicationContext(), name, null, SCHEMA_VERSION);
+		appContext = context.getApplicationContext();
 	}
 
 	/** Shared connection for the running app. */
@@ -116,6 +119,7 @@ public class WorkshopDatabase extends SQLiteOpenHelper
 				+ "position INTEGER NOT NULL DEFAULT 0)");
 		db.execSQL("CREATE INDEX idx_estimate_items_service ON estimate_items(service_id)");
 		createDiagnostics(db);
+		DiagnosisRepository.createTables(db);
 	}
 
 	@Override
@@ -123,6 +127,7 @@ public class WorkshopDatabase extends SQLiteOpenHelper
 	{
 		// Additive migration: v1 workshop records remain untouched.
 		if (oldVersion < 2 && newVersion >= 2) createDiagnostics(db);
+		if (oldVersion < 3 && newVersion >= 3) DiagnosisRepository.createTables(db);
 	}
 
 	private static void createDiagnostics(SQLiteDatabase db)

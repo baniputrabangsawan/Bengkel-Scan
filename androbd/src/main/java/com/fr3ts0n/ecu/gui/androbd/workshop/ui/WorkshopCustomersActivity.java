@@ -186,7 +186,7 @@ public class WorkshopCustomersActivity extends AppCompatActivity
 	{
 		Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
 		Intent send = new Intent(Intent.ACTION_SEND)
-				.setType("application/octet-stream")
+				.setType(file.getName().endsWith(".zip") ? "application/zip" : "application/octet-stream")
 				.putExtra(Intent.EXTRA_STREAM, uri)
 				.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.workshop_backup_subject))
 				.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -215,7 +215,13 @@ public class WorkshopCustomersActivity extends AppCompatActivity
 				if (in == null) throw new IOException("Cannot read the selected file");
 				byte[] buffer = new byte[8192];
 				int read;
-				while ((read = in.read(buffer)) != -1) out.write(buffer, 0, read);
+				long total = 0;
+				while ((read = in.read(buffer)) != -1)
+				{
+					total += read;
+					if (total > 512L * 1024 * 1024) throw new IOException("Backup is too large");
+					out.write(buffer, 0, read);
+				}
 				out.flush();
 				WorkshopBackup.restore(repository.database(), temp);
 			}

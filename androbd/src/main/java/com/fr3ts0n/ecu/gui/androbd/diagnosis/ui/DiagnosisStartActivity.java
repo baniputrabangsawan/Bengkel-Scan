@@ -14,10 +14,12 @@ import com.fr3ts0n.ecu.gui.androbd.R;
 import com.fr3ts0n.ecu.gui.androbd.SettingsActivity;
 import com.fr3ts0n.ecu.gui.androbd.diagnosis.core.DiagnosisKnowledge;
 import com.fr3ts0n.ecu.gui.androbd.diagnosis.data.DiagnosisKnowledgeLoader;
+import com.fr3ts0n.ecu.gui.androbd.diagnosis.data.DiagnosisRepository;
+import com.fr3ts0n.ecu.gui.androbd.workshop.ui.WorkshopUi;
 
 import java.io.IOException;
 
-/** Categories and complaints, usable without a scanner or a service record. */
+/** Categories and saved complaints, independent of a scanner or service record. */
 public class DiagnosisStartActivity extends AppCompatActivity
 {
     private static final int IMPORT = 6101;
@@ -28,7 +30,9 @@ public class DiagnosisStartActivity extends AppCompatActivity
             R.string.diagnosis_category_brakes_steering, R.string.diagnosis_category_other};
     private DiagnosisKnowledge knowledge;
     private DiagnosisKnowledgeLoader loader;
+    private DiagnosisRepository repository;
     private String category;
+    private boolean importing;
 
     @Override protected void onCreate(Bundle state)
     {
@@ -36,12 +40,19 @@ public class DiagnosisStartActivity extends AppCompatActivity
         super.onCreate(state);
         category = state == null ? null : state.getString("category");
         loader = new DiagnosisKnowledgeLoader(this);
+        repository = new DiagnosisRepository(this);
         load();
         if (state == null && knowledge != null && getIntent().hasExtra(DiagnosisUi.COMPLAINT))
         {
             DiagnosisKnowledge.Complaint complaint = knowledge.findComplaint(getIntent().getStringExtra(DiagnosisUi.COMPLAINT));
             if (complaint != null) open(complaint);
         }
+    }
+
+    @Override protected void onResume()
+    {
+        super.onResume();
+        if (repository != null) render();
     }
 
     private void load()
@@ -59,6 +70,7 @@ public class DiagnosisStartActivity extends AppCompatActivity
     {
         LinearLayout root = DiagnosisUi.screen(this, R.string.diagnosis_start_title);
         DiagnosisUi.text(this, root, getString(R.string.diagnosis_start_intro), false);
+        renderCases(root);
         if (knowledge == null)
         {
             DiagnosisUi.text(this, root, getString(R.string.diagnosis_load_error), false);
@@ -87,13 +99,51 @@ public class DiagnosisStartActivity extends AppCompatActivity
         }
     }
 
+    private void renderCases(LinearLayout root)
+    {
+        DiagnosisUi.text(this, root, getString(R.string.diagnosis_case_drafts), true);
+        try
+        {
+            boolean found = false;
+            for (DiagnosisRepository.CaseRecord saved : repository.cases())
+            {
+                if (getIntent().hasExtra(WorkshopUi.EXTRA_SERVICE_ID)
+                        && (saved.serviceId == null || saved.serviceId != getIntent().getLongExtra(WorkshopUi.EXTRA_SERVICE_ID, -1))) continue;
+                found = true;
+                String status = getString(saved.isFinal ? R.string.diagnosis_case_final_state : R.string.diagnosis_case_draft_state);
+                DiagnosisUi.button(this, root, getString(R.string.diagnosis_case_resume_label, saved.id, saved.complaintTitle, status), view -> resume(saved));
+            }
+            if (!found) DiagnosisUi.text(this, root, getString(R.string.diagnosis_case_no_records), false);
+        }
+        catch (RuntimeException e)
+        {
+            Log.e("Diagnosis", "Saved cases read failed", e);
+            DiagnosisUi.text(this, root, getString(R.string.diagnosis_case_load_failed), false);
+        }
+    }
+
+    private void resume(DiagnosisRepository.CaseRecord saved)
+    {
+        Class<?> screen = saved.answers.size() == saved.complaint.questions.size()
+                ? DiagnosisResultsActivity.class : DiagnosisQuestionsActivity.class;
+        Intent intent = new Intent(this, screen).putExtra(DiagnosisUi.CASE, saved.id);
+        if (saved.serviceId != null) intent.putExtra(WorkshopUi.EXTRA_SERVICE_ID, saved.serviceId.longValue());
+        startActivity(intent);
+    }
+
     private void open(DiagnosisKnowledge.Complaint complaint)
     {
-        Intent intent = new Intent(this, DiagnosisQuestionsActivity.class)
-                .putExtra(DiagnosisUi.COMPLAINT, complaint.id)
-                .putExtra(DiagnosisUi.KNOWLEDGE, DiagnosisKnowledgeLoader.encode(DiagnosisUi.subset(knowledge, complaint)));
-        DiagnosisUi.serviceExtra(getIntent(), intent);
-        startActivity(intent);
+        try
+        {
+            Long serviceId = getIntent().hasExtra(WorkshopUi.EXTRA_SERVICE_ID)
+                    ? getIntent().getLongExtra(WorkshopUi.EXTRA_SERVICE_ID, -1) : null;
+            resume(repository.create(knowledge, complaint, serviceId));
+        }
+        catch (RuntimeException e)
+        {
+            Log.e("Diagnosis", "Case creation failed", e);
+            Toast.makeText(this, R.string.diagnosis_case_save_failed, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu)
@@ -107,8 +157,8 @@ public class DiagnosisStartActivity extends AppCompatActivity
         if (item.getItemId() == android.R.id.home) { onBackPressed(); return true; }
         if (item.getItemId() == IMPORT)
         {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*")
-                    .addCategory(Intent.CATEGORY_OPENABLE);
+            if (importing) return true;
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*").addCategory(Intent.CATEGORY_OPENABLE);
             startActivityForResult(intent, IMPORT);
             return true;
         }
@@ -119,17 +169,33 @@ public class DiagnosisStartActivity extends AppCompatActivity
     {
         super.onActivityResult(request, result, data);
         if (request != IMPORT || result != RESULT_OK || data == null || data.getData() == null) return;
-        try
-        {
-            loader.importExtra(data.getData());
-            Toast.makeText(this, R.string.diagnosis_import_ok, Toast.LENGTH_LONG).show();
-            load();
-        }
-        catch (IOException | IllegalArgumentException e)
-        {
-            Log.e("Diagnosis", "Knowledge import failed", e);
-            Toast.makeText(this, R.string.diagnosis_import_error, Toast.LENGTH_LONG).show();
-        }
+        if (importing) return;
+        importing = true;
+        new Thread(() -> {
+            DiagnosisKnowledgeLoader imported = new DiagnosisKnowledgeLoader(getApplicationContext());
+            try
+            {
+                imported.importExtra(data.getData());
+                DiagnosisKnowledge loaded = imported.load();
+                runOnUiThread(() -> {
+                    importing = false;
+                    if (isFinishing() || isDestroyed()) return;
+                    loader = imported;
+                    knowledge = loaded;
+                    Toast.makeText(this, R.string.diagnosis_import_ok, Toast.LENGTH_LONG).show();
+                    render();
+                });
+            }
+            catch (IOException | RuntimeException e)
+            {
+                Log.e("Diagnosis", "Knowledge import failed", e);
+                runOnUiThread(() -> {
+                    importing = false;
+                    if (!isFinishing() && !isDestroyed())
+                        Toast.makeText(this, R.string.diagnosis_import_error, Toast.LENGTH_LONG).show();
+                });
+            }
+        }, "DiagnosisKnowledgeImport").start();
     }
 
     @Override protected void onSaveInstanceState(Bundle out)

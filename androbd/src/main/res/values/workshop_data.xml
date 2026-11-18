@@ -68,7 +68,7 @@
     <string name="workshop_backup_failed">Backup failed: %1$s</string>
     <string name="workshop_restore_menu">Restore from file</string>
     <string name="workshop_restore_title">Restore data?</string>
-    <string name="workshop_restore_message">All current workshop data will be replaced by the selected backup.</string>
+    <string name="workshop_restore_message">Seluruh data bengkel akan diganti. Cadangan ZIP juga mengganti foto, rekaman, dan panduan tambahan. Berkas .db lama hanya memulihkan database dan tidak membawa media.</string>
     <string name="workshop_restore_done">Data restored</string>
     <string name="workshop_restore_failed">Restore failed: %1$s</string>
     <string name="workshop_backup_subject">Bengkel Scan backup</string>
