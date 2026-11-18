@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="16dp"
+    android:background="@color/workshop_page_background">
+    <TextView android:id="@+id/diagnostic_context"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textAppearance="@style/WorkshopHomeSectionHeading" />
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" android:text="@string/diagnostic_manual_notice"
+        android:textAppearance="@style/WorkshopHomeHelper" />
+    <ListView android:id="@+id/diagnostic_modules"
+        android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+        android:layout_marginTop="12dp" android:divider="@android:color/transparent"
+        android:dividerHeight="8dp" android:clipToPadding="false" android:paddingBottom="8dp" />
+    <com.google.android.material.button.MaterialButton android:id="@+id/diagnostic_open_guide"
+        style="@style/WorkshopHomeSecondaryAction" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="@string/diagnostic_guides" />
+</LinearLayout>

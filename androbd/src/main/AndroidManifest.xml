@@ -115,6 +115,20 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
             android:label="@string/workshop_services_title" />
+        <activity
+            android:name=".workshop.ui.WorkshopDiagnosticsActivity"
+            android:exported="false"
+            android:label="@string/diagnostic_title" />
+        <activity
+            android:name=".workshop.ui.WorkshopDiagnosticEditActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:label="@string/diagnostic_title" />
+        <activity
+            android:name=".workshop.ui.WorkshopGuideActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:label="@string/diagnostic_guides" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

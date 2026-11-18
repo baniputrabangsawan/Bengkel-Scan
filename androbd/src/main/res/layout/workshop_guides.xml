@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/guide_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/workshop_page_background"
+    android:fillViewport="true"
+    android:saveEnabled="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <TextView
+            android:id="@+id/guide_vehicle_context"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:textAppearance="@style/WorkshopHomeHelper"
+            android:textIsSelectable="true"
+            android:visibility="gone" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:accessibilityHeading="true"
+            android:text="@string/guide_manual_missing"
+            android:textAppearance="@style/WorkshopHomeSectionHeading" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/guide_scope"
+            android:textAppearance="@style/WorkshopHomeHelper" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/guide_applicability"
+            android:textAppearance="@style/WorkshopHomeHelper" />
+        <LinearLayout
+            android:id="@+id/guide_catalogue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/guide_query"
+                android:text="@string/guide_search"
+                android:textAppearance="@style/WorkshopHomeHelper" />
+            <EditText
+                android:id="@+id/guide_query"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:inputType="textCapCharacters|textMultiLine"
+                android:maxLines="4"
+                android:saveEnabled="false"
+                android:hint="@string/guide_search" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/guide_module_filter"
+                android:text="@string/guide_module"
+                android:textAppearance="@style/WorkshopHomeHelper" />
+            <Spinner
+                android:id="@+id/guide_module_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:saveEnabled="false" />
+            <TextView
+                android:id="@+id/guide_result_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:accessibilityLiveRegion="polite"
+                android:textAppearance="@style/WorkshopHomeHelper" />
+            <LinearLayout
+                android:id="@+id/guide_results"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/guide_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/guide_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="@string/guide_back_catalogue" />
+            <LinearLayout
+                android:id="@+id/guide_detail_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

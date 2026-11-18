@@ -13,6 +13,7 @@
  */
 package com.fr3ts0n.ecu.gui.androbd.workshop.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,6 +79,9 @@ public class WorkshopServiceActivity extends AppCompatActivity
 				: vehicle.plate);
 		((TextView) findViewById(R.id.workshop_summary)).setText(
 				service.complaint + "\n" + WorkshopUi.dateTime(service.createdAt));
+		findViewById(R.id.workshop_diagnostics).setOnClickListener(view ->
+				startActivity(new Intent(this, WorkshopDiagnosticsActivity.class)
+						.putExtra(WorkshopUi.EXTRA_SERVICE_ID, service.id)));
 
 		status = findViewById(R.id.workshop_status);
 		ArrayAdapter<String> statuses = new ArrayAdapter<>(this,

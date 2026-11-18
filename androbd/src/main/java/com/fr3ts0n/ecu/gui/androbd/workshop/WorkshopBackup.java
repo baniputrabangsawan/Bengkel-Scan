@@ -32,13 +32,13 @@ import java.util.Locale;
  * Whole-file backup and restore of the workshop database.
  *
  * <p>Backup is a physical copy of the SQLite file, not a partial export, so
- * customer, vehicle, service and estimate data stay consistent. Callers must
+ * customer, vehicle, service, estimate and diagnostic data stay consistent. Callers must
  * not write concurrently: export checkpoints the WAL and then copies the main
  * file, which is only safe while the app holds the UI (single writer).</p>
  *
- * <p>Restore validates the source file, keeps a
+ * <p>Restore validates and migrates a private candidate copy, keeps a
  * {@code workshop.db.before-restore} copy of the current data, and rolls back
- * automatically if the replaced file cannot be opened.</p>
+ * automatically if replacement fails. The caller's backup is never modified.</p>
  */
 public final class WorkshopBackup
 {
@@ -80,8 +80,8 @@ public final class WorkshopBackup
 	/**
 	 * Replace the current database with a previously exported file.
 	 *
-	 * @throws IOException when the source is not a valid database of this schema
-	 *                     version, or when the restored file fails its checks
+	 * @throws IOException when the backup has an unsupported or invalid schema,
+	 *                     or when the restored file fails its checks
 	 */
 	public static void restore(WorkshopDatabase database, File source) throws IOException
 	{
@@ -92,7 +92,7 @@ public final class WorkshopBackup
 
 		SQLiteDatabase db = database.getWritableDatabase();
 		File current = new File(db.getPath());
-		if (current.equals(source))
+		if (current.getCanonicalFile().equals(source.getCanonicalFile()))
 		{
 			throw new IOException("Backup source is the live database");
 		}
@@ -104,18 +104,18 @@ public final class WorkshopBackup
 		try
 		{
 			copy(source, candidate);
-			validate(candidate);
+			validateAndMigrate(database, candidate);
 			checkpoint(db);
 
 			File safety = new File(current.getPath() + ".before-restore");
 			copy(current, safety);
 
 			database.close();
-			deleteIfExists(new File(current.getPath() + "-wal"));
-			deleteIfExists(new File(current.getPath() + "-shm"));
+			// Sidecar deletion belongs inside the rollback boundary too.
 
 			try
 			{
+				deleteSidecars(current);
 				copy(candidate, current);
 				verifyUsage(database.getWritableDatabase());
 			}
@@ -124,9 +124,12 @@ public final class WorkshopBackup
 				database.close();
 				try
 				{
+					// Failed candidate WAL/journals must never replay onto the old file.
+					deleteSidecars(current);
 					copy(safety, current);
+					verifyUsage(database.getWritableDatabase());
 				}
-				catch (IOException rollbackFailure)
+				catch (IOException | RuntimeException rollbackFailure)
 				{
 					failure.addSuppressed(rollbackFailure);
 					throw new IOException("Restore failed and rollback failed; copy "
@@ -138,64 +141,104 @@ public final class WorkshopBackup
 		finally
 		{
 			deleteQuietly(candidate);
+			deleteQuietly(new File(candidate.getPath() + "-wal"));
+			deleteQuietly(new File(candidate.getPath() + "-shm"));
+			deleteQuietly(new File(candidate.getPath() + "-journal"));
 		}
 	}
 
-	private static void validate(File source) throws IOException
+	private static void validateAndMigrate(WorkshopDatabase database, File candidate) throws IOException
 	{
-		SQLiteDatabase check = null;
-		try
+		try (SQLiteDatabase check = SQLiteDatabase.openDatabase(candidate.getPath(), null,
+				SQLiteDatabase.OPEN_READWRITE))
 		{
-			check = SQLiteDatabase.openDatabase(source.getPath(), null,
-					SQLiteDatabase.OPEN_READONLY);
-			if (check.getVersion() != WorkshopDatabase.SCHEMA_VERSION)
+			check.setForeignKeyConstraintsEnabled(true);
+			int version = check.getVersion();
+			if (version < 1 || version > WorkshopDatabase.SCHEMA_VERSION)
 			{
-				throw new IOException("Unsupported backup schema version "
-						+ check.getVersion() + " (expected " + WorkshopDatabase.SCHEMA_VERSION + ")");
+				throw new IOException("Unsupported backup schema version " + version);
 			}
-			for (String table : new String[]{"customers", "vehicles", "services", "estimate_items"})
+			validateSchema(check, version);
+			if (version < WorkshopDatabase.SCHEMA_VERSION)
 			{
-				if (!tableExists(check, table))
+				check.beginTransaction();
+				try
 				{
-					throw new IOException("Backup is missing table " + table);
+					database.onUpgrade(check, version, WorkshopDatabase.SCHEMA_VERSION);
+					check.setVersion(WorkshopDatabase.SCHEMA_VERSION);
+					check.setTransactionSuccessful();
+				}
+				finally
+				{
+					check.endTransaction();
 				}
 			}
-			try (Cursor cursor = check.rawQuery("PRAGMA integrity_check", null))
-			{
-				if (!cursor.moveToFirst() || !"ok".equalsIgnoreCase(cursor.getString(0)))
-				{
-					throw new IOException("Backup failed SQLite integrity check");
-				}
-			}
+			verifyUsage(check);
+			checkpoint(check);
 		}
-		catch (SQLiteException e)
+		catch (SQLiteException | IllegalArgumentException e)
 		{
-			throw new IOException("Not a readable SQLite backup", e);
-		}
-		finally
-		{
-			if (check != null) check.close();
+			throw new IOException("Not a valid workshop backup", e);
 		}
 	}
 
 	private static void verifyUsage(SQLiteDatabase db) throws IOException
 	{
-		try (Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM customers", null))
+		if (db.getVersion() != WorkshopDatabase.SCHEMA_VERSION)
 		{
-			if (!cursor.moveToFirst())
+			throw new IOException("Restored database has an unexpected schema version");
+		}
+		validateSchema(db, WorkshopDatabase.SCHEMA_VERSION);
+	}
+
+	/** Exercise every column used by repositories, including empty tables. */
+	private static void validateSchema(SQLiteDatabase db, int version) throws IOException
+	{
+		String[] queries = {
+				"SELECT id,name,phone,notes,created_at FROM customers LIMIT 0",
+				"SELECT id,customer_id,plate,plate_key,model,year,engine_type,vin,odometer_km,created_at FROM vehicles LIMIT 0",
+				"SELECT id,vehicle_id,complaint,status,payment_status,notes,created_at,updated_at,completed_at FROM services LIMIT 0",
+				"SELECT id,service_id,kind,description,quantity,unit_price,position FROM estimate_items LIMIT 0",
+				"SELECT s.id FROM services s JOIN vehicles v ON v.id=s.vehicle_id JOIN customers c ON c.id=v.customer_id LEFT JOIN estimate_items i ON i.service_id=s.id LIMIT 0"
+		};
+		for (String query : queries)
+		{
+			try (Cursor cursor = db.rawQuery(query, null))
 			{
-				throw new IOException("Restored database cannot be queried");
+				cursor.moveToFirst();
+			}
+		}
+		if (version >= 2)
+		{
+			// Strict parsing also rejects unknown enums and fabricated incomplete proof.
+			try (Cursor cursor = db.query("diagnostics", DiagnosticRepository.COLUMNS,
+					null, null, null, null, null))
+			{
+				while (cursor.moveToNext()) DiagnosticRepository.read(cursor);
+			}
+		}
+		try (Cursor cursor = db.rawQuery("PRAGMA integrity_check", null))
+		{
+			if (!cursor.moveToFirst() || !"ok".equalsIgnoreCase(cursor.getString(0))
+					|| cursor.moveToNext())
+			{
+				throw new IOException("Backup failed SQLite integrity check");
+			}
+		}
+		try (Cursor cursor = db.rawQuery("PRAGMA foreign_key_check", null))
+		{
+			if (cursor.moveToFirst())
+			{
+				throw new IOException("Backup failed SQLite foreign key check");
 			}
 		}
 	}
 
-	private static boolean tableExists(SQLiteDatabase db, String table) throws IOException
+	private static void deleteSidecars(File database) throws IOException
 	{
-		try (Cursor cursor = db.rawQuery(
-				"SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?",
-				new String[]{table}))
+		for (String suffix : new String[]{"-wal", "-shm", "-journal"})
 		{
-			return cursor.moveToFirst();
+			deleteIfExists(new File(database.getPath() + suffix));
 		}
 	}
 
@@ -212,6 +255,10 @@ public final class WorkshopBackup
 
 	private static void copy(File source, File target) throws IOException
 	{
+		if (source.getCanonicalFile().equals(target.getCanonicalFile()))
+		{
+			throw new IOException("Cannot copy a database onto itself");
+		}
 		try (InputStream in = new FileInputStream(source);
 			 OutputStream out = new FileOutputStream(target))
 		{

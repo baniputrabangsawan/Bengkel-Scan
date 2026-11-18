@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnostic_title">Diagnosis &amp; bukti pemeriksaan</string>
+    <string name="diagnostic_entry">Diagnosis &amp; panduan</string>
+    <string name="diagnostic_guides">Cara mengecek &amp; perbaikan</string>
+    <string name="diagnostic_manual_notice">Catatan manual dari scanner atau pengujian mekanik. Layar ini tidak membaca modul SRS/transmisi secara langsung dan tidak menyatakan kendaraan sehat karena tidak ada kode.</string>
+    <string name="diagnostic_summary">%1$s · %2$s\nKeluhan: %3$s</string>
+    <string name="diagnostic_no_record">Belum ada catatan; belum dapat menyimpulkan</string>
+    <string name="diagnostic_record_summary">%1$s\n%2$s\nDiperbarui: %3$s</string>
+    <string name="diagnostic_unresolved">Belum dapat menyimpulkan kondisi modul</string>
+    <string name="diagnostic_status_label">Hasil akses/pemeriksaan modul</string>
+    <string name="diagnostic_conclusion_label">Tingkat kesimpulan mekanik</string>
+    <string name="diagnostic_scanner">Sumber pembacaan: alat, aplikasi, atau metode uji</string>
+    <string name="diagnostic_codes">Kode dan status persis dari alat (boleh kosong)</string>
+    <string name="diagnostic_symptoms">Gejala dan kondisi saat terjadi</string>
+    <string name="diagnostic_observations">Data aktual, satuan, dan hasil pengamatan</string>
+    <string name="diagnostic_procedure">Prosedur pengujian yang dilakukan</string>
+    <string name="diagnostic_result">Hasil ukur dan perbandingan dengan acuan</string>
+    <string name="diagnostic_reference">Manual: judul, kendaraan/varian, halaman, revisi</string>
+    <string name="diagnostic_diagnosis">Temuan atau dugaan penyebab</string>
+    <string name="diagnostic_repair">Tindakan perbaikan berdasarkan bukti</string>
+    <string name="diagnostic_verification">Hasil pemeriksaan ulang setelah perbaikan</string>
+    <string name="diagnostic_proof_notice">“Terkonfirmasi” adalah penilaian mekanik, bukan verifikasi otomatis aplikasi. Wajib mencatat penyebab, prosedur uji, hasil ukur, dan acuan yang cocok dengan kendaraan. Kode saja bukan bukti komponen rusak.</string>
+    <string name="diagnostic_no_reference">Acuan kendaraan belum tersedia—belum dapat menyimpulkan. Isi manual dan hasil pengujian sebelum memilih terkonfirmasi.</string>
+    <string name="diagnostic_srs_warning">SRS: jangan mengaktifkan airbag/pretensioner atau mengukur langsung rangkaian pemicunya dengan multimeter. Hentikan jika prosedur pabrikan dan kompetensi SRS belum tersedia.</string>
+    <string name="diagnostic_transmission_warning">Transmisi: jenis oli, suhu, tekanan, dan prosedur adaptasi berbeda antar varian. Jangan memakai angka universal atau menjalankan adaptasi tanpa prosedur pabrikan.</string>
+    <string name="diagnostic_required">Wajib diisi untuk tingkat kesimpulan ini</string>
+    <string name="diagnostic_require_read">Status harus Terbaca/diperiksa sebelum dapat dikonfirmasi.</string>
+    <string name="diagnostic_invalid">Catatan belum memenuhi syarat bukti. Periksa sumber pembacaan, hasil akses, prosedur, hasil uji, acuan, dan temuan.</string>
+    <string name="diagnostic_save_failed">Catatan gagal disimpan. Data pada formulir tetap tersedia; periksa penyimpanan dan coba lagi.</string>
+    <string name="diagnostic_saved">Catatan diagnosis tersimpan</string>
+    <string name="diagnostic_discard_title">Tinggalkan perubahan?</string>
+    <string name="diagnostic_discard_message">Perubahan pada catatan ini belum disimpan.</string>
+    <string name="diagnostic_discard">Tinggalkan</string>
+    <string name="diagnostic_keep_editing">Lanjut mengisi</string>
+    <string name="diagnostic_module_engine">Mesin</string>
+    <string name="diagnostic_module_srs">Airbag / SRS</string>
+    <string name="diagnostic_module_transmission">Transmisi / TCM</string>
+    <string name="diagnostic_module_abs">Rem / ABS</string>
+    <string name="diagnostic_module_body">Bodi / kelistrikan</string>
+    <string name="diagnostic_module_other">Modul lainnya</string>
+    <string-array name="diagnostic_read_states">
+        <item>Belum diperiksa</item>
+        <item>Tidak didukung oleh alat</item>
+        <item>Terbaca / diperiksa</item>
+        <item>Gagal dibaca / diuji</item>
+    </string-array>
+    <string-array name="diagnostic_conclusions">
+        <item>Indikasi ECU / hasil pembacaan</item>
+        <item>Dugaan—perlu pengujian</item>
+        <item>Terkonfirmasi mekanik dengan bukti</item>
+    </string-array>
+</resources>

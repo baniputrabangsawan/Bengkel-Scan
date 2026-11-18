@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnostic_title">Diagnosis &amp; test evidence</string>
+    <string name="diagnostic_entry">Diagnosis &amp; guides</string>
+    <string name="diagnostic_guides">Checking &amp; repair guides</string>
+    <string name="diagnostic_manual_notice">Manual records from a scanner or mechanic testing. This screen does not read SRS/transmission modules directly, and no codes does not mean the vehicle is healthy.</string>
+    <string name="diagnostic_summary">%1$s · %2$s\nComplaint: %3$s</string>
+    <string name="diagnostic_no_record">No record; condition cannot be concluded</string>
+    <string name="diagnostic_record_summary">%1$s\n%2$s\nUpdated: %3$s</string>
+    <string name="diagnostic_unresolved">Module condition cannot be concluded</string>
+    <string name="diagnostic_status_label">Module access / inspection result</string>
+    <string name="diagnostic_conclusion_label">Mechanic conclusion level</string>
+    <string name="diagnostic_scanner">Reading source: tool, app or test method</string>
+    <string name="diagnostic_codes">Exact codes and status from the tool (may be empty)</string>
+    <string name="diagnostic_symptoms">Symptoms and occurrence conditions</string>
+    <string name="diagnostic_observations">Actual readings, units and observations</string>
+    <string name="diagnostic_procedure">Test procedure performed</string>
+    <string name="diagnostic_result">Measurements and comparison against reference</string>
+    <string name="diagnostic_reference">Manual: title, vehicle/variant, page, revision</string>
+    <string name="diagnostic_diagnosis">Finding or suspected cause</string>
+    <string name="diagnostic_repair">Repair action supported by evidence</string>
+    <string name="diagnostic_verification">Post-repair verification results</string>
+    <string name="diagnostic_proof_notice">“Confirmed” is the mechanic’s assessment, not automatic app verification. Record the cause, test procedure, measurements and vehicle-matching reference. A code alone does not prove a component has failed.</string>
+    <string name="diagnostic_no_reference">Vehicle reference unavailable—no conclusion can be made. Record the manual and test results before selecting confirmed.</string>
+    <string name="diagnostic_srs_warning">SRS: do not activate airbags/pretensioners or measure their initiator circuits directly with a multimeter. Stop without manufacturer procedures and SRS competency.</string>
+    <string name="diagnostic_transmission_warning">Transmission fluid, temperatures, pressures and adaptation procedures vary by variant. Do not use universal values or perform adaptation without manufacturer procedures.</string>
+    <string name="diagnostic_required">Required for this conclusion level</string>
+    <string name="diagnostic_require_read">Status must be Read / inspected before confirmation.</string>
+    <string name="diagnostic_invalid">The evidence requirements are not met. Check reading source, access result, procedure, test results, reference and finding.</string>
+    <string name="diagnostic_save_failed">Could not save the record. Your form is retained; check storage and try again.</string>
+    <string name="diagnostic_saved">Diagnostic record saved</string>
+    <string name="diagnostic_discard_title">Discard changes?</string>
+    <string name="diagnostic_discard_message">Changes to this record have not been saved.</string>
+    <string name="diagnostic_discard">Discard</string>
+    <string name="diagnostic_keep_editing">Keep editing</string>
+    <string name="diagnostic_module_engine">Engine</string>
+    <string name="diagnostic_module_srs">Airbag / SRS</string>
+    <string name="diagnostic_module_transmission">Transmission / TCM</string>
+    <string name="diagnostic_module_abs">Brakes / ABS</string>
+    <string name="diagnostic_module_body">Body / electrical</string>
+    <string name="diagnostic_module_other">Other modules</string>
+    <string-array name="diagnostic_read_states">
+        <item>Not inspected</item>
+        <item>Not supported by tool</item>
+        <item>Read / inspected</item>
+        <item>Reading / test failed</item>
+    </string-array>
+    <string-array name="diagnostic_conclusions">
+        <item>ECU indication / reading</item>
+        <item>Hypothesis—testing required</item>
+        <item>Mechanic-confirmed with evidence</item>
+    </string-array>
+</resources>

@@ -11,7 +11,7 @@ Fork ini menyederhanakan antarmuka agar mekanik mudah membaca Kode Kerusakan, Da
 - **Tanpa kendaraan:** tersedia Mode Latihan dengan data simulasi.
 - **Lisensi:** [GNU GPL-3.0](LICENSE); atribusi upstream tetap dipertahankan.
 
-> **Status saat ini:** aplikasi diagnostik OBD dengan antarmuka bengkel. Data pelanggan, kendaraan, servis, dan rincian biaya sudah bisa diisi dari aplikasi (lihat [Data bengkel](#data-bengkel)), tetapi hasil pembacaan OBD **belum tersambung otomatis** ke catatan servis, dan PDF/invoice serta checklist gejala belum tersedia.
+> **Status saat ini:** aplikasi diagnostik OBD dengan data pelanggan, kendaraan, servis, biaya, catatan diagnosis lintas scanner, dan panduan pemeriksaan offline. Catatan SRS/transmisi diisi mekanik dari alat atau pengujian; bukan akses langsung universal ke modul. Hasil OBD belum tersimpan otomatis ke servis; PDF/invoice belum tersedia.
 
 ## Daftar isi
 
@@ -250,6 +250,21 @@ Rincian biaya memakai Rupiah bilangan bulat; jumlah mendukung pecahan (misalnya 
 
 Batasan saat ini: hasil OBD **belum** tersambung otomatis ke catatan servis (fase berikutnya), belum ada PDF/invoice, dan belum ada akun atau sinkronisasi. Satu ponsel adalah satu database; jangan mengisi data dari dua layar sekaligus saat mencadangkan atau memulihkan.
 
+### Diagnosis lintas scanner dan panduan perbaikan
+
+- Dari **rincian servis → Diagnosis & panduan**, pilih Mesin, Airbag/SRS, Transmisi/TCM, Rem/ABS, Bodi/kelistrikan, atau Modul lainnya. Setiap modul memiliki catatan terpisah untuk servis tersebut.
+- Catat sumber alat/aplikasi/metode uji, kode beserta status persis dari scanner, gejala, data aktual dan satuan, prosedur, hasil uji, acuan manual kendaraan/varian/halaman/revisi, temuan, perbaikan, dan hasil pemeriksaan ulang.
+- **Belum diperiksa**, **Tidak didukung**, dan **Gagal dibaca/diuji** bukan “normal”. Bahkan status **Terbaca/diperiksa** tanpa kode tidak membuktikan seluruh kendaraan sehat.
+- Tingkat kesimpulan dipisahkan menjadi **Indikasi ECU**, **Dugaan—perlu pengujian**, dan **Terkonfirmasi mekanik dengan bukti**. Konfirmasi ditolak tanpa status terbaca, sumber pembacaan, temuan, prosedur, hasil uji, serta acuan. Aplikasi memeriksa kelengkapan, bukan mengesahkan kebenaran pengukuran atau kecocokan manual.
+- **Cara mengecek & perbaikan** tersedia di beranda, daftar diagnosis, dan formulir modul. Panduan dapat dibaca offline; tautan sumber memerlukan internet. Panduan umum menampilkan batas penerapan, keselamatan, alat, langkah bercabang, tindakan bersyarat, verifikasi, dan sumber. Kode tanpa panduan khusus tidak diperlakukan sebagai kecocokan atau diagnosis pasti.
+- Acuan kendaraan yang belum ada ditandai **“Acuan kendaraan belum tersedia—belum dapat menyimpulkan”**. Tidak ada angka tekanan/suhu/tegangan universal yang dibuat-buat. Gunakan manual varian yang tepat sebelum pengujian komponen atau perbaikan.
+- SRS: jangan memicu airbag/pretensioner atau mengukur rangkaian pemicunya dengan multimeter. Transmisi: spesifikasi oli, suhu, tekanan, dan adaptasi tidak disamaratakan. Kecocokan alat untuk truk 24 V harus dibuktikan sebelum disambungkan.
+
+Pencatatan manual tidak tergantung merek scanner. Impor laporan vendor dan koneksi langsung THINK/alat lain tidak ditambahkan tanpa format atau SDK yang terverifikasi. Tidak ada perintah ECU, hapus kode, aktivasi aktuator, atau reset SRS/transmisi pada fitur ini.
+
+Katalog bawaan mencakup P0299/boost rendah, panas berlebih, peringatan SRS, masalah transmisi, serta alur pengumpulan bukti untuk kode yang belum didukung. Sumber offline mencatat kesesuaian dan revisi, antara lain [Garrett Turbo Diagnostics](https://www.garrettmotion.com/turbo-replacement/turbo-diagnostics/), [GM PI1366](https://static.nhtsa.gov/odi/tsbs/2014/MC-10126208-9999.pdf), [Aston Martin OTH-01-1043](https://static.nhtsa.gov/odi/tsbs/2018/MC-10142192-9999.pdf), dan [Toyota 23TA08](https://static.nhtsa.gov/odi/rcl/2023/RCRIT-23V480-8717.pdf). Buletin tersebut bukan manual untuk semua kendaraan bengkel; batas model/VIN tetap ditampilkan.
+
+
 ## Jenis sambungan dan cara menghubungkan
 
 **Jenis sambungan adalah jalur ponsel ke alat scan, bukan protokol alat scan ke ECU.** Contohnya, Bluetooth dapat dipakai oleh alat yang berbicara CAN atau protokol OBD lainnya ke kendaraan.
@@ -446,9 +461,9 @@ Versi acuan ada di file Gradle masing-masing modul, bukan pada instruksi instala
 | SpeedView | 1.6.1 | Gauge upstream, disembunyikan pada UI bengkel |
 | AChartEngine | JAR 1.2.0 | Grafik upstream |
 
-Lapisan data bengkel ada di `androbd/src/main/java/com/fr3ts0n/ecu/gui/androbd/workshop/` memakai `SQLiteOpenHelper` bawaan Android (tanpa Room, tanpa server backend atau login): `WorkshopDatabase` (skema versi 1), `WorkshopRepository` (pelanggan, kendaraan, servis, item estimasi), `WorkshopBackup` (salin/restore berkas database utuh), dan subpaket `workshop.ui` berisi empat layar (daftar pelanggan, kendaraan pelanggan, servis kendaraan, rincian servis). Preferensi aplikasi memakai `SharedPreferences`. Berkas `.obd` upstream bukan backup database pelanggan; mekanisme backup Android di manifest juga bukan fitur ekspor/restore bengkel yang dapat diandalkan pengguna.
+Lapisan data bengkel ada di `androbd/src/main/java/com/fr3ts0n/ecu/gui/androbd/workshop/` memakai `SQLiteOpenHelper` bawaan Android (tanpa Room/server/login). `WorkshopDatabase` versi 2 menambah tabel `diagnostics` tanpa menghapus data versi 1. `WorkshopRepository` mengelola pelanggan/kendaraan/servis/estimasi; `DiagnosticRepository` mengelola bukti per pasangan servis/modul; `WorkshopBackup` mencadangkan dan memulihkan seluruh data. Paket `guidance` menyimpan katalog panduan berbasis resource; `workshop.ui` menampilkan catatan dan panduan.
 
-Skema memakai uang Rupiah bilangan bulat, status tersimpan sebagai nama enum, `PRAGMA foreign_keys=ON`, dan penghapusan pelanggan berantai ke kendaraan, servis, serta item estimasi. Ekspor menyalin berkas database setelah `wal_checkpoint(TRUNCATE)`; restore memvalidasi versi skema dan tabel wajib, menyimpan salinan `.before-restore`, lalu mengembalikan data lama bila berkas hasil restore gagal dibuka. Jangan menjalankan ekspor/restore bersamaan dengan penulisan lain dari layar berbeda.
+Uang memakai Rupiah bilangan bulat; status disimpan sebagai nama enum. Foreign key aktif dan penghapusan pelanggan berantai ke kendaraan, servis, estimasi, serta diagnosis. Restore memvalidasi salinan kandidat, seluruh kolom yang dipakai, integritas, foreign key, dan syarat bukti; cadangan versi 1 dimigrasikan ke versi 2 sebelum mengganti database aktif. Versi yang lebih baru ditolak. Salinan `.before-restore` dipertahankan dan data lama dipulihkan jika penggantian gagal. Ekspor tetap memerlukan tidak adanya penulisan bersamaan. Berkas `.obd` upstream bukan cadangan database bengkel.
 
 ## Panduan pengembangan
 
@@ -505,6 +520,15 @@ adb shell am instrument -w \
   -e class com.fr3ts0n.ecu.gui.androbd.DiagnosticPresentationInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.ObdUiLabelsInstrumentedTest \
   com.fr3ts0n.ecu.gui.androbd.test/androidx.test.runner.AndroidJUnitRunner
 ```
+
+Tes diagnosis dan migrasi database:
+
+```bash
+adb shell am instrument -w \
+  -e class com.fr3ts0n.ecu.gui.androbd.workshop.DiagnosticRepositoryInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopDiagnosticUiInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopGuideActivityTest,com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopRepositoryInstrumentedTest \
+  com.fr3ts0n.ecu.gui.androbd.test/androidx.test.runner.AndroidJUnitRunner
+```
+
 
 Untuk menjalankan tes Android aplikasi melalui Gradle:
 
@@ -580,9 +604,9 @@ Roadmap adalah arah pengembangan, **bukan daftar fitur yang sudah tersedia**.
 | 0–1 | Build dasar dan pemetaan codebase | Selesai pada lingkungan pengembangan |
 | 2 | Bahasa Indonesia, branding Bengkel Scan, menu sederhana, dan perapian UI | Diimplementasikan; kamus DTC Indonesia ditunda |
 | 3 | Database offline pelanggan, kendaraan, servis, item estimasi; ekspor/backup | Selesai: skema, repository, empat layar pengisian, cadangkan/pulihkan |
-| 4 | Tautan hasil OBD ke servis dan penyimpanan snapshot otomatis | Belum tersedia |
+| 4 | Tautan hasil OBD ke servis dan penyimpanan snapshot otomatis | Catatan manual lintas scanner per servis tersedia; snapshot OBD otomatis belum tersedia |
 | 5 | Laporan/invoice PDF dan berbagi melalui share sheet, termasuk WhatsApp | Belum tersedia |
-| 6 | Checklist gejala diesel dengan knowledge base yang dapat diedit | Belum tersedia |
+| 6 | Checklist gejala diesel dengan knowledge base yang dapat diedit | Panduan pemeriksaan/perbaikan offline bersumber tersedia; editor knowledge base belum tersedia |
 | 7 | Pengukuran APK, memori, startup, lalu optimasi berbasis bukti | Belum dilakukan sebagai fase pengukuran |
 
 Perubahan dikerjakan bertahap. Penyimpanan offline dan riwayat per kendaraan perlu selesai sebelum aplikasi dipakai sebagai satu-satunya sumber catatan bengkel.

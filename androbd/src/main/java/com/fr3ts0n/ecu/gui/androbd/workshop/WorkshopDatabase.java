@@ -30,7 +30,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class WorkshopDatabase extends SQLiteOpenHelper
 {
 	public static final String DEFAULT_NAME = "workshop.db";
-	static final int SCHEMA_VERSION = 1;
+	static final int SCHEMA_VERSION = 2;
 
 	private static WorkshopDatabase instance;
 
@@ -115,12 +115,38 @@ public class WorkshopDatabase extends SQLiteOpenHelper
 				+ "unit_price INTEGER NOT NULL DEFAULT 0,"
 				+ "position INTEGER NOT NULL DEFAULT 0)");
 		db.execSQL("CREATE INDEX idx_estimate_items_service ON estimate_items(service_id)");
+		createDiagnostics(db);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
-		// Forward-only migrations. Add "if (oldVersion < N)" blocks with the
-		// matching SCHEMA_VERSION bump; never edit history in place.
+		// Additive migration: v1 workshop records remain untouched.
+		if (oldVersion < 2 && newVersion >= 2) createDiagnostics(db);
+	}
+
+	private static void createDiagnostics(SQLiteDatabase db)
+	{
+		db.execSQL("CREATE TABLE diagnostics ("
+				+ "service_id INTEGER NOT NULL REFERENCES services(id) ON DELETE CASCADE,"
+				+ "module TEXT NOT NULL CHECK(module IN ('ENGINE','SRS','TRANSMISSION','ABS','BODY','OTHER')),"
+				+ "read_status TEXT NOT NULL CHECK(read_status IN ('NOT_CHECKED','NOT_SUPPORTED','READ','READ_FAILED')),"
+				+ "conclusion TEXT NOT NULL CHECK(conclusion IN ('ECU_INDICATION','HYPOTHESIS','CONFIRMED')),"
+				+ "scanner TEXT NOT NULL DEFAULT '',"
+				+ "codes TEXT NOT NULL DEFAULT '',"
+				+ "symptoms TEXT NOT NULL DEFAULT '',"
+				+ "observations TEXT NOT NULL DEFAULT '',"
+				+ "test_procedure TEXT NOT NULL DEFAULT '',"
+				+ "test_result TEXT NOT NULL DEFAULT '',"
+				+ "reference TEXT NOT NULL DEFAULT '',"
+				+ "diagnosis TEXT NOT NULL DEFAULT '',"
+				+ "repair TEXT NOT NULL DEFAULT '',"
+				+ "verification TEXT NOT NULL DEFAULT '',"
+				+ "updated_at INTEGER NOT NULL,"
+				+ "PRIMARY KEY(service_id, module),"
+				+ "CHECK(read_status != 'READ' OR length(trim(scanner)) > 0),"
+				+ "CHECK(conclusion != 'CONFIRMED' OR (read_status = 'READ'"
+				+ " AND length(trim(diagnosis)) > 0 AND length(trim(test_procedure)) > 0"
+				+ " AND length(trim(test_result)) > 0 AND length(trim(reference)) > 0)))");
 	}
 }
