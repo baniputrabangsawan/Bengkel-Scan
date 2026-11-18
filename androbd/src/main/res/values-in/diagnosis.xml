@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnosis_start_title">Diagnosis Tanpa Alat Scan</string>
+    <string name="diagnosis_start_intro">Untuk kendaraan tanpa ECU atau soket OBD. Pilih keluhan, lalu jawab sesuai hasil pengamatan.</string>
+    <string name="diagnosis_choose_category">Pilih kelompok keluhan</string>
+    <string name="diagnosis_choose_complaint">Pilih keluhan utama</string>
+    <string name="diagnosis_questions_title">Pertanyaan pemeriksaan</string>
+    <string name="diagnosis_results_title">Kemungkinan penyebab</string>
+    <string name="diagnosis_disclaimer">Hasil ini hanya saran. Keputusan akhir ada pada mekanik.</string>
+    <string name="diagnosis_draft">Draf, belum diverifikasi mekanik</string>
+    <string name="diagnosis_show_results">Lihat kemungkinan penyebab</string>
+    <string name="diagnosis_answer_required">Pilih satu jawaban pada setiap pertanyaan. Gunakan jawaban belum diperiksa jika belum diketahui.</string>
+    <string name="diagnosis_signs">Tanda yang biasanya terlihat</string>
+    <string name="diagnosis_verify">Cara memeriksa</string>
+    <string name="diagnosis_why">Alasan urutan pemeriksaan</string>
+    <string name="diagnosis_no_matching_rules">Belum ada jawaban pembeda yang cocok. Urutan awal bukan kepastian penyebab.</string>
+    <string name="diagnosis_work">Usulan pekerjaan: %1$s</string>
+    <string name="diagnosis_danger_low">Bahaya rendah</string>
+    <string name="diagnosis_danger_medium">Bahaya sedang</string>
+    <string name="diagnosis_danger_high">Bahaya tinggi</string>
+    <string name="diagnosis_danger_warning">Jangan dikendarai sebelum diperiksa.</string>
+    <string name="diagnosis_import">Impor panduan JSON</string>
+    <string name="diagnosis_import_ok">Panduan tambahan berhasil diimpor.</string>
+    <string name="diagnosis_import_error">Panduan tidak dapat diimpor. Periksa format, ID, dan referensi JSON. Panduan sebelumnya tidak diganti.</string>
+    <string name="diagnosis_load_error">Panduan pemeriksaan tidak dapat dibuka. Periksa berkas panduan aplikasi.</string>
+    <string name="diagnosis_invalid_case">Data pemeriksaan tidak dapat dibuka.</string>
+    <string name="diagnosis_sound_title">Panduan Bunyi</string>
+    <string name="diagnosis_category_noise">Bunyi</string>
+    <string name="diagnosis_category_smoke">Asap</string>
+    <string name="diagnosis_category_starting">Sulit hidup / tidak mau hidup</string>
+    <string name="diagnosis_category_power">Tenaga berkurang</string>
+    <string name="diagnosis_category_overheating">Panas berlebih</string>
+    <string name="diagnosis_category_leaks">Kebocoran</string>
+    <string name="diagnosis_category_vibration">Getaran</string>
+    <string name="diagnosis_category_electrical">Kelistrikan / lampu</string>
+    <string name="diagnosis_category_brakes_steering">Rem dan kemudi</string>
+    <string name="diagnosis_category_other">Lainnya</string>
+    <string name="diagnosis_empty_category">Panduan untuk kelompok ini belum tersedia di katalog yang aktif.</string>
+</resources>

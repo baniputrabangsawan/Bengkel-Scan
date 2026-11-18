@@ -116,6 +116,18 @@
             android:exported="false"
             android:label="@string/workshop_services_title" />
         <activity
+            android:name=".diagnosis.ui.DiagnosisStartActivity"
+            android:exported="false"
+            android:label="@string/diagnosis_start_title" />
+        <activity
+            android:name=".diagnosis.ui.DiagnosisQuestionsActivity"
+            android:exported="false"
+            android:label="@string/diagnosis_questions_title" />
+        <activity
+            android:name=".diagnosis.ui.DiagnosisResultsActivity"
+            android:exported="false"
+            android:label="@string/diagnosis_results_title" />
+        <activity
             android:name=".workshop.ui.WorkshopDiagnosticsActivity"
             android:exported="false"
             android:label="@string/diagnostic_title" />
