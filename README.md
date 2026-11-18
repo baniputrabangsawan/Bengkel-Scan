@@ -11,7 +11,7 @@ Fork ini menyederhanakan antarmuka agar mekanik mudah membaca Kode Kerusakan, Da
 - **Tanpa kendaraan:** tersedia Mode Latihan dengan data simulasi.
 - **Lisensi:** [GNU GPL-3.0](LICENSE); atribusi upstream tetap dipertahankan.
 
-> **Status saat ini:** aplikasi diagnostik OBD dengan antarmuka bengkel, **belum aplikasi manajemen bengkel lengkap**. Database pelanggan, catatan servis otomatis, estimasi biaya, PDF, invoice, backup database, dan checklist gejala belum tersedia. Jangan menganggap hasil pembacaan sudah tersimpan sebagai riwayat servis.
+> **Status saat ini:** aplikasi diagnostik OBD dengan antarmuka bengkel, **belum aplikasi manajemen bengkel lengkap**. Lapisan database offline (pelanggan, kendaraan, servis, estimasi, ekspor/restore) sudah ada, tetapi **belum punya layar** sehingga belum bisa dipakai dari aplikasi. PDF, invoice, dan checklist gejala belum tersedia. Jangan menganggap hasil pembacaan sudah tersimpan sebagai riwayat servis.
 
 ## Daftar isi
 
@@ -430,7 +430,9 @@ Versi acuan ada di file Gradle masing-masing modul, bukan pada instruksi instala
 | SpeedView | 1.6.1 | Gauge upstream, disembunyikan pada UI bengkel |
 | AChartEngine | JAR 1.2.0 | Grafik upstream |
 
-Belum ada Room/SQLite bengkel, server backend, login, atau sinkronisasi cloud. Preferensi aplikasi memakai `SharedPreferences`. Berkas `.obd` upstream bukan backup database pelanggan; mekanisme backup Android di manifest juga bukan fitur ekspor/restore bengkel yang dapat diandalkan pengguna.
+Lapisan data bengkel sudah ada di `androbd/src/main/java/com/fr3ts0n/ecu/gui/androbd/workshop/` memakai `SQLiteOpenHelper` bawaan Android (tanpa Room, tanpa server backend atau login): `WorkshopDatabase` (skema versi 1), `WorkshopRepository` (pelanggan, kendaraan, servis, item estimasi), dan `WorkshopBackup` (salin/restore berkas database utuh). Layar pelanggan, kendaraan, dan servis **belum dibuat**, jadi data belum bisa diisi dari UI. Preferensi aplikasi memakai `SharedPreferences`. Berkas `.obd` upstream bukan backup database pelanggan; mekanisme backup Android di manifest juga bukan fitur ekspor/restore bengkel yang dapat diandalkan pengguna.
+
+Skema memakai uang Rupiah bilangan bulat, status tersimpan sebagai nama enum, `PRAGMA foreign_keys=ON`, dan penghapusan pelanggan berantai ke kendaraan, servis, serta item estimasi. Ekspor menyalin berkas database setelah `wal_checkpoint(TRUNCATE)`; restore memvalidasi versi skema dan tabel wajib, menyimpan salinan `.before-restore`, lalu mengembalikan data lama bila berkas hasil restore gagal dibuka. Jangan menjalankan ekspor/restore bersamaan dengan penulisan lain dari layar berbeda.
 
 ## Panduan pengembangan
 
@@ -561,7 +563,7 @@ Roadmap adalah arah pengembangan, **bukan daftar fitur yang sudah tersedia**.
 | --- | --- | --- |
 | 0–1 | Build dasar dan pemetaan codebase | Selesai pada lingkungan pengembangan |
 | 2 | Bahasa Indonesia, branding Bengkel Scan, menu sederhana, dan perapian UI | Diimplementasikan; kamus DTC Indonesia ditunda |
-| 3 | Database offline pelanggan, kendaraan, servis, item estimasi; ekspor/backup | Belum tersedia |
+| 3 | Database offline pelanggan, kendaraan, servis, item estimasi; ekspor/backup | Lapisan data, repository, dan ekspor/restore berkas selesai; layar pengisian data belum ada |
 | 4 | Tautan hasil OBD ke servis dan penyimpanan snapshot otomatis | Belum tersedia |
 | 5 | Laporan/invoice PDF dan berbagi melalui share sheet, termasuk WhatsApp | Belum tersedia |
 | 6 | Checklist gejala diesel dengan knowledge base yang dapat diedit | Belum tersedia |
