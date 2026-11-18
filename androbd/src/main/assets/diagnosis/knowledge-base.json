@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "revision": "draf-awal-2026-11-18",
+  "complaints": [
+    {
+      "id": "cold_start",
+      "category": "starting",
+      "title": "Mesin sulit hidup saat dingin",
+      "questions": [
+        {
+          "id": "cranking_speed",
+          "text": "Bagaimana putaran mesin saat starter pada kondisi dingin?",
+          "options": [
+            { "id": "slow", "text": "Putaran lebih lambat atau melemah" },
+            { "id": "normal", "text": "Putaran terdengar seperti biasanya" },
+            { "id": "none", "text": "Mesin tidak berputar" },
+            { "id": "unknown", "text": "Belum diperiksa atau tidak yakin" }
+          ]
+        },
+        {
+          "id": "after_standing",
+          "text": "Kapan kesulitan menghidupkan mesin paling terasa?",
+          "options": [
+            { "id": "long_stop", "text": "Setelah lama tidak digunakan, lalu lebih mudah setelah hidup" },
+            { "id": "every_start", "text": "Pada hampir setiap percobaan, termasuk setelah mesin hangat" },
+            { "id": "unknown", "text": "Belum dibandingkan atau tidak yakin" }
+          ]
+        },
+        {
+          "id": "fuel_supply_evidence",
+          "text": "Adakah hasil pemeriksaan aman pada suplai bahan bakar bertekanan rendah?",
+          "options": [
+            { "id": "air_or_leak", "text": "Teknisi menemukan udara masuk atau ketidakrapatan sambungan" },
+            { "id": "no_finding", "text": "Sudah diperiksa sesuai manual, belum ditemukan gangguan" },
+            { "id": "unknown", "text": "Belum diperiksa atau sistem belum dikenali" }
+          ]
+        }
+      ],
+      "causes": [
+        {
+          "id": "cold_start.weak_starting_supply",
+          "name": "Pasokan listrik starter lemah atau sambungan bermasalah",
+          "signs": [
+            "Putaran starter lambat atau melemah saat dicoba.",
+            "Lampu dapat meredup atau sambungan baterai terlihat longgar atau berkarat; gejala ini bukan bukti tunggal."
+          ],
+          "verification_steps": [
+            "Parkir di tempat aman dan berventilasi, aktifkan rem parkir, pilih posisi transmisi aman, dan matikan kontak sebelum inspeksi visual.",
+            "Periksa kondisi luar baterai, terminal, kabel utama, dan sambungan massa tanpa menjembatani kutub atau menyentuh bagian bergerak.",
+            "Minta teknisi melakukan uji kondisi baterai dan jatuh tegangan rangkaian starter mengikuti prosedur serta spesifikasi manual kendaraan.",
+            "Jika pasokan listrik memenuhi spesifikasi tetapi putaran tetap lambat, lanjutkan pemeriksaan starter dan hambatan mekanis oleh teknisi; jangan langsung mengganti baterai."
+          ],
+          "danger_level": "MEDIUM",
+          "warning": "Hentikan percobaan bila baterai bengkak, bocor, kabel panas, atau tercium bau menyengat. Jauhkan api dan percikan; jangan menjembatani terminal starter. Batasi percobaan starter menurut manual kendaraan.",
+          "work_item": {
+            "kind": "LABOR",
+            "description": "Pemeriksaan baterai, sambungan massa, dan rangkaian starter sesuai manual; tindakan perbaikan ditentukan setelah ada bukti."
+          },
+          "base_weight": 2,
+          "score_rules": [
+            {
+              "question_id": "cranking_speed",
+              "option_id": "slow",
+              "delta": 4,
+              "reason": "Putaran lambat mendukung pemeriksaan pasokan starter, tetapi kondisi starter dan mesin tetap perlu dibedakan."
+            },
+            {
+              "question_id": "cranking_speed",
+              "option_id": "normal",
+              "delta": -2,
+              "reason": "Putaran yang terdengar normal mengurangi dukungan terhadap pasokan starter lemah, bukan menyingkirkannya tanpa pengukuran."
+            },
+            {
+              "question_id": "cranking_speed",
+              "option_id": "none",
+              "delta": 2,
+              "reason": "Tidak ada putaran memerlukan pemeriksaan rangkaian starter dan pengaman start; penyebabnya belum tentu baterai."
+            }
+          ],
+          "verified": false,
+          "sound_ids": ["slow_cranking"]
+        },
+        {
+          "id": "cold_start.air_in_fuel_supply",
+          "name": "Udara masuk atau suplai bahan bakar sisi tekanan rendah tidak terjaga",
+          "signs": [
+            "Starter berputar seperti biasa, tetapi mesin sulit hidup setelah lama berhenti.",
+            "Pada sistem yang sesuai, pemeriksaan teknisi menemukan ketidakrapatan di sisi suplai tekanan rendah; tidak semua kendaraan memiliki gejala atau susunan yang sama."
+          ],
+          "verification_steps": [
+            "Kenali jenis mesin dan sistem bahan bakar dari manual terlebih dahulu. Dugaan ini hanya relevan bila susunan sistem dan hasil pemeriksaan mendukungnya.",
+            "Dengan mesin mati dan dingin, periksa secara visual area filter, selang, serta sambungan sisi tekanan rendah yang dapat diakses sesuai manual. Jangan melepas pipa injeksi atau sambungan bertekanan tinggi.",
+            "Jika ditemukan kebocoran atau bau bahan bakar, hentikan pengoperasian dan minta teknisi menangani sumber kebocoran secara aman.",
+            "Minta teknisi memeriksa kekedapan dan aliran suplai menggunakan prosedur serta peralatan yang ditentukan manual. Jangan melakukan pemancingan bahan bakar atau pembuangan udara dengan cara coba-coba.",
+            "Catat temuan dan bandingkan kondisi start sebelum serta sesudah tindakan yang disetujui; bila suplai normal, periksa penyebab lain sesuai jenis mesin."
+          ],
+          "danger_level": "HIGH",
+          "warning": "Bahan bakar dapat terbakar dan sistem injeksi dapat bertekanan tinggi. Jangan mencari kebocoran dengan tangan, membuka pipa injeksi, atau mencoba menyalakan mesin saat ada kebocoran. Jauhkan sumber api dan gunakan teknisi yang kompeten.",
+          "work_item": {
+            "kind": "LABOR",
+            "description": "Pemeriksaan kekedapan dan suplai bahan bakar sisi tekanan rendah sesuai jenis sistem; penggantian komponen hanya setelah penyebab terbukti."
+          },
+          "base_weight": 1,
+          "score_rules": [
+            {
+              "question_id": "cranking_speed",
+              "option_id": "normal",
+              "delta": 1,
+              "reason": "Putaran normal memungkinkan pemeriksaan suplai bahan bakar, tetapi belum membuktikan adanya udara masuk."
+            },
+            {
+              "question_id": "cranking_speed",
+              "option_id": "none",
+              "delta": -5,
+              "reason": "Bila mesin sama sekali tidak berputar, gangguan suplai bahan bakar tidak menjelaskan hilangnya putaran starter."
+            },
+            {
+              "question_id": "after_standing",
+              "option_id": "long_stop",
+              "delta": 2,
+              "reason": "Keluhan setelah lama berhenti sesuai dengan kemungkinan suplai tidak terjaga, namun masih perlu pemeriksaan khusus sistem."
+            },
+            {
+              "question_id": "fuel_supply_evidence",
+              "option_id": "air_or_leak",
+              "delta": 4,
+              "reason": "Temuan teknisi pada sisi suplai mendukung dugaan ketidakrapatan; lokasi dan hubungan dengan keluhan harus dicatat."
+            },
+            {
+              "question_id": "fuel_supply_evidence",
+              "option_id": "no_finding",
+              "delta": -2,
+              "reason": "Pemeriksaan yang belum menemukan gangguan mengurangi dukungan terhadap dugaan ini, tanpa menjamin semua kondisi sudah teruji."
+            }
+          ],
+          "verified": false,
+          "sound_ids": []
+        }
+      ]
+    }
+  ],
+  "sounds": [
+    {
+      "id": "slow_cranking",
+      "title": "Putaran starter lambat",
+      "description": "Irama putaran starter terdengar lebih lambat atau semakin melemah dibanding kondisi normal kendaraan yang sama. Ini uraian gejala, bukan rekaman pembanding yang telah divalidasi.",
+      "when": "Saat percobaan menghidupkan mesin; jangan mengulang starter hanya untuk meniru atau merekam bunyi.",
+      "audio_file": null
+    }
+  ]
+}
