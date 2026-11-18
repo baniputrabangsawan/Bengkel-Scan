@@ -97,6 +97,7 @@ public class DiagnosisResultsActivity extends AppCompatActivity
                 startActivity(new Intent(this, DiagnosisCaseActivity.class).putExtra(DiagnosisUi.CASE, record.id)));
         DiagnosisUi.button(this, root, getString(R.string.diagnosis_edit_answers), view ->
                 startActivity(new Intent(this, DiagnosisQuestionsActivity.class).putExtra(DiagnosisUi.CASE, record.id)));
+        DiagnosisHistoryPanel.render(this, root, repository, record);
         Map<String, CheckStatus> checks = new LinkedHashMap<>();
         for (DiagnosisRepository.Check check : record.checks.values()) checks.put(check.causeId, check.status);
         for (DiagnosisScorer.RankedCause ranked : DiagnosisScorer.rank(complaint, answers, checks))

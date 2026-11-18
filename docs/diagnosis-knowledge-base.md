@@ -330,3 +330,8 @@ Revisi `draf-diesel-injeksi-mekanis-tanpa-komputer-2026-11-18` menyediakan 16 ke
 
 Cakupan: sulit hidup dingin/panas (termasuk starter tidak memutar mesin), asap hitam/putih/biru, tenaga turun, panas berlebih, ketukan mesin, peringatan tekanan oli, kebocoran solar, aki tidak terisi, rem, kemudi, bunyi suspensi, getaran saat berjalan, dan keluhan lainnya. Pemeriksaan menargetkan diesel injeksi mekanis tanpa ECU; tidak mensyaratkan kode kerusakan, alat scan, atau data sensor komputer. Turbo, busi pijar, dan perlengkapan tambahan hanya berlaku bila kendaraan memilikinya.
 
+
+## Kasus serupa
+
+Panel riwayat menghitung kasus **lain** yang penilaian akhirnya dikonfirmasi mekanik, dengan keluhan, model, tahun dan jenis mesin yang sama. Huruf besar/kecil serta spasi model/jenis mesin dinormalisasi; tahun harus sama. Identitas yang belum diisi tidak dianggap cocok. Panel menampilkan kriteria, jumlah per penilaian akhir, dan tanggal catatan; kotak pemeriksaan kandidat lain tidak ikut dihitung. Hitungan tidak mengubah skor dan tidak menyatakan peluang kerusakan.
+

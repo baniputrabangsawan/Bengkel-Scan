@@ -222,6 +222,29 @@ public class DiagnosisFlowInstrumentedTest
         catch (ReflectiveOperationException e) { throw new AssertionError(e); }
     }
 
+    @Test public void historyPanelCountsOnlyConfirmedMatchingVehicleCases() throws Exception
+    {
+        try (Fixture fixture = new Fixture(true))
+        {
+            String model = "History fixture " + java.util.UUID.randomUUID();
+            fixture.repository.updateVehicle(fixture.caseId, model, 1998, "DIESEL");
+            DiagnosisKnowledge knowledge = fixture.saved().knowledge;
+            DiagnosisRepository.CaseRecord previous = fixture.repository.create(knowledge, fixture.complaint, fixture.saved().serviceId);
+            fixture.repository.saveProgress(previous.id, fixture.saved().answers, Collections.emptyMap());
+            fixture.repository.updateVehicle(previous.id, model, 1998, "DIESEL");
+            fixture.repository.saveFinal(previous.id, "", "Synthetic confirmed prior finding", true, "Synthetic manual test evidence");
+            try (ActivityScenario<DiagnosisResultsActivity> scenario = ActivityScenario.launch(fixture.intent(DiagnosisResultsActivity.class)))
+            {
+                scenario.onActivity(activity -> assertNotNull(text(activity.findViewById(android.R.id.content),
+                        activity.getString(R.string.diagnosis_history_total, 1))));
+                fixture.repository.updateVehicle(previous.id, model, 1999, "DIESEL");
+                scenario.recreate();
+                scenario.onActivity(activity -> assertNotNull(text(activity.findViewById(android.R.id.content),
+                        activity.getString(R.string.diagnosis_history_total, 0))));
+            }
+        }
+    }
+
     private static final class Fixture implements AutoCloseable
     {
         final Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();

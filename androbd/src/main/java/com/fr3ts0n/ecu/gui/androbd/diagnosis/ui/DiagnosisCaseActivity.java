@@ -38,6 +38,7 @@ public class DiagnosisCaseActivity extends AppCompatActivity
     private DiagnosisRepository.CaseRecord record;
     private DiagnosisMediaStore media;
     private LinearLayout root;
+    private LinearLayout historyPanel;
     private EditText custom, notes, model, year, engine;
     private CheckBox confirmed;
     private String selected;
@@ -121,6 +122,10 @@ public class DiagnosisCaseActivity extends AppCompatActivity
         DiagnosisUi.button(this, root, getString(R.string.diagnosis_sound_title),
                 view -> startActivity(new Intent(this, SoundGuideActivity.class)
                         .putExtra(DiagnosisUi.CASE, record.id)));
+        historyPanel = new LinearLayout(this);
+        historyPanel.setOrientation(LinearLayout.VERTICAL);
+        root.addView(historyPanel, new LinearLayout.LayoutParams(-1, -2));
+        DiagnosisHistoryPanel.render(this, historyPanel, repository, record);
         dirty = state != null && state.getBoolean("dirty");
         TextWatcher changes = new TextWatcher()
         {
@@ -182,6 +187,8 @@ public class DiagnosisCaseActivity extends AppCompatActivity
             repository.saveFinal(record.id, selected, diagnosis, confirmed.isChecked(), notes.getText().toString());
             record = repository.get(record.id);
             dirty = false;
+            historyPanel.removeAllViews();
+            DiagnosisHistoryPanel.render(this, historyPanel, repository, record);
             Toast.makeText(this, R.string.diagnosis_case_saved, Toast.LENGTH_LONG).show();
         }
         catch (RuntimeException e)

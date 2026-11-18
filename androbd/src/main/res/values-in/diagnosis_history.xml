@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="diagnosis_history_title">Riwayat kasus serupa di perangkat ini</string>
+    <string name="diagnosis_history_criteria">Pencocokan memakai ID keluhan yang sama, model dan jenis mesin yang sama setelah penyamaan huruf besar/kecil serta spasi, dan tahun yang sama. Data kosong tidak dianggap cocok. Kasus ini tidak ikut dihitung.</string>
+    <string name="diagnosis_history_missing">Belum dapat mencocokkan riwayat: lengkapi keluhan, model, tahun, dan jenis mesin kendaraan kasus ini. Nilai yang belum diketahui tidak dicocokkan.</string>
+    <string name="diagnosis_history_vehicle">Keluhan: %1$s\nModel: %2$s\nTahun: %3$d\nJenis mesin: %4$s</string>
+    <string name="diagnosis_history_total">Kasus akhir yang dikonfirmasi mekanik: %1$d</string>
+    <string name="diagnosis_history_empty">Belum ada kasus akhir terkonfirmasi lain yang memenuhi semua kriteria.</string>
+    <string name="diagnosis_history_group">%1$s: %2$d kasus\nTanggal catatan pertama: %3$s\nTanggal catatan terakhir: %4$s</string>
+    <string name="diagnosis_history_caution">Hitungan hanya memakai penyebab pada penilaian akhir yang dikonfirmasi mekanik, bukan semua kandidat yang diperiksa. Tanggal mengikuti pembaruan catatan tersimpan. Riwayat lokal ini bukan peluang kerusakan atau jaminan diagnosis; kendaraan tetap perlu diperiksa.</string>
+</resources>
