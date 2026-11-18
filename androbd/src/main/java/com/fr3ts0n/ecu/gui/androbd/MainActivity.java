@@ -1052,6 +1052,12 @@ public class MainActivity extends PluginManager
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
+        if (id == R.id.diagnosis_sound_menu)
+        {
+            startActivity(new Intent(this,
+                    com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.SoundGuideActivity.class));
+            return true;
+        }
         if (id == android.R.id.home)
         {
             setObdService(ObdProt.OBD_SVC_NONE, null);

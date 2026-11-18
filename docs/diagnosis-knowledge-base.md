@@ -302,3 +302,24 @@ Database bengkel versi 3 menambah `diagnosis_cases`, `diagnosis_checks`, dan `di
 
 Arsip dibatasi 512 MiB isi terurai dan 10.000 entri. Foto impor dibatasi 20 MiB sebelum dikurangi resolusinya; audio impor dibatasi 32 MiB. Tidak ada berkas audio contoh palsu yang disertakan.
 
+
+## Panduan Bunyi dan rekaman lokal
+
+Buka **⋮ → Panduan Bunyi** dari beranda, atau kelompok **Bunyi** di diagnosis. Setiap jenis bunyi menjelaskan irama/kondisi kemunculan serta kemungkinan terkait. Kemiripan bunyi tidak membuktikan penyebab sama. Entri `audio_file: null` menampilkan **Belum ada rekaman** sampai rekaman acuan diimpor atau dibuat; tidak ada audio kendaraan yang direkayasa untuk mengisi daftar.
+
+**Impor audio** menggunakan pemilih dokumen dan label yang Anda isi. Audio impor ditandai belum diverifikasi. **Rekam bunyi** hanya tersedia setelah ada kasus dengan penilaian akhir yang dikonfirmasi mekanik beserta buktinya. Pilih kasus dan label, lalu izinkan mikrofon saat Android meminta. Rekaman berhenti paling lama 15 detik atau ketika layar ditinggalkan; tidak ada perekaman latar belakang, unggahan, atau pengenalan AI.
+
+Putar/jeda memakai `MediaPlayer`. Satu bunyi diputar pada satu waktu; meninggalkan layar melepaskan pemutar. Rekaman disimpan sebagai berkas pribadi dengan metadata label, waktu, ID kasus, dan salinan penilaian mekanik; izin mikrofon dapat ditolak atau dicabut melalui pengaturan Android. Jangan merekam sambil mengemudi, dekat bagian bergerak/panas, atau dengan sengaja memunculkan gejala berbahaya. Suara percakapan dapat ikut terekam: minta izin orang di sekitar dan lindungi ZIP cadangan.
+
+
+## Checklist tinjauan mekanik senior
+
+- Cocokkan setiap keluhan dengan diesel injeksi mekanis yang benar-benar ditangani bengkel. Tandai bila hanya berlaku untuk mesin dengan turbo, busi pijar, atau perlengkapan tertentu.
+- Periksa bahwa pertanyaan membedakan penyebab tanpa menyuruh pengemudi memunculkan gejala berbahaya. Jawaban belum diketahui harus tetap tersedia.
+- Tinjau setiap tanda dan pengujian; tentukan alat, keselamatan, serta acuan manual yang diperlukan. Jangan menambahkan angka spesifikasi umum yang belum dibuktikan untuk kendaraan tersebut.
+- Tinjau urutan bobot dan alasan bersama beberapa kasus bengkel. Peringkat bukan peluang statistik dan tidak boleh menjadi alasan mengganti komponen tanpa pengujian.
+- Periksa peringatan rem, kemudi, kebocoran solar, tekanan oli dan panas berlebih. Bila ragu, jangan dikendarai sebelum diperiksa.
+- Dengarkan rekaman acuan hanya jika asal kendaraan, kondisi rekam, label dan diagnosis mekaniknya diketahui. Bunyi sama tidak membuktikan kerusakan sama.
+- Setelah isi suatu penyebab ditinjau dan disetujui mekanik senior, ubah `verified` penyebab itu menjadi `true` dan naikkan `revision`. Konfirmasi pada kasus kendaraan tidak otomatis menyetujui isi panduan.
+- Cadangkan ZIP, impor JSON hasil tinjauan melalui menu, lalu coba pilihan yang cocok/tidak cocok/belum diperiksa. Pastikan kasus lama masih menampilkan snapshot dan buktinya sendiri.
+

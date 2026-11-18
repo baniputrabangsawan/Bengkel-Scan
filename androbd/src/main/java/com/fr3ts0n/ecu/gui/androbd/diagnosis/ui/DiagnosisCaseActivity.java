@@ -118,6 +118,9 @@ public class DiagnosisCaseActivity extends AppCompatActivity
             startActivityForResult(intent, PHOTO);
         });
         renderPhotos();
+        DiagnosisUi.button(this, root, getString(R.string.diagnosis_sound_title),
+                view -> startActivity(new Intent(this, SoundGuideActivity.class)
+                        .putExtra(DiagnosisUi.CASE, record.id)));
         dirty = state != null && state.getBoolean("dirty");
         TextWatcher changes = new TextWatcher()
         {

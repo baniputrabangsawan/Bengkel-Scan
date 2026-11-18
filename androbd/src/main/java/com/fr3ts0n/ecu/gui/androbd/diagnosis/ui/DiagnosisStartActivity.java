@@ -77,6 +77,9 @@ public class DiagnosisStartActivity extends AppCompatActivity
             return;
         }
         if (!loader.warning().isEmpty()) DiagnosisUi.text(this, root, loader.warning(), false);
+        if ("noise".equals(category))
+            DiagnosisUi.button(this, root, getString(R.string.diagnosis_sound_title),
+                    view -> startActivity(new Intent(this, SoundGuideActivity.class)));
         DiagnosisUi.text(this, root, getString(category == null ? R.string.diagnosis_choose_category : R.string.diagnosis_choose_complaint), true);
         if (category == null)
         {

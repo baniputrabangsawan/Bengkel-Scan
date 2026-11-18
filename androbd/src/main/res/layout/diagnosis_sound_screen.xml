@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/workshop_page_background"
+    android:fillViewport="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/diagnosis_sound_scope"
+            android:textAppearance="@style/WorkshopHomeHelper" />
+        <TextView
+            android:id="@+id/diagnosis_sound_notice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:accessibilityLiveRegion="polite"
+            android:textIsSelectable="true"
+            android:textAppearance="@style/WorkshopHomeHelper" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:labelFor="@id/diagnosis_sound_selector"
+            android:text="@string/diagnosis_sound_choose"
+            android:textAppearance="@style/WorkshopHomeSectionHeading" />
+        <Spinner
+            android:id="@+id/diagnosis_sound_selector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp" />
+        <TextView
+            android:id="@+id/diagnosis_sound_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textIsSelectable="true"
+            android:textAppearance="@style/WorkshopHomeHelper" />
+        <TextView
+            android:id="@+id/diagnosis_sound_when"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textIsSelectable="true"
+            android:textAppearance="@style/WorkshopHomeHelper" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:accessibilityHeading="true"
+            android:text="@string/diagnosis_sound_clips"
+            android:textAppearance="@style/WorkshopHomeSectionHeading" />
+        <TextView
+            android:id="@+id/diagnosis_sound_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:accessibilityLiveRegion="polite"
+            android:text="@string/diagnosis_sound_loading"
+            android:textAppearance="@style/WorkshopHomeHelper" />
+        <LinearLayout
+            android:id="@+id/diagnosis_sound_clips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/diagnosis_sound_import"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:enabled="false"
+            android:text="@string/diagnosis_sound_import" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/diagnosis_sound_record"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:enabled="false"
+            android:text="@string/diagnosis_sound_record" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:accessibilityHeading="true"
+            android:text="@string/diagnosis_sound_related"
+            android:textAppearance="@style/WorkshopHomeSectionHeading" />
+        <LinearLayout
+            android:id="@+id/diagnosis_sound_related"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </LinearLayout>
+</ScrollView>

@@ -47,6 +47,11 @@
         android:visible="false"
         android:title="@string/day_night_mode" />
 
+    <item
+        android:id="@+id/diagnosis_sound_menu"
+        android:title="@string/diagnosis_sound_title"
+        app:showAsAction="never" />
+
     <!-- Configuration and Management -->
     <item
         android:id="@+id/settings"

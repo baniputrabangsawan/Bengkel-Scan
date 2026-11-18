@@ -32,6 +32,7 @@
     <!-- Required for foreground service of type connectedDevice (API 34+) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <application
         android:allowBackup="true"
         android:description="@string/app_description"
@@ -115,6 +116,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
             android:label="@string/workshop_services_title" />
+        <activity
+            android:name=".diagnosis.ui.SoundGuideActivity"
+            android:exported="false"
+            android:label="@string/diagnosis_sound_title" />
         <activity
             android:name=".diagnosis.ui.DiagnosisCaseActivity"
             android:exported="false"
