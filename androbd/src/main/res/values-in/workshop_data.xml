@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_data_title">Data bengkel</string>
+    <string name="home_workshop_title">Pelanggan &amp; servis</string>
+    <string name="home_workshop_hint">Catat pelanggan, kendaraan, dan biaya</string>
+    <string name="home_workshop_action">Buka data bengkel</string>
+
+    <string name="workshop_customers_title">Pelanggan</string>
+    <string name="workshop_customers_search_hint">Cari nama atau nomor HP</string>
+    <string name="workshop_customers_empty">Belum ada pelanggan. Tekan \"Tambah pelanggan\" untuk mulai.</string>
+    <string name="workshop_customers_add">Tambah pelanggan</string>
+    <string name="workshop_backup">Cadangkan data</string>
+
+    <string name="workshop_customer_name">Nama pelanggan</string>
+    <string name="workshop_customer_phone">Nomor HP (opsional)</string>
+    <string name="workshop_customer_notes">Catatan (opsional)</string>
+    <string name="workshop_error_name">Nama pelanggan wajib diisi</string>
+    <string name="workshop_error_plate">Plat nomor wajib diisi</string>
+    <string name="workshop_error_complaint">Tulis keluhan pelanggan</string>
+
+    <string name="workshop_vehicles_title">Kendaraan</string>
+    <string name="workshop_vehicles_empty">Belum ada kendaraan untuk pelanggan ini.</string>
+    <string name="workshop_vehicle_add">Tambah kendaraan</string>
+    <string name="workshop_vehicle_plate">Plat nomor</string>
+    <string name="workshop_vehicle_model">Model (opsional)</string>
+    <string name="workshop_vehicle_year">Tahun (opsional)</string>
+    <string name="workshop_vehicle_engine">Jenis bahan bakar</string>
+    <string name="workshop_engine_diesel">Diesel</string>
+    <string name="workshop_engine_petrol">Bensin</string>
+    <string name="workshop_vehicle_summary">%1$s · %2$d</string>
+
+    <string name="workshop_services_title">Servis</string>
+    <string name="workshop_services_empty">Belum ada catatan servis untuk kendaraan ini.</string>
+    <string name="workshop_service_add">Servis baru</string>
+    <string name="workshop_service_complaint">Keluhan pelanggan</string>
+
+    <string name="workshop_status_waiting">Menunggu</string>
+    <string name="workshop_status_in_progress">Sedang dikerjakan</string>
+    <string name="workshop_status_done">Selesai</string>
+    <string name="workshop_payment_unpaid">Belum dibayar</string>
+    <string name="workshop_payment_paid">Sudah dibayar</string>
+
+    <string name="workshop_service_status_label">Status</string>
+    <string name="workshop_service_payment_label">Sudah dibayar</string>
+    <string name="workshop_service_notes">Catatan tambahan</string>
+    <string name="workshop_service_save_notes">Simpan catatan</string>
+    <string name="workshop_service_notes_saved">Catatan tersimpan</string>
+
+    <string name="workshop_estimate_heading">Rincian biaya</string>
+    <string name="workshop_estimate_add">Tambah item</string>
+    <string name="workshop_estimate_empty">Belum ada rincian biaya.</string>
+    <string name="workshop_estimate_total">Total</string>
+    <string name="workshop_item_kind">Jenis</string>
+    <string name="workshop_item_labour">Jasa</string>
+    <string name="workshop_item_part">Sparepart</string>
+    <string name="workshop_item_description">Keterangan</string>
+    <string name="workshop_item_quantity">Jumlah</string>
+    <string name="workshop_item_unit_price">Harga satuan (Rp)</string>
+    <string name="workshop_item_line">%1$s × %2$s</string>
+    <string name="workshop_error_quantity">Jumlah harus lebih dari nol</string>
+    <string name="workshop_error_price">Harga tidak boleh negatif</string>
+
+    <string name="workshop_delete_item_title">Hapus item?</string>
+    <string name="workshop_delete_item_message">Hapus \"%1$s\" dari servis ini?</string>
+
+    <string name="workshop_backup_done">Cadangan tersimpan:\n%1$s</string>
+    <string name="workshop_backup_share">Bagikan</string>
+    <string name="workshop_backup_failed">Gagal mencadangkan: %1$s</string>
+    <string name="workshop_restore_menu">Pulihkan dari berkas</string>
+    <string name="workshop_restore_title">Pulihkan data?</string>
+    <string name="workshop_restore_message">Seluruh data bengkel saat ini akan diganti dengan berkas cadangan yang dipilih.</string>
+    <string name="workshop_restore_done">Data berhasil dipulihkan</string>
+    <string name="workshop_restore_failed">Gagal memulihkan: %1$s</string>
+    <string name="workshop_backup_subject">Cadangan Bengkel Scan</string>
+    <string name="workshop_backup_title">Cadangan</string>
+    <string name="workshop_restore_action">Pulihkan</string>
+
+    <string name="workshop_action_save">Simpan</string>
+    <string name="workshop_action_cancel">Batal</string>
+    <string name="workshop_action_delete">Hapus</string>
+    <string name="workshop_no_phone">Nomor HP belum dicatat</string>
+    <string name="workshop_no_model">Model belum dicatat</string>
+</resources>

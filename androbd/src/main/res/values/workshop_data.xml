@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_data_title">Workshop data</string>
+    <string name="home_workshop_title">Customers &amp; services</string>
+    <string name="home_workshop_hint">Record customers, vehicles and costs</string>
+    <string name="home_workshop_action">Open workshop data</string>
+
+    <string name="workshop_customers_title">Customers</string>
+    <string name="workshop_customers_search_hint">Search name or phone</string>
+    <string name="workshop_customers_empty">No customers yet. Tap \"Add customer\" to start.</string>
+    <string name="workshop_customers_add">Add customer</string>
+    <string name="workshop_backup">Back up data</string>
+
+    <string name="workshop_customer_name">Customer name</string>
+    <string name="workshop_customer_phone">Phone number (optional)</string>
+    <string name="workshop_customer_notes">Notes (optional)</string>
+    <string name="workshop_error_name">Customer name is required</string>
+    <string name="workshop_error_plate">Plate number is required</string>
+    <string name="workshop_error_complaint">Describe the complaint</string>
+
+    <string name="workshop_vehicles_title">Vehicles</string>
+    <string name="workshop_vehicles_empty">No vehicles for this customer yet.</string>
+    <string name="workshop_vehicle_add">Add vehicle</string>
+    <string name="workshop_vehicle_plate">Plate number</string>
+    <string name="workshop_vehicle_model">Model (optional)</string>
+    <string name="workshop_vehicle_year">Year (optional)</string>
+    <string name="workshop_vehicle_engine">Fuel type</string>
+    <string name="workshop_engine_diesel">Diesel</string>
+    <string name="workshop_engine_petrol">Petrol</string>
+    <string name="workshop_vehicle_summary">%1$s · %2$d</string>
+
+    <string name="workshop_services_title">Services</string>
+    <string name="workshop_services_empty">No service records for this vehicle yet.</string>
+    <string name="workshop_service_add">New service</string>
+    <string name="workshop_service_complaint">Customer complaint</string>
+
+    <string name="workshop_status_waiting">Waiting</string>
+    <string name="workshop_status_in_progress">In progress</string>
+    <string name="workshop_status_done">Done</string>
+    <string name="workshop_payment_unpaid">Unpaid</string>
+    <string name="workshop_payment_paid">Paid</string>
+
+    <string name="workshop_service_status_label">Status</string>
+    <string name="workshop_service_payment_label">Paid</string>
+    <string name="workshop_service_notes">Additional notes</string>
+    <string name="workshop_service_save_notes">Save notes</string>
+    <string name="workshop_service_notes_saved">Notes saved</string>
+
+    <string name="workshop_estimate_heading">Cost details</string>
+    <string name="workshop_estimate_add">Add item</string>
+    <string name="workshop_estimate_empty">No cost items yet.</string>
+    <string name="workshop_estimate_total">Total</string>
+    <string name="workshop_item_kind">Type</string>
+    <string name="workshop_item_labour">Labour</string>
+    <string name="workshop_item_part">Part</string>
+    <string name="workshop_item_description">Description</string>
+    <string name="workshop_item_quantity">Quantity</string>
+    <string name="workshop_item_unit_price">Unit price (Rp)</string>
+    <string name="workshop_item_line">%1$s × %2$s</string>
+    <string name="workshop_error_quantity">Quantity must be greater than zero</string>
+    <string name="workshop_error_price">Price must be zero or more</string>
+
+    <string name="workshop_delete_item_title">Delete item?</string>
+    <string name="workshop_delete_item_message">Remove \"%1$s\" from this service?</string>
+
+    <string name="workshop_backup_done">Backup saved:\n%1$s</string>
+    <string name="workshop_backup_share">Share</string>
+    <string name="workshop_backup_failed">Backup failed: %1$s</string>
+    <string name="workshop_restore_menu">Restore from file</string>
+    <string name="workshop_restore_title">Restore data?</string>
+    <string name="workshop_restore_message">All current workshop data will be replaced by the selected backup.</string>
+    <string name="workshop_restore_done">Data restored</string>
+    <string name="workshop_restore_failed">Restore failed: %1$s</string>
+    <string name="workshop_backup_subject">Bengkel Scan backup</string>
+    <string name="workshop_backup_title">Backup</string>
+    <string name="workshop_restore_action">Restore</string>
+
+    <string name="workshop_action_save">Save</string>
+    <string name="workshop_action_cancel">Cancel</string>
+    <string name="workshop_action_delete">Delete</string>
+    <string name="workshop_no_phone">Phone number not recorded</string>
+    <string name="workshop_no_model">Model not recorded</string>
+</resources>

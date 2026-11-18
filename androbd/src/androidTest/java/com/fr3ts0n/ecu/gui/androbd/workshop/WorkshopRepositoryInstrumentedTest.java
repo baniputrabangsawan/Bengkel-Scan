@@ -55,6 +55,9 @@ public class WorkshopRepositoryInstrumentedTest
 	{
 		repository.close();
 		context.deleteDatabase(databaseName);
+		File safety = new File(context.getDatabasePath(databaseName).getPath()
+				+ ".before-restore");
+		if (safety.exists()) safety.delete();
 	}
 
 	@Test

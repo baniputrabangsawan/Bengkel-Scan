@@ -949,6 +949,12 @@ public class MainActivity extends PluginManager
             setMode(MODE.DEMO);
             return;
         }
+        if (id == R.id.home_workshop)
+        {
+            startActivity(new Intent(this,
+                    com.fr3ts0n.ecu.gui.androbd.workshop.ui.WorkshopCustomersActivity.class));
+            return;
+        }
         if (menu == null) return;
         int menuId;
         if (id == R.id.home_connection_action)

@@ -11,7 +11,7 @@ Fork ini menyederhanakan antarmuka agar mekanik mudah membaca Kode Kerusakan, Da
 - **Tanpa kendaraan:** tersedia Mode Latihan dengan data simulasi.
 - **Lisensi:** [GNU GPL-3.0](LICENSE); atribusi upstream tetap dipertahankan.
 
-> **Status saat ini:** aplikasi diagnostik OBD dengan antarmuka bengkel, **belum aplikasi manajemen bengkel lengkap**. Lapisan database offline (pelanggan, kendaraan, servis, estimasi, ekspor/restore) sudah ada, tetapi **belum punya layar** sehingga belum bisa dipakai dari aplikasi. PDF, invoice, dan checklist gejala belum tersedia. Jangan menganggap hasil pembacaan sudah tersimpan sebagai riwayat servis.
+> **Status saat ini:** aplikasi diagnostik OBD dengan antarmuka bengkel. Data pelanggan, kendaraan, servis, dan rincian biaya sudah bisa diisi dari aplikasi (lihat [Data bengkel](#data-bengkel)), tetapi hasil pembacaan OBD **belum tersambung otomatis** ke catatan servis, dan PDF/invoice serta checklist gejala belum tersedia.
 
 ## Daftar isi
 
@@ -38,6 +38,7 @@ Fork ini menyederhanakan antarmuka agar mekanik mudah membaca Kode Kerusakan, Da
 | Data Saat Kerusakan | Freeze frame jika ECU menyediakan; baca Kode Kerusakan terlebih dahulu |
 | Informasi Kendaraan | Informasi OBD yang dikirim ECU; tidak semua kendaraan mengirim VIN atau semua identitas |
 | Mode Latihan | Data contoh untuk belajar tanpa alat scan dan tanpa kendaraan |
+| Data bengkel | Pelanggan, kendaraan, catatan servis, status/pembayaran, rincian biaya, cadangkan dan pulihkan |
 | Tema | Terang, gelap, dan mengikuti sistem |
 | Tentang Aplikasi | Kredit AndrOBD, pemberitahuan lisensi, dan tautan proyek asli |
 | Pencarian DTC di web | Tekan lama kode; memerlukan aplikasi pencarian/browser dan internet |
@@ -233,6 +234,21 @@ Kembali ke beranda tidak sama dengan memutus sambungan. Jangan mengandalkan apli
 - **Pengaturan → Pengaturan umum → Tema:** Terang, Gelap, atau Ikuti sistem.
 - **Pengaturan → Opsi OBD → Parameter data yang ditampilkan:** memilih parameter yang ditampilkan; pilihan tidak membuat ECU mendukung parameter baru.
 - Pengaturan satuan tersedia pada Pengaturan umum. Pastikan satuan yang dipakai ketika membandingkan dengan manual servis.
+
+### Data bengkel
+
+Kartu **Data bengkel** di beranda membuka daftar pelanggan. Alur pengisian:
+
+1. **Tambah pelanggan** — nama wajib, nomor HP dan catatan opsional. Kolom pencarian mencocokkan nama atau nomor HP.
+2. Ketuk pelanggan → **Tambah kendaraan** — plat wajib; model, tahun, dan jenis bahan bakar opsional. Jenis bahan bakar hanya keterangan, tidak mengubah protokol OBD. Pencarian plat mengabaikan spasi dan huruf besar/kecil (`b1234` menemukan `B 1234 XYZ`).
+3. Ketuk kendaraan → **Servis baru** — tulis keluhan pelanggan.
+4. Ketuk servis untuk mengubah **Status** (Menunggu, Sedang dikerjakan, Selesai), menandai **Sudah dibayar**, menyimpan catatan tambahan, dan menambah **Rincian biaya**.
+
+Rincian biaya memakai Rupiah bilangan bulat; jumlah mendukung pecahan (misalnya 1,5 jam jasa) dan total dihitung otomatis. Ketuk lama satu item untuk menghapusnya setelah konfirmasi.
+
+**Cadangkan data** menulis seluruh berkas database ke `Android/data/com.fr3ts0n.ecu.gui.androbd/files/backup/workshop-YYYYMMDD-HHmmss.db` dan dapat dibagikan lewat menu Bagikan (WhatsApp, Drive, dan sebagainya). **⋮ → Pulihkan dari berkas** mengganti seluruh data dengan berkas cadangan yang dipilih: ada konfirmasi, berkas divalidasi lebih dahulu, dan data lama disimpan sebagai `workshop.db.before-restore`.
+
+Batasan saat ini: hasil OBD **belum** tersambung otomatis ke catatan servis (fase berikutnya), belum ada PDF/invoice, dan belum ada akun atau sinkronisasi. Satu ponsel adalah satu database; jangan mengisi data dari dua layar sekaligus saat mencadangkan atau memulihkan.
 
 ## Jenis sambungan dan cara menghubungkan
 
@@ -430,7 +446,7 @@ Versi acuan ada di file Gradle masing-masing modul, bukan pada instruksi instala
 | SpeedView | 1.6.1 | Gauge upstream, disembunyikan pada UI bengkel |
 | AChartEngine | JAR 1.2.0 | Grafik upstream |
 
-Lapisan data bengkel sudah ada di `androbd/src/main/java/com/fr3ts0n/ecu/gui/androbd/workshop/` memakai `SQLiteOpenHelper` bawaan Android (tanpa Room, tanpa server backend atau login): `WorkshopDatabase` (skema versi 1), `WorkshopRepository` (pelanggan, kendaraan, servis, item estimasi), dan `WorkshopBackup` (salin/restore berkas database utuh). Layar pelanggan, kendaraan, dan servis **belum dibuat**, jadi data belum bisa diisi dari UI. Preferensi aplikasi memakai `SharedPreferences`. Berkas `.obd` upstream bukan backup database pelanggan; mekanisme backup Android di manifest juga bukan fitur ekspor/restore bengkel yang dapat diandalkan pengguna.
+Lapisan data bengkel ada di `androbd/src/main/java/com/fr3ts0n/ecu/gui/androbd/workshop/` memakai `SQLiteOpenHelper` bawaan Android (tanpa Room, tanpa server backend atau login): `WorkshopDatabase` (skema versi 1), `WorkshopRepository` (pelanggan, kendaraan, servis, item estimasi), `WorkshopBackup` (salin/restore berkas database utuh), dan subpaket `workshop.ui` berisi empat layar (daftar pelanggan, kendaraan pelanggan, servis kendaraan, rincian servis). Preferensi aplikasi memakai `SharedPreferences`. Berkas `.obd` upstream bukan backup database pelanggan; mekanisme backup Android di manifest juga bukan fitur ekspor/restore bengkel yang dapat diandalkan pengguna.
 
 Skema memakai uang Rupiah bilangan bulat, status tersimpan sebagai nama enum, `PRAGMA foreign_keys=ON`, dan penghapusan pelanggan berantai ke kendaraan, servis, serta item estimasi. Ekspor menyalin berkas database setelah `wal_checkpoint(TRUNCATE)`; restore memvalidasi versi skema dan tabel wajib, menyimpan salinan `.before-restore`, lalu mengembalikan data lama bila berkas hasil restore gagal dibuka. Jangan menjalankan ekspor/restore bersamaan dengan penulisan lain dari layar berbeda.
 
@@ -563,7 +579,7 @@ Roadmap adalah arah pengembangan, **bukan daftar fitur yang sudah tersedia**.
 | --- | --- | --- |
 | 0–1 | Build dasar dan pemetaan codebase | Selesai pada lingkungan pengembangan |
 | 2 | Bahasa Indonesia, branding Bengkel Scan, menu sederhana, dan perapian UI | Diimplementasikan; kamus DTC Indonesia ditunda |
-| 3 | Database offline pelanggan, kendaraan, servis, item estimasi; ekspor/backup | Lapisan data, repository, dan ekspor/restore berkas selesai; layar pengisian data belum ada |
+| 3 | Database offline pelanggan, kendaraan, servis, item estimasi; ekspor/backup | Selesai: skema, repository, empat layar pengisian, cadangkan/pulihkan |
 | 4 | Tautan hasil OBD ke servis dan penyimpanan snapshot otomatis | Belum tersedia |
 | 5 | Laporan/invoice PDF dan berbagi melalui share sheet, termasuk WhatsApp | Belum tersedia |
 | 6 | Checklist gejala diesel dengan knowledge base yang dapat diedit | Belum tersedia |

@@ -95,6 +95,26 @@
             android:name=".PidCustomization"
             android:label="@string/customize_display"
             android:configChanges="touchscreen|orientation|screenSize" />
+        <activity
+            android:name=".workshop.ui.WorkshopCustomersActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/workshop_customers_title" />
+        <activity
+            android:name=".workshop.ui.WorkshopCustomerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/workshop_customers_title" />
+        <activity
+            android:name=".workshop.ui.WorkshopVehicleActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/workshop_vehicles_title" />
+        <activity
+            android:name=".workshop.ui.WorkshopServiceActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/workshop_services_title" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
