@@ -186,7 +186,7 @@ adb shell am start -W -n "$APP/.MainActivity"
 
 `ANDROID_SERIAL` mengarahkan perintah `adb` berikutnya ke ponsel pilihan. Nama aplikasi di launcher adalah **Bengkel Scan**, tetapi package ID tetap `com.fr3ts0n.ecu.gui.androbd`.
 
-> **Penting jika AndrOBD sudah terpasang:** package ID yang sama dapat menimbulkan konflik tanda tangan dengan build dari F-Droid atau sumber lain. `adb install -r` memperbarui aplikasi hanya jika tanda tangannya cocok. Jangan langsung uninstall atau menjalankan `pm clear`: tindakan tersebut dapat menghapus data/pengaturan. Cadangkan data yang tersedia melalui instalasi lama terlebih dahulu; fork ini belum mempunyai backup database bengkel.
+> **Penting jika AndrOBD sudah terpasang:** package ID yang sama dapat menimbulkan konflik tanda tangan dengan build dari F-Droid atau sumber lain. `adb install -r` memperbarui aplikasi hanya jika tanda tangannya cocok. Jangan langsung uninstall atau menjalankan `pm clear`: tindakan tersebut dapat menghapus data/pengaturan. Cadangkan data terlebih dahulu melalui **Data bengkel → Cadangkan data** pada instalasi lama.
 
 ## Penggunaan aplikasi
 
@@ -200,8 +200,9 @@ adb shell am start -W -n "$APP/.MainActivity"
 | Data Langsung | Memantau nilai sensor dan status yang tersedia |
 | Data Saat Kerusakan | Membaca kondisi yang disimpan ECU ketika terjadi gangguan |
 | Informasi Kendaraan | Melihat identitas/informasi OBD yang disediakan ECU |
-| Pengaturan | Mengatur sambungan, parameter, bahasa, satuan, dan tema |
 | Tentang aplikasi | Membaca kredit dan lisensi |
+| Diagnosis Tanpa Alat Scan | Checklist gejala untuk kendaraan tanpa ECU; hasil hanya saran |
+| Panduan Bunyi (menu ⋮) | Memutar audio lokal, mengimpor, atau merekam bunyi terkait kasus terkonfirmasi |
 
 Saat belum terhubung, pilihan pemeriksaan dinonaktifkan. Pada Mode Latihan, data diberi penjelasan bahwa itu **contoh, bukan hasil pemeriksaan kendaraan Anda**.
 
@@ -546,6 +547,23 @@ adb shell am instrument -w \
   -e class com.fr3ts0n.ecu.gui.androbd.workshop.DiagnosticRepositoryInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopDiagnosticUiInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopGuideActivityTest,com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopRepositoryInstrumentedTest \
   com.fr3ts0n.ecu.gui.androbd.test/androidx.test.runner.AndroidJUnitRunner
 ```
+
+Tes diagnosis terpandu, audio, dan kasus serupa:
+
+```bash
+# Kelompok cepat (tanpa skenario rekaman mikrofon yang memerlukan waktu lebih lama):
+adb shell am instrument -w \
+  -e class com.fr3ts0n.ecu.gui.androbd.diagnosis.DiagnosisKnowledgeInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.diagnosis.DiagnosisFlowInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.diagnosis.DiagnosisRepositoryInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.diagnosis.DiagnosisEstimateUiInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.diagnosis.data.DiagnosisMediaStoreInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.diagnosis.data.DiagnosisServiceLinkInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.DiagnosisAudioPlayerInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.DiagnosisPlaybackSuccessInstrumentedTest \
+  com.fr3ts0n.ecu.gui.androbd.test/androidx.test.runner.AndroidJUnitRunner
+
+# Skenario mikrofon nyata dapat memerlukan hingga sekitar 3 menit; jalankan terpisah.
+adb shell am instrument -w \
+  -e class com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.DiagnosisRecordingInstrumentedTest \
+  com.fr3ts0n.ecu.gui.androbd.test/androidx.test.runner.AndroidJUnitRunner
+```
+
+Tes mikrofon memakai data kasus dan rekaman sementara lalu membersihkannya; tes itu bukan bukti kebenaran diagnosis kendaraan.
+
 
 
 Untuk menjalankan tes Android aplikasi melalui Gradle:
