@@ -160,15 +160,18 @@ migrasi tidak berulang.
 
 ### F12. Diagnosis tanpa ECU
 - [x] Selesai sebelum fase ini (commit `c470958d`..`c7b8fcb5`)
+- [x] Diverifikasi ulang: `DiagnosisKnowledge`/`Flow`/`Repository` lulus di ponsel (25 tes)
 
 ### F13. Panduan bunyi
 - [x] Selesai sebelum fase ini (commit `4ed5e436`)
+- [x] Diverifikasi ulang: pemutaran + pemutar audio lulus di ponsel
 
 ### F14. Catatan suara
 - [ ] Rekaman per item/kasus + pemutaran
 
 ### F15. Riwayat kasus
 - [x] Selesai sebelum fase ini (commit `c7b8fcb5`)
+- [x] Diverifikasi ulang: `DiagnosisCaseHistoryTest` lulus di JVM
 
 ### F16. Pengingat servis
 - [ ] Tanggal/odometer, layar jatuh tempo, teks WhatsApp
