@@ -97,7 +97,12 @@ migrasi tidak berulang.
 - [x] Tanggal: commit `9224a872` (profil) lalu commit F3
 
 ### F4. Servis dan alur status
-- [ ] Status `PAID`/`Lunas`, kembali mundur, daftar hari ini/terbuka
+- [x] Empat langkah di layar servis: Menunggu → Sedang dikerjakan → Selesai → Lunas
+- [x] Lunas menandai selesai + dibayar + waktu bayar; mundur ke status belum selesai membatalkan pembayaran
+- [x] Setiap perubahan status/pembayaran menulis satu baris `audit_log`
+- [x] Layar **Pekerjaan servis** dengan saringan Semua / Belum selesai / Hari ini / Belum lunas
+- [x] Kartu beranda menampilkan "N belum selesai · M hari ini" (hanya baca)
+- [ ] Bekas uji pada `services` id 43 mengembalikan audit_log tambahan; bukan data pelanggan, boleh dibiarkan
 
 ### F5. Pindai OBD terkait servis
 - [ ] Snapshot, penanda demo/nyata, sebelum-sesudah, audit hapus kode

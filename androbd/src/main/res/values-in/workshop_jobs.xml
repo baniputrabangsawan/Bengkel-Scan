@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_jobs_title">Pekerjaan servis</string>
+    <string name="workshop_jobs_filter_all">Semua</string>
+    <string name="workshop_jobs_filter_open">Belum selesai</string>
+    <string name="workshop_jobs_filter_today">Hari ini</string>
+    <string name="workshop_jobs_filter_unpaid">Belum lunas</string>
+    <string name="workshop_jobs_empty">Tidak ada pekerjaan servis pada pilihan ini.</string>
+    <string name="workshop_jobs_today_empty">Belum ada pekerjaan servis hari ini.</string>
+    <string name="home_jobs_title">Pekerjaan servis</string>
+    <string name="home_jobs_hint">Hari ini dan yang belum selesai</string>
+    <string name="home_jobs_action">Buka pekerjaan servis</string>
+    <string name="home_jobs_summary">%1$d belum selesai · %2$d hari ini</string>
+    <string name="workshop_service_odometer">Odometer saat masuk (km, opsional)</string>
+    <string name="workshop_service_paid_note">Sudah lunas. Perubahan pada pekerjaan selesai tetap tercatat di log audit.</string>
+    <string name="workshop_status_paid">Lunas</string>
+</resources>

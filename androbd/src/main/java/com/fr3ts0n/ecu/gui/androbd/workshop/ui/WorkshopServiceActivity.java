@@ -92,7 +92,8 @@ public class WorkshopServiceActivity extends AppCompatActivity
 				android.R.layout.simple_spinner_item,
 				new String[]{getString(R.string.workshop_status_waiting),
 						getString(R.string.workshop_status_in_progress),
-						getString(R.string.workshop_status_done)});
+						getString(R.string.workshop_status_done),
+						getString(R.string.workshop_status_paid)});
 		statuses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		status.setAdapter(statuses);
 		status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
@@ -101,11 +102,25 @@ public class WorkshopServiceActivity extends AppCompatActivity
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 			{
 				if (binding || service == null) return;
+				// The fourth step "Lunas" finishes the job and records payment in one tap.
+				if (position == 3)
+				{
+					if (service.status != ServiceStatus.DONE) updateStatus(ServiceStatus.DONE);
+					if (service.paymentStatus != PaymentStatus.PAID)
+					{
+						setPaid(true);
+					}
+					bind();
+					return;
+				}
 				ServiceStatus next = position == 1 ? ServiceStatus.IN_PROGRESS
 						: position == 2 ? ServiceStatus.DONE : ServiceStatus.WAITING;
-				if (next == service.status) return;
-				repository.updateServiceStatus(service.id, next);
-				service = repository.findService(service.id);
+				if (next != service.status) updateStatus(next);
+				// Stepping back to an unfinished state also clears an earlier payment.
+				if (service.paymentStatus == PaymentStatus.PAID && next != ServiceStatus.DONE)
+				{
+					setPaid(false);
+				}
 			}
 
 			@Override
@@ -147,18 +162,41 @@ public class WorkshopServiceActivity extends AppCompatActivity
 		bind();
 	}
 
+	/** Record payment, keep the service screen's copy current, and log the change. */
+	private void setPaid(boolean nowPaid)
+	{
+		repository.setPayment(service.id, nowPaid ? PaymentStatus.PAID : PaymentStatus.UNPAID,
+				null, null);
+		new com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopSettingsRepository(repository.database())
+				.record("service.payment", "service", service.id, nowPaid ? "PAID" : "UNPAID");
+		service = repository.findService(service.id);
+	}
+
+	/** Change the workflow state and keep one audit line per change. */
+	private void updateStatus(ServiceStatus next)
+	{
+		repository.updateServiceStatus(service.id, next);
+		new com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopSettingsRepository(repository.database())
+				.record("service.status", "service", service.id, next.name());
+		service = repository.findService(service.id);
+	}
+
 	private void bind()
 	{
 		binding = true;
-		status.setSelection(service.status == ServiceStatus.IN_PROGRESS ? 1
+		status.setSelection(service.paymentStatus == PaymentStatus.PAID ? 3
+				: service.status == ServiceStatus.IN_PROGRESS ? 1
 				: service.status == ServiceStatus.DONE ? 2 : 0);
 		binding = false;
 
 		paid.setOnCheckedChangeListener(null);
 		paid.setChecked(service.paymentStatus == PaymentStatus.PAID);
 		paid.setOnCheckedChangeListener((button, checked) ->
-				repository.setPaymentStatus(service.id,
-						checked ? PaymentStatus.PAID : PaymentStatus.UNPAID));
+		{
+			if (binding) return;
+			setPaid(checked);
+			bind();
+		});
 
 		if (!notes.hasFocus())
 		{

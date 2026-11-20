@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_jobs_title">Service jobs</string>
+    <string name="workshop_jobs_filter_all">All</string>
+    <string name="workshop_jobs_filter_open">Open</string>
+    <string name="workshop_jobs_filter_today">Today</string>
+    <string name="workshop_jobs_filter_unpaid">Not paid yet</string>
+    <string name="workshop_jobs_empty">No service jobs match this filter.</string>
+    <string name="workshop_jobs_today_empty">No service jobs today.</string>
+    <string name="home_jobs_title">Service jobs</string>
+    <string name="home_jobs_hint">Today and open jobs by status</string>
+    <string name="home_jobs_action">Open service jobs</string>
+    <string name="home_jobs_summary">%1$d open · %2$d today</string>
+    <string name="workshop_service_odometer">Odometer at drop-off (km, optional)</string>
+    <string name="workshop_service_paid_note">Paid. Changing this on a finished job keeps the history in the audit log.</string>
+    <string name="workshop_status_paid">Paid</string>
+</resources>

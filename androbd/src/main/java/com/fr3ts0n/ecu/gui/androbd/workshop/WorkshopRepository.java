@@ -274,6 +274,25 @@ public final class WorkshopRepository
 		return readServices("status = ?", new String[]{status.name()}, "created_at DESC");
 	}
 
+	/** Every service job, newest first. */
+	public List<ServiceRecord> allServices()
+	{
+		return readServices(null, null, "created_at DESC");
+	}
+
+	/** Jobs not yet done: waiting or in progress, oldest first so the queue reads top-down. */
+	public List<ServiceRecord> openServices()
+	{
+		return readServices("status != ?", new String[]{ServiceStatus.DONE.name()}, "created_at ASC");
+	}
+
+	/** Jobs whose payment is still outstanding. */
+	public List<ServiceRecord> unpaidServices()
+	{
+		return readServices("payment_status = ?", new String[]{PaymentStatus.UNPAID.name()},
+				"created_at DESC");
+	}
+
 	public long addEstimateItem(long serviceId, ItemKind kind, String description,
 			double quantity, long unitPrice)
 	{

@@ -850,6 +850,7 @@ public class MainActivity extends PluginManager
         ModernUiUtils.applyScreenInsets(this);
         getListView().setOnTouchListener(toolbarAutoHider);
         updateWorkshopHome();
+        updateJobsHome();
     }
 
     /**
@@ -955,6 +956,12 @@ public class MainActivity extends PluginManager
                     com.fr3ts0n.ecu.gui.androbd.workshop.ui.WorkshopCustomersActivity.class));
             return;
         }
+        if (id == R.id.home_jobs)
+        {
+            startActivity(new Intent(this,
+                    com.fr3ts0n.ecu.gui.androbd.workshop.ui.WorkshopJobsActivity.class));
+            return;
+        }
         if (id == R.id.home_guided_diagnosis)
         {
             startActivity(new Intent(this,
@@ -978,6 +985,24 @@ public class MainActivity extends PluginManager
         else return;
         MenuItem action = menu.findItem(menuId);
         if (action != null && action.isEnabled()) onOptionsItemSelected(action);
+    }
+
+    /** Open and today counts on the home card; read-only, no writes. */
+    private void updateJobsHome()
+    {
+        TextView detail = findViewById(R.id.home_jobs_detail);
+        if (detail == null) return;
+        com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopRepository repository =
+                com.fr3ts0n.ecu.gui.androbd.workshop.ui.WorkshopUi.repository(this);
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        calendar.set(java.util.Calendar.MINUTE, 0);
+        calendar.set(java.util.Calendar.SECOND, 0);
+        calendar.set(java.util.Calendar.MILLISECOND, 0);
+        long start = calendar.getTimeInMillis();
+        int open = repository.openServices().size();
+        int today = repository.servicesForDay(start, start + 24L * 60 * 60 * 1000).size();
+        detail.setText(getString(R.string.home_jobs_summary, open, today));
     }
 
     private void updateWorkshopHome()
@@ -1308,6 +1333,7 @@ public class MainActivity extends PluginManager
                 else if (getMode() == MODE.OFFLINE && CommService.medium == CommService.MEDIUM.DEMO)
                     setMode(MODE.DEMO);
                 updateWorkshopHome();
+        updateJobsHome();
             }
             break;
 
@@ -1901,6 +1927,7 @@ public class MainActivity extends PluginManager
             }
         }
         updateWorkshopHome();
+        updateJobsHome();
     }
 
     /**
@@ -1959,6 +1986,7 @@ public class MainActivity extends PluginManager
                 break;
         }
         updateWorkshopHome();
+        updateJobsHome();
     }
 
     /**
@@ -2388,6 +2416,7 @@ public class MainActivity extends PluginManager
             unHideActionBar();
         }
         updateWorkshopHome();
+        updateJobsHome();
     }
 
     /**

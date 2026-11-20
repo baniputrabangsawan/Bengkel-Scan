@@ -107,6 +107,11 @@
             android:exported="false"
             android:label="@string/workshop_customers_title" />
         <activity
+            android:name=".workshop.ui.WorkshopJobsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/workshop_jobs_title" />
+        <activity
             android:name=".workshop.ui.WorkshopProfileActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
