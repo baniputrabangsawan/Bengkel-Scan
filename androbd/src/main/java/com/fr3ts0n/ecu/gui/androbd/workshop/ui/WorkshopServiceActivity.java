@@ -81,6 +81,9 @@ public class WorkshopServiceActivity extends AppCompatActivity
 				: vehicle.plate);
 		((TextView) findViewById(R.id.workshop_summary)).setText(
 				service.complaint + "\n" + WorkshopUi.dateTime(service.createdAt));
+		findViewById(R.id.workshop_canned).setOnClickListener(view ->
+				startActivity(new Intent(this, WorkshopCannedJobsActivity.class)
+						.putExtra(WorkshopUi.EXTRA_SERVICE_ID, service.id)));
 		findViewById(R.id.workshop_inspection).setOnClickListener(view ->
 				startActivity(new Intent(this, WorkshopInspectionActivity.class)
 						.putExtra(WorkshopUi.EXTRA_SERVICE_ID, service.id)));

@@ -6,6 +6,10 @@
         android:title="@string/workshop_profile_title"
         app:showAsAction="never" />
     <item
+        android:id="@+id/workshop_canned_menu"
+        android:title="@string/workshop_canned_menu"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/workshop_restore"
         android:title="@string/workshop_restore_menu"
         app:showAsAction="never" />

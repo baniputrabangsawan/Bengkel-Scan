@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_canned_title">Job packages</string>
+    <string name="workshop_canned_intro">A package copies its lines into an estimate. Editing the copy never changes the package.</string>
+    <string name="workshop_canned_empty">No job packages yet. Create one for work you repeat often.</string>
+    <string name="workshop_canned_add">New package</string>
+    <string name="workshop_canned_name">Package name</string>
+    <string name="workshop_canned_note">Note (optional)</string>
+    <string name="workshop_canned_item_add">Add package line</string>
+    <string name="workshop_canned_apply">Add package to this service</string>
+    <string name="workshop_canned_applied">%1$d line(s) added to the estimate</string>
+    <string name="workshop_canned_delete_title">Delete package?</string>
+    <string name="workshop_canned_delete_message">Delete \"%1$s\"? Estimates already using its lines are not changed.</string>
+    <string name="workshop_canned_error_name">Package name is required</string>
+    <string name="workshop_canned_saved">Package saved</string>
+    <string name="workshop_canned_seed_note">Example package — prices are placeholders, set your own.</string>
+    <string name="workshop_canned_menu">Job packages</string>
+    <string name="workshop_canned_lines">%1$d line(s)</string>
+    <string name="workshop_canned_pick">Choose a package</string>
+    <string-array name="workshop_canned_seed_names">
+        <item>Periodic diesel service</item>
+        <item>Brake check and replace</item>
+        <item>Fuel filter change</item>
+        <item>Turbo hose leak check</item>
+    </string-array>
+</resources>

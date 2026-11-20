@@ -129,7 +129,10 @@ migrasi tidak berulang.
 - [x] Tes JVM `WorkshopServiceActivityParseTest` (2) + alur estimasi diagnosis lulus di ponsel
 
 ### F8. Paket pekerjaan
-- [ ] Template + layar admin + seed 3-5 contoh
+- [x] Layar **Paket pekerjaan**: buat/ubah nama, tambah/hapus baris, hapus paket
+- [x] Ketuk paket dari layar servis = menyalin barisnya ke estimasi (`applyTo`), salinan tidak mengubah paket
+- [x] Seed 4 paket contoh saat daftar masih kosong, nama berakhiran `[contoh]`, harga 0 dan catatan "harga masih contoh"
+- [x] Tes `CannedJobInstrumentedTest` (4) lulus di ponsel
 
 ### F9. Persetujuan estimasi
 - [ ] Status persetujuan, per baris, riwayat
