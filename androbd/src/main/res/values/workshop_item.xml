@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_item_discount">Discount (Rp, optional)</string>
+    <string name="workshop_item_discount_hint">Whole Rupiah taken off this line, never above its total.</string>
+    <string name="workshop_item_inspection_link">Related inspected part (optional)</string>
+    <string name="workshop_item_inspection_none">Not linked</string>
+    <string name="workshop_estimate_edit">Edit item</string>
+    <string name="workshop_item_saved">Item saved</string>
+    <string name="workshop_error_discount">Discount must be zero or more, and not above the line total</string>
+    <string name="workshop_estimate_linked">Linked to an inspected part</string>
+    <string name="workshop_item_discount_short">discount %1$s</string>
+</resources>

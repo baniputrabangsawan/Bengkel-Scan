@@ -32,6 +32,8 @@ import com.fr3ts0n.ecu.gui.androbd.ModernUiUtils;
 import com.fr3ts0n.ecu.gui.androbd.R;
 import com.fr3ts0n.ecu.gui.androbd.SettingsActivity;
 import com.fr3ts0n.ecu.gui.androbd.workshop.EstimateItem;
+import com.fr3ts0n.ecu.gui.androbd.workshop.InspectionItem;
+import com.fr3ts0n.ecu.gui.androbd.workshop.InspectionRepository;
 import com.fr3ts0n.ecu.gui.androbd.workshop.ItemKind;
 import com.fr3ts0n.ecu.gui.androbd.workshop.PaymentStatus;
 import com.fr3ts0n.ecu.gui.androbd.workshop.ServiceRecord;
@@ -148,6 +150,18 @@ public class WorkshopServiceActivity extends AppCompatActivity
 		adapter = new WorkshopRowAdapter(this);
 		list.setAdapter(adapter);
 		list.setOnItemLongClickListener(this::confirmDeleteItem);
+		list.setOnItemClickListener((parent, view, position, id) ->
+		{
+			long itemId = adapter.getItem(position).id;
+			for (EstimateItem item : repository.estimateItems(service.id))
+			{
+				if (item.id == itemId)
+				{
+					showItemDialog(item);
+					return;
+				}
+			}
+		});
 
 		findViewById(R.id.workshop_add).setOnClickListener(view -> addEstimateItem());
 		findViewById(R.id.workshop_save_notes).setOnClickListener(view ->
@@ -276,9 +290,18 @@ public class WorkshopServiceActivity extends AppCompatActivity
 		List<WorkshopRow> rows = new ArrayList<>(items.size());
 		for (EstimateItem item : items)
 		{
-			rows.add(new WorkshopRow(item.id, item.description,
-					getString(R.string.workshop_item_line,
-							quantity.format(item.quantity), WorkshopUi.money(item.unitPrice)),
+			StringBuilder subtitle = new StringBuilder(getString(R.string.workshop_item_line,
+					quantity.format(item.quantity), WorkshopUi.money(item.unitPrice)));
+			if (item.discount > 0)
+			{
+				subtitle.append(" · ").append(getString(R.string.workshop_item_discount_short,
+						WorkshopUi.money(item.discount)));
+			}
+			if (item.inspectionItemId != null)
+			{
+				subtitle.append(" · ").append(getString(R.string.workshop_estimate_linked));
+			}
+			rows.add(new WorkshopRow(item.id, item.description, subtitle.toString(),
 					WorkshopUi.money(item.lineTotal())));
 		}
 		adapter.submit(rows);
@@ -304,11 +327,23 @@ public class WorkshopServiceActivity extends AppCompatActivity
 
 	private void addEstimateItem()
 	{
+		showItemDialog(null);
+	}
+
+	/**
+	 * Add or edit one estimate line.
+	 *
+	 * @param editing line to change, or {@code null} to add
+	 */
+	private void showItemDialog(final EstimateItem editing)
+	{
 		View form = getLayoutInflater().inflate(R.layout.dialog_estimate_item, null);
 		Spinner kind = form.findViewById(R.id.workshop_kind);
 		TextInputEditText description = form.findViewById(R.id.workshop_description);
 		TextInputEditText quantity = form.findViewById(R.id.workshop_quantity);
 		TextInputEditText price = form.findViewById(R.id.workshop_price);
+		TextInputEditText discount = form.findViewById(R.id.workshop_discount);
+		Spinner inspectionLink = form.findViewById(R.id.workshop_inspection_link);
 
 		ArrayAdapter<String> kinds = new ArrayAdapter<>(this,
 				android.R.layout.simple_spinner_item,
@@ -317,8 +352,34 @@ public class WorkshopServiceActivity extends AppCompatActivity
 		kinds.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		kind.setAdapter(kinds);
 
+		// Optional link to a part inspected during this service.
+		final List<InspectionItem> inspected =
+				new InspectionRepository(repository.database()).forService(service.id);
+		ArrayAdapter<String> links = new ArrayAdapter<>(this,
+				android.R.layout.simple_spinner_item, linkLabels(inspected));
+		links.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		inspectionLink.setAdapter(links);
+
+		if (editing != null)
+		{
+			kind.setSelection(editing.kind == ItemKind.LABOUR ? 0 : 1);
+			description.setText(editing.description);
+			quantity.setText(new DecimalFormat("0.##").format(editing.quantity));
+			price.setText(String.valueOf(editing.unitPrice));
+			discount.setText(editing.discount == 0 ? "" : String.valueOf(editing.discount));
+			for (int i = 0; i < inspected.size(); i++)
+			{
+				if (Long.valueOf(inspected.get(i).id).equals(editing.inspectionItemId))
+				{
+					inspectionLink.setSelection(i + 1);
+					break;
+				}
+			}
+		}
+
 		AlertDialog dialog = new AlertDialog.Builder(this)
-				.setTitle(R.string.workshop_estimate_add)
+				.setTitle(editing == null ? R.string.workshop_estimate_add
+						: R.string.workshop_estimate_edit)
 				.setView(form)
 				.setNegativeButton(R.string.workshop_action_cancel, null)
 				.setPositiveButton(R.string.workshop_action_save, null)
@@ -326,55 +387,98 @@ public class WorkshopServiceActivity extends AppCompatActivity
 		dialog.setOnShowListener(ignored ->
 				dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view ->
 				{
-					String text = description.getText() == null
-							? "" : description.getText().toString().trim();
+					String text = textOf(description);
 					if (text.isEmpty())
 					{
 						description.setError(getString(R.string.workshop_item_description));
 						description.requestFocus();
 						return;
 					}
-					double amount;
-					try
-					{
-						amount = Double.parseDouble(quantity.getText().toString()
-								.trim().replace(',', '.'));
-					}
-					catch (NumberFormatException invalid)
-					{
-						amount = 0;
-					}
+					double amount = parseQuantity(textOf(quantity));
 					if (amount <= 0)
 					{
 						quantity.setError(getString(R.string.workshop_error_quantity));
 						quantity.requestFocus();
 						return;
 					}
-					long unitPrice;
-					try
-					{
-						unitPrice = Long.parseLong(price.getText().toString()
-								.trim().replaceAll("[^0-9]", ""));
-					}
-					catch (NumberFormatException invalid)
-					{
-						unitPrice = -1;
-					}
+					long unitPrice = parseRupiah(textOf(price), -1);
 					if (unitPrice < 0)
 					{
 						price.setError(getString(R.string.workshop_error_price));
 						price.requestFocus();
 						return;
 					}
-					repository.addEstimateItem(service.id,
-							kind.getSelectedItemPosition() == 0
-									? ItemKind.LABOUR : ItemKind.PART,
-							text, amount, unitPrice);
+					long taken = parseRupiah(textOf(discount), 0);
+					if (taken < 0 || taken > Math.round(amount * unitPrice))
+					{
+						discount.setError(getString(R.string.workshop_error_discount));
+						discount.requestFocus();
+						return;
+					}
+					ItemKind itemKind = kind.getSelectedItemPosition() == 0
+							? ItemKind.LABOUR : ItemKind.PART;
+					if (editing == null)
+					{
+						int link = inspectionLink.getSelectedItemPosition();
+						repository.addEstimateItem(service.id, itemKind, text, amount, unitPrice,
+								taken, link <= 0 ? null
+										: Long.valueOf(inspected.get(link - 1).id));
+					}
+					else
+					{
+						repository.updateEstimateItem(editing.id, itemKind, text, amount,
+								unitPrice, taken);
+					}
 					WorkshopUi.hideKeyboard(this);
 					dialog.dismiss();
 					loadItems();
+					Toast.makeText(this, R.string.workshop_item_saved, Toast.LENGTH_SHORT).show();
 				}));
 		dialog.show();
+	}
+
+	private String[] linkLabels(List<InspectionItem> inspected)
+	{
+		String[] labels = new String[inspected.size() + 1];
+		labels[0] = getString(R.string.workshop_item_inspection_none);
+		for (int i = 0; i < inspected.size(); i++)
+		{
+			labels[i + 1] = inspected.get(i).name;
+		}
+		return labels;
+	}
+
+	/** "1,5" or "1.5" hours, as the mechanic types it. */
+	static double parseQuantity(String value)
+	{
+		try
+		{
+			return Double.parseDouble(value.trim().replace(',', '.'));
+		}
+		catch (NumberFormatException invalid)
+		{
+			return 0;
+		}
+	}
+
+	/** Whole Rupiah; separators are ignored, and a blank field keeps {@code fallback}. */
+	static long parseRupiah(String value, long fallback)
+	{
+		String digits = value == null ? "" : value.replaceAll("[^0-9]", "");
+		if (digits.isEmpty()) return fallback;
+		try
+		{
+			return Long.parseLong(digits);
+		}
+		catch (NumberFormatException invalid)
+		{
+			return -1;
+		}
+	}
+
+	private static String textOf(TextInputEditText field)
+	{
+		return field.getText() == null ? "" : field.getText().toString().trim();
 	}
 
 	@Override

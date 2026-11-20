@@ -70,4 +70,38 @@
             android:inputType="number"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="@string/workshop_item_discount"
+        app:helperText="@string/workshop_item_discount_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/workshop_discount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/workshop_item_inspection_link"
+        android:textColor="@color/workshop_secondary_text"
+        android:textSize="14sp" />
+
+    <Spinner
+        android:id="@+id/workshop_inspection_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/result_row_surface"
+        android:minHeight="56dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp" />
 </LinearLayout>

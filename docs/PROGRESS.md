@@ -122,7 +122,11 @@ migrasi tidak berulang.
 - [ ] Belum diuji dengan kamera fisik; emulator tanpa kamera memakai galeri
 
 ### F7. Estimasi
-- [ ] Diskon, ubah baris, tautan item
+- [x] Satu dialog untuk tambah dan ubah baris (ketuk baris); hapus lewat ketuk lama
+- [x] Diskon per baris dalam Rupiah, ditolak bila melebihi total baris
+- [x] Tautan opsional ke bagian yang diperiksa pada servis itu; ditampilkan pada baris
+- [x] Pemisah Indonesia "1,5" dan format "Rp 150.000" diurai di satu tempat (`parseQuantity`/`parseRupiah`)
+- [x] Tes JVM `WorkshopServiceActivityParseTest` (2) + alur estimasi diagnosis lulus di ponsel
 
 ### F8. Paket pekerjaan
 - [ ] Template + layar admin + seed 3-5 contoh

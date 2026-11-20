@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_item_discount">Diskon (Rp, opsional)</string>
+    <string name="workshop_item_discount_hint">Potongan Rupiah bulat untuk baris ini, tidak boleh melebihi totalnya.</string>
+    <string name="workshop_item_inspection_link">Bagian diperiksa terkait (opsional)</string>
+    <string name="workshop_item_inspection_none">Tidak ditautkan</string>
+    <string name="workshop_estimate_edit">Ubah item</string>
+    <string name="workshop_item_saved">Item disimpan</string>
+    <string name="workshop_error_discount">Diskon harus nol atau lebih, dan tidak melebihi total baris</string>
+    <string name="workshop_estimate_linked">Tertaut bagian yang diperiksa</string>
+    <string name="workshop_item_discount_short">diskon %1$s</string>
+</resources>
