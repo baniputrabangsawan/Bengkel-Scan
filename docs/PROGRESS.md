@@ -188,7 +188,11 @@ migrasi tidak berulang.
 - [x] Tes JVM `ReminderStatusTest` (6); total 58 tes JVM lulus
 
 ### F17. Cadangkan, pulihkan, ekspor
-- [ ] CSV + pengingat cadangan (ZIP sudah ada)
+- [x] ZIP cadangan/pulihkan sudah ada (database + foto + audio + panduan tambahan)
+- [x] **Ekspor CSV**: pelanggan, servis, nota belum lunas; UTF-8 + BOM, pemisah `;`, semua kolom dikutip
+- [x] Pengingat cadangan halus: sekali per hari setelah N hari tanpa cadangan (bawaan 7), tombol "Cadangkan sekarang"
+- [x] Tes `CsvExporterInstrumentedTest` (3) lulus
+- [ ] Mengirim CSV ke aplikasi lain belum diuji manual (chooser)
 
 ### F18. Layar OBD lanjutan
 - [ ] Sakelar "Mode Lanjutan" dengan konfirmasi

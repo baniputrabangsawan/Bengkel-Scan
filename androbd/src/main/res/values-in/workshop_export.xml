@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_export_csv">Ekspor CSV</string>
+    <string name="workshop_export_customers">Pelanggan</string>
+    <string name="workshop_export_services">Servis</string>
+    <string name="workshop_export_unpaid">Nota belum lunas</string>
+    <string name="workshop_export_done">CSV tersimpan: %1$s</string>
+    <string name="workshop_export_failed">Ekspor gagal: %1$s</string>
+    <string name="workshop_backup_nudge_title">Waktunya mencadangkan</string>
+    <string name="workshop_backup_nudge_message">Cadangan terakhir %1$d hari lalu. Cadangkan sekarang supaya catatan bengkel tidak hilang bila ponsel rusak.</string>
+    <string name="workshop_backup_never">Belum pernah mencadangkan. Cadangkan sekarang supaya catatan bengkel tidak hilang bila ponsel rusak.</string>
+    <string name="workshop_backup_nudge_later">Nanti</string>
+    <string name="workshop_backup_now">Cadangkan sekarang</string>
+    <string name="workshop_backup_days">Pengingat cadangan (hari)</string>
+    <string name="workshop_backup_days_hint">Pengingat halus muncul setelah sekian hari tanpa cadangan.</string>
+</resources>

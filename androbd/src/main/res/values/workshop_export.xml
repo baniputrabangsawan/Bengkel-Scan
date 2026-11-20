@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_export_csv">Export CSV</string>
+    <string name="workshop_export_customers">Customers</string>
+    <string name="workshop_export_services">Services</string>
+    <string name="workshop_export_unpaid">Unpaid invoices</string>
+    <string name="workshop_export_done">CSV saved: %1$s</string>
+    <string name="workshop_export_failed">Export failed: %1$s</string>
+    <string name="workshop_backup_nudge_title">Time to back up</string>
+    <string name="workshop_backup_nudge_message">The last backup was %1$d days ago. Back up now so a lost phone does not lose the workshop records.</string>
+    <string name="workshop_backup_never">No backup has been made yet. Back up now so a lost phone does not lose the workshop records.</string>
+    <string name="workshop_backup_nudge_later">Later</string>
+    <string name="workshop_backup_now">Back up now</string>
+    <string name="workshop_backup_days">Backup reminder (days)</string>
+    <string name="workshop_backup_days_hint">A gentle reminder is shown after this many days without a backup.</string>
+</resources>

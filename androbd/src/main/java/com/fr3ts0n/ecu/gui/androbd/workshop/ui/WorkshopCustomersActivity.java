@@ -105,6 +105,7 @@ public class WorkshopCustomersActivity extends AppCompatActivity
 
 		findViewById(R.id.workshop_add).setOnClickListener(view -> addCustomer());
 		findViewById(R.id.workshop_backup).setOnClickListener(view -> backup());
+		maybeNudgeBackup();
 	}
 
 	@Override
@@ -162,12 +163,94 @@ public class WorkshopCustomersActivity extends AppCompatActivity
 		dialog.show();
 	}
 
+	/** Settings key: when the last successful backup happened. */
+	private static final String KEY_LAST_BACKUP = "backup.last_at";
+	/** Settings key: when the nudge was last shown, so it appears once a day. */
+	private static final String KEY_LAST_NUDGE = "backup.last_nudge";
+
+	/**
+	 * Gentle reminder after the configured number of days without a backup.
+	 * Shown at most once a day, and dismissed for the day if the mechanic says later.
+	 */
+	private void maybeNudgeBackup()
+	{
+		com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopSettingsRepository settings =
+				new com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopSettingsRepository(
+						repository.database());
+		long days = Math.max(1, settings.getLong(
+				com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopSettingsRepository.KEY_BACKUP_REMINDER_DAYS,
+				7));
+		long now = System.currentTimeMillis();
+		long lastNudge = settings.getLong(KEY_LAST_NUDGE, 0);
+		if (lastNudge > 0 && now - lastNudge < 24L * 60 * 60 * 1000) return;
+
+		long lastBackup = settings.getLong(KEY_LAST_BACKUP, 0);
+		long silentSince = lastBackup > 0 ? now - lastBackup : -1;
+		if (lastBackup > 0 && silentSince < days * 24L * 60 * 60 * 1000) return;
+
+		settings.put(KEY_LAST_NUDGE, String.valueOf(now));
+		String message = lastBackup > 0
+				? getString(R.string.workshop_backup_nudge_message, (int) (silentSince
+						/ (24L * 60 * 60 * 1000)))
+				: getString(R.string.workshop_backup_never);
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.workshop_backup_nudge_title)
+				.setMessage(message)
+				.setNegativeButton(R.string.workshop_backup_nudge_later, null)
+				.setPositiveButton(R.string.workshop_backup_now, (dialog, which) -> backup())
+				.show();
+	}
+
+	/** Pick which table to write, then share the file like a backup. */
+	private void chooseExport()
+	{
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.workshop_export_csv)
+				.setItems(new String[]{getString(R.string.workshop_export_customers),
+						getString(R.string.workshop_export_services),
+						getString(R.string.workshop_export_unpaid)}, (dialog, which) -> export(which))
+				.setNegativeButton(R.string.workshop_action_cancel, null)
+				.show();
+	}
+
+	private void export(int which)
+	{
+		try
+		{
+			File folder = new File(getExternalFilesDir(null), "exports");
+			if (!folder.isDirectory() && !folder.mkdirs()) throw new IOException("exports folder");
+			String stamp = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss", java.util.Locale.US)
+					.format(new java.util.Date());
+			String name = which == 0 ? "pelanggan-" : which == 1 ? "servis-" : "belum-lunas-";
+			File target = new File(folder, name + stamp + ".csv");
+			try (java.io.Writer out = new java.io.OutputStreamWriter(
+					new java.io.FileOutputStream(target), java.nio.charset.StandardCharsets.UTF_8))
+			{
+				// BOM so Excel opens Indonesian text correctly.
+				out.write('\uFEFF');
+				if (which == 0) com.fr3ts0n.ecu.gui.androbd.workshop.CsvExporter
+						.writeCustomers(repository, out);
+				else if (which == 1) com.fr3ts0n.ecu.gui.androbd.workshop.CsvExporter
+						.writeServices(repository, out);
+				else com.fr3ts0n.ecu.gui.androbd.workshop.CsvExporter.writeUnpaid(repository, out);
+			}
+			Toast.makeText(this, getString(R.string.workshop_export_done, target.getName()),
+					Toast.LENGTH_LONG).show();
+		}
+		catch (IOException | RuntimeException error)
+		{
+			showError(R.string.workshop_export_failed, error);
+		}
+	}
+
 	private void backup()
 	{
 		try
 		{
 			File target = WorkshopBackup.defaultExportFile(this);
 			WorkshopBackup.export(repository.database(), target);
+			new com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopSettingsRepository(repository.database())
+					.put(KEY_LAST_BACKUP, String.valueOf(System.currentTimeMillis()));
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.workshop_backup_title)
 					.setMessage(getString(R.string.workshop_backup_done, target.getAbsolutePath()))
@@ -277,6 +360,11 @@ public class WorkshopCustomersActivity extends AppCompatActivity
 		if (item.getItemId() == android.R.id.home)
 		{
 			finish();
+			return true;
+		}
+		if (item.getItemId() == R.id.workshop_export_csv)
+		{
+			chooseExport();
 			return true;
 		}
 		if (item.getItemId() == R.id.workshop_due_menu)
