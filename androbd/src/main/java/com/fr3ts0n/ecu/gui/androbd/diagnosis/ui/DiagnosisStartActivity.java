@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fr3ts0n.ecu.gui.androbd.R;
@@ -39,6 +40,20 @@ public class DiagnosisStartActivity extends AppCompatActivity
         SettingsActivity.applyLocale(this);
         super.onCreate(state);
         category = state == null ? null : state.getString("category");
+        // Back from the question list must return to the categories first, and the
+        // system back gesture only reaches a dispatcher callback on Android 13+.
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true)
+        {
+            @Override public void handleOnBackPressed()
+            {
+                if (category != null) { category = null; render(); }
+                else
+                {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        });
         loader = new DiagnosisKnowledgeLoader(this);
         repository = new DiagnosisRepository(this);
         load();
@@ -227,9 +242,5 @@ public class DiagnosisStartActivity extends AppCompatActivity
         out.putString("category", category);
     }
 
-    @Override public void onBackPressed()
-    {
-        if (category != null) { category = null; render(); }
-        else super.onBackPressed();
-    }
+
 }

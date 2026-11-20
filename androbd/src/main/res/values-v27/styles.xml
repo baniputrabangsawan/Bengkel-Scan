@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- API 27+ understands this attribute; older devices keep the default nav bar. -->
+    <style name="AppTheme" parent="Theme.Material3.DayNight">
+        <item name="android:windowLightNavigationBar">@bool/workshop_light_system_bars</item>
+    </style>
+</resources>

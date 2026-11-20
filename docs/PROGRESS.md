@@ -203,7 +203,22 @@ migrasi tidak berulang.
 - [ ] Sakelar belum dicoba jari di ponsel (butuh navigasi layar; build + tes lulus)
 
 ### F19. Ukur dan optimalkan
-- [ ] Angka sebelum/sesudah
+Angka terukur pada ponsel Infinix X6885 (Android 16), 21 Nov 2026:
+
+| Ukuran | Nilai |
+| --- | --- |
+| APK debug | 11 029 598 byte (10,52 MB) |
+| APK rilis (R8 + shrink) | 3 482 565 byte (3,32 MB) |
+| Cold start (`am start -W`, sesudah `force-stop`) | 1 785 ms; 4 363 ms saat sistem sibuk |
+| Memori beranda sesudah mulai | TOTAL PSS 119 926 KB, Java Heap 24 184 KB |
+| Laporan PDF 8 foto | 127 ms, 71 364 byte |
+| Tes JVM | 62 lulus |
+
+Yang diperbaiki karena datanya menuntut (bukan dugaan):
+- `lintRelease` gagal karena 10 error nyata di kode sendiri, bukan baseline: cast `MaterialButton` pada `Button`, `onBackPressed` yang tidak lagi dipanggil (konfirmasi buang draf tidak muncul di Android 13+), `windowLightNavigationBar` (API 27) dan `screenReaderFocusable` (API 28) dipakai pada `minSdk 23`, serta `android:tint` pada `ImageView`.
+- Sesudah perbaikan: lint 0 error, rilis 3,32 MB (R8 + resource shrinking sudah aktif).
+
+Belum dioptimalkan karena belum ada bukti kebutuhan: kamus DTC 13 bahasa (`codes_*.properties`, ~2,6 MB mentah) memberi 3,32 MB rilis; menghapus bahasa lain menghemat ruang tetapi menghilangkan kemampuan upstream dan belum diminta.
 
 ### F20. Audit akhir dan rilis
 - [ ] Audit, README, panduan pengguna, checklist mekanik, panduan keystore

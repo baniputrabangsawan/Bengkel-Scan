@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- API 28+ can make a whole card one accessibility stop; older versions keep
+         the default, where TalkBack reads the children instead. -->
+    <style name="WorkshopHomeTile" parent="WorkshopHomePanel">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:enabled">false</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:screenReaderFocusable">true</item>
+    </style>
+</resources>

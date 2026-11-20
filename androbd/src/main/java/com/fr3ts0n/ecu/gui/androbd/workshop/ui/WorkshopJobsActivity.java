@@ -30,7 +30,6 @@ import com.fr3ts0n.ecu.gui.androbd.workshop.PaymentStatus;
 import com.fr3ts0n.ecu.gui.androbd.workshop.ServiceRecord;
 import com.fr3ts0n.ecu.gui.androbd.workshop.Vehicle;
 import com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopRepository;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,10 +55,10 @@ public class WorkshopJobsActivity extends AppCompatActivity
 	private WorkshopRowAdapter adapter;
 	private TextView empty;
 	private Filter filter = Filter.OPEN;
-	private MaterialButton all;
-	private MaterialButton open;
-	private MaterialButton today;
-	private MaterialButton unpaid;
+	private android.widget.Button all;
+	private android.widget.Button open;
+	private android.widget.Button today;
+	private android.widget.Button unpaid;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)

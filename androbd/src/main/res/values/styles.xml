@@ -2,7 +2,6 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="Theme.Material3.DayNight" >
         <item name="android:windowLightStatusBar">@bool/workshop_light_system_bars</item>
-        <item name="android:windowLightNavigationBar">@bool/workshop_light_system_bars</item>
         <item name="android:activatedBackgroundIndicator">@drawable/activated_background</item>
         <item name="android:fitsSystemWindows">false</item>
         <item name="colorPrimary">@color/workshop_primary</item>

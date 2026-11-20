@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRadioButton;
@@ -49,6 +50,20 @@ public class DiagnosisCaseActivity extends AppCompatActivity
     {
         SettingsActivity.applyLocale(this);
         super.onCreate(state);
+        // Android 13+ delivers the system back gesture here, not to onBackPressed(),
+        // so the unsaved-draft confirmation must be registered as a callback.
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true)
+        {
+            @Override public void handleOnBackPressed()
+            {
+                if (dirty) confirmDiscard();
+                else
+                {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        });
         root = DiagnosisUi.screen(this, R.string.diagnosis_case_title);
         repository = new DiagnosisRepository(this);
         media = new DiagnosisMediaStore(this);
@@ -268,12 +283,6 @@ public class DiagnosisCaseActivity extends AppCompatActivity
         out.putBoolean("discard_dialog", discardDialog != null && discardDialog.isShowing());
     }
 
-    @Override public void onBackPressed()
-    {
-        if (dirty) confirmDiscard();
-        else super.onBackPressed();
-    }
-
     private void confirmDiscard()
     {
         if (discardDialog != null && discardDialog.isShowing()) return;
@@ -297,7 +306,11 @@ public class DiagnosisCaseActivity extends AppCompatActivity
 
     @Override public boolean onOptionsItemSelected(MenuItem item)
     {
-        if (item.getItemId() == android.R.id.home) { onBackPressed(); return true; }
+        if (item.getItemId() == android.R.id.home)
+        {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }
