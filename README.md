@@ -627,7 +627,7 @@ Hentikan dengan `Ctrl+C`. Jika aplikasi restart, PID berubah; ambil PID kembali.
 | Pilihan Data Saat Kerusakan nonaktif | Baca Kode Kerusakan dahulu; ECU mungkin tidak mempunyai data freeze frame |
 | Layar Data Langsung kosong | Tunggu inisialisasi, periksa parameter yang dipilih dan dukungan PID; demo tidak membuktikan kemampuan ECU |
 | Selalu masuk Mode Latihan | Ganti Jenis Sambungan Alat Scan ke transport alat nyata; jangan memakai data contoh untuk keputusan servis |
-| Deskripsi DTC masih Inggris | Normal pada versi ini; kamus DTC Indonesia lengkap belum dibuat |
+| Deskripsi DTC masih Inggris atau kosong | Pastikan bahasa aplikasi Indonesia. Kode di luar 3.584 entri kamus menampilkan **Arti kode belum tersedia di kamus aplikasi**; aplikasi tidak mengarang arti |
 
 Jika build gagal, simpan **30 baris terakhir error** beserta perintah yang dijalankan, keluaran `java -version`, dan branch yang dipakai. Untuk masalah koneksi, sertakan model/tahun kendaraan, model alat, jenis sambungan, versi Android, dan log yang sudah disanitasi. Jangan mencoba perintah ECU acak sebagai troubleshooting.
 
@@ -642,7 +642,7 @@ Roadmap adalah arah pengembangan, **bukan daftar fitur yang sudah tersedia**.
 | 3 | Database offline pelanggan, kendaraan, servis, item estimasi; ekspor/backup | Selesai; cadangan ZIP kini membawa database, foto, dan audio diagnosis |
 | 4 | Tautan hasil OBD ke servis dan penyimpanan snapshot otomatis | Catatan manual lintas scanner dan tautan kasus gejala tersedia; snapshot OBD otomatis belum tersedia |
 | 5 | Laporan/invoice PDF dan berbagi melalui share sheet, termasuk WhatsApp | Belum tersedia |
-| 6 | Checklist gejala diesel dengan knowledge base yang dapat diedit | Selesai sebagai draf:16 keluhan, pertanyaan, peringkat, bukti, bunyi, impor JSON, dan kasus serupa; belum ditinjau mekanik senior |
+| 6 | Checklist gejala diesel dengan knowledge base yang dapat diedit | Selesai sebagai draf: 16 keluhan, pertanyaan, peringkat, bukti, bunyi, impor JSON, dan kasus serupa; belum ditinjau mekanik senior |
 
 Perubahan dikerjakan bertahap. Penyimpanan offline dan riwayat per kendaraan perlu selesai sebelum aplikasi dipakai sebagai satu-satunya sumber catatan bengkel.
 
