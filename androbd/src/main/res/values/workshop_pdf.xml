@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_pdf_title">Report and invoice</string>
+    <string name="workshop_pdf_intro">Two documents are made: a diagnosis report and an invoice. Both stay in the app folder and can be sent from here.</string>
+    <string name="workshop_pdf_report">Diagnosis report</string>
+    <string name="workshop_pdf_invoice">Invoice</string>
+    <string name="workshop_pdf_share">Send by WhatsApp or other app</string>
+    <string name="workshop_pdf_share_text">Send as message text</string>
+    <string name="workshop_pdf_made">Documents saved:\n%1$s</string>
+    <string name="workshop_pdf_failed">Document could not be made: %1$s</string>
+    <string name="workshop_pdf_no_customer">No customer phone number recorded</string>
+    <string name="workshop_pdf_text_body">%1$s\n%2$s\n%3$s\nTotal approved: %4$s\n%5$s</string>
+</resources>

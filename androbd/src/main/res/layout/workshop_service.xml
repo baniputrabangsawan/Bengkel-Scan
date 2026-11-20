@@ -44,6 +44,14 @@
                 android:text="@string/diagnosis_start_title" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/workshop_pdf"
+                style="@style/WorkshopHomeSecondaryAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/workshop_pdf_title" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/workshop_canned"
                 style="@style/WorkshopHomeSecondaryAction"
                 android:layout_width="match_parent"

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_pdf_title">Laporan dan nota</string>
+    <string name="workshop_pdf_intro">Dua dokumen dibuat: laporan diagnosis dan nota. Keduanya tersimpan di folder aplikasi dan bisa dikirim dari sini.</string>
+    <string name="workshop_pdf_report">Laporan diagnosis</string>
+    <string name="workshop_pdf_invoice">Nota</string>
+    <string name="workshop_pdf_share">Kirim lewat WhatsApp atau aplikasi lain</string>
+    <string name="workshop_pdf_share_text">Kirim sebagai teks pesan</string>
+    <string name="workshop_pdf_made">Dokumen tersimpan:\n%1$s</string>
+    <string name="workshop_pdf_failed">Dokumen gagal dibuat: %1$s</string>
+    <string name="workshop_pdf_no_customer">Nomor HP pelanggan belum dicatat</string>
+    <string name="workshop_pdf_text_body">%1$s\n%2$s\n%3$s\nTotal disetujui: %4$s\n%5$s</string>
+</resources>

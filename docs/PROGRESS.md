@@ -142,7 +142,13 @@ migrasi tidak berulang.
 - [x] Tes JVM `EstimateApprovalSummaryTest` (4); total 52 tes JVM lulus
 
 ### F10. PDF + WhatsApp
-- [ ] Laporan, nota, multi-halaman, FileProvider, teks WhatsApp
+- [x] `PdfPageWriter`: A4 595×842, teks dibungkus per baris, halaman baru bila tidak cukup, footer bernomor
+- [x] **Laporan diagnosis**: identitas bengkel dari profil, pelanggan, kendaraan, keluhan, kode sebelum perbaikan (asal data ditulis), bagian diperiksa + foto, estimasi, catatan, disclaimer
+- [x] **Nota**: hanya baris **disetujui**, total disetujui, status/pembayaran
+- [x] Berkas di `Android/data/<pkg>/files/exports/`, dibagikan lewat chooser (`application/pdf`, WhatsApp bisa mengambilnya) + opsi teks pesan
+- [x] `provider_paths.xml` hanya membuka folder aplikasi (bukan seluruh storage)
+- [x] Tes `WorkshopPdfInstrumentedTest` (3): header `%PDF-`/trailer `%%EOF`, paginasi 400 kalimat + 6 foto, nota hanya baris disetujui
+- [ ] Tampilan PDF belum diperiksa mata (tidak ada pembaca PDF di lingkungan ini)
 
 ### F11. Pembayaran
 - [ ] Sebagian, metode, tanggal, daftar belum lunas
