@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_due_title">Due for service</string>
+    <string name="workshop_due_intro">Vehicles whose date or odometer has been reached. Nothing is sent automatically.</string>
+    <string name="workshop_due_empty">No vehicle is due for service.</string>
+    <string name="workshop_due_overdue">Overdue</string>
+    <string name="workshop_due_today">Due today</string>
+    <string name="workshop_due_soon">Due soon</string>
+    <string name="workshop_due_by_date">%1$s</string>
+    <string name="workshop_due_by_km">%1$d km</string>
+    <string name="workshop_due_remind">Set a reminder</string>
+    <string name="workshop_due_date">Next service date (optional)</string>
+    <string name="workshop_due_odometer">Next service odometer (km, optional)</string>
+    <string name="workshop_due_note">Note (optional)</string>
+    <string name="workshop_due_saved">Reminder saved</string>
+    <string name="workshop_due_need_target">Fill a date or an odometer</string>
+    <string name="workshop_due_dismiss">Mark as done</string>
+    <string name="workshop_due_send">Send reminder by WhatsApp or other app</string>
+    <string name="workshop_due_message">Halo %1$s, kendaraan %2$s sudah waktunya servis%3$s. Mohon konfirmasi jadwalnya ke bengkel kami. Terima kasih.</string>
+    <string name="workshop_due_message_date"> pada %1$s</string>
+    <string name="workshop_due_message_km"> (odometer %1$d km)</string>
+    <string name="workshop_due_pick">Choose a vehicle</string>
+    <string name="workshop_due_menu">Due for service</string>
+</resources>

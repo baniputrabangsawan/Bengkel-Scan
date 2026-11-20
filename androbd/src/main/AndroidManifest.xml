@@ -112,6 +112,11 @@
             android:exported="false"
             android:label="@string/workshop_pdf_title" />
         <activity
+            android:name=".workshop.ui.WorkshopDueActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/workshop_due_title" />
+        <activity
             android:name=".workshop.ui.WorkshopCannedJobsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"

@@ -180,7 +180,12 @@ migrasi tidak berulang.
 - [x] Diverifikasi ulang: `DiagnosisCaseHistoryTest` lulus di JVM
 
 ### F16. Pengingat servis
-- [ ] Tanggal/odometer, layar jatuh tempo, teks WhatsApp
+- [x] Per kendaraan: tanggal servis berikutnya dan/atau odometer (`reminders`)
+- [x] Layar **Jatuh tempo servis**: terlewat / hari ini / akan jatuh tempo (14 hari)
+- [x] `ReminderStatus` memutuskan status hanya dari data yang tercatat; odometer tak dikenal tidak dianggap jatuh tempo
+- [x] Teks WhatsApp siap kirim (nama, plat, tanggal/odometer), lewat chooser; tidak ada pengiriman otomatis
+- [x] **Tidak ada notifikasi latar belakang** (sesuai persetujuan: hanya layar)
+- [x] Tes JVM `ReminderStatusTest` (6); total 58 tes JVM lulus
 
 ### F17. Cadangkan, pulihkan, ekspor
 - [ ] CSV + pengingat cadangan (ZIP sudah ada)

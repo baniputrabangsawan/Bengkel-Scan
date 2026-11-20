@@ -177,7 +177,75 @@ public class WorkshopVehicleActivity extends AppCompatActivity
 			editVehicle();
 			return true;
 		}
+		if (item.getItemId() == R.id.workshop_due)
+		{
+			setReminder();
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	/** Set the next service date and/or odometer for this vehicle. */
+	private void setReminder()
+	{
+		View form = getLayoutInflater().inflate(R.layout.dialog_estimate_item, null);
+		form.findViewById(R.id.workshop_kind).setVisibility(View.GONE);
+		form.findViewById(R.id.workshop_description).setVisibility(View.GONE);
+		form.findViewById(R.id.workshop_quantity).setVisibility(View.GONE);
+		form.findViewById(R.id.workshop_price).setVisibility(View.GONE);
+		form.findViewById(R.id.workshop_discount).setVisibility(View.GONE);
+		form.findViewById(R.id.workshop_inspection_link).setVisibility(View.GONE);
+		TextInputEditText day = form.findViewById(R.id.workshop_reminder_day);
+		TextInputEditText odometer = form.findViewById(R.id.workshop_reminder_odometer);
+		day.setVisibility(View.VISIBLE);
+		odometer.setVisibility(View.VISIBLE);
+		odometer.setText(vehicle.odometerKm == null ? "" : String.valueOf(vehicle.odometerKm));
+
+		AlertDialog dialog = new AlertDialog.Builder(this)
+				.setTitle(R.string.workshop_due_remind)
+				.setView(form)
+				.setNegativeButton(R.string.workshop_action_cancel, null)
+				.setPositiveButton(R.string.workshop_action_save, null)
+				.create();
+		dialog.setOnShowListener(ignored ->
+				dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view ->
+				{
+					Integer km = parseOdometer(textOf(odometer));
+					Long dueDate = parseDate(textOf(day));
+					if (km == null && dueDate == null)
+					{
+						day.setError(getString(R.string.workshop_due_need_target));
+						return;
+					}
+					new com.fr3ts0n.ecu.gui.androbd.workshop.ReminderRepository(
+							repository.database())
+							.create(vehicle.id, dueDate, km, "");
+					dialog.dismiss();
+					Toast.makeText(this, R.string.workshop_due_saved, Toast.LENGTH_SHORT).show();
+				}));
+		dialog.show();
+	}
+
+	/** {@code dd-MM-yyyy} as the mechanic types it, or null when blank/invalid. */
+	public static Long parseDate(String value)
+	{
+		if (value == null || value.trim().isEmpty()) return null;
+		String[] parts = value.trim().split("[-/.]");
+		if (parts.length != 3) return null;
+		try
+		{
+			int day = Integer.parseInt(parts[0]);
+			int month = Integer.parseInt(parts[1]);
+			int year = Integer.parseInt(parts[2]);
+			java.util.Calendar calendar = java.util.Calendar.getInstance();
+			calendar.set(year, month - 1, day, 8, 0, 0);
+			calendar.set(java.util.Calendar.MILLISECOND, 0);
+			return calendar.getTimeInMillis();
+		}
+		catch (NumberFormatException | java.lang.ArrayIndexOutOfBoundsException invalid)
+		{
+			return null;
+		}
 	}
 
 	/** Change plate, model, year, fuel type, identity number and odometer in place. */

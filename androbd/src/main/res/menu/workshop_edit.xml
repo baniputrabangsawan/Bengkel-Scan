@@ -5,4 +5,8 @@
         android:id="@+id/workshop_edit"
         android:title="@string/workshop_customer_edit_menu"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/workshop_due"
+        android:title="@string/workshop_due_remind"
+        app:showAsAction="never" />
 </menu>
