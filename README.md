@@ -39,6 +39,17 @@ Fork ini menyederhanakan antarmuka agar mekanik mudah membaca kode, data pemerik
 | Informasi Kendaraan | Informasi OBD yang dikirim ECU; tidak semua kendaraan mengirim VIN atau semua identitas |
 | Mode Latihan | Data contoh untuk belajar tanpa alat scan dan tanpa kendaraan |
 | Data bengkel | Pelanggan, kendaraan, catatan servis, status/pembayaran, rincian biaya, cadangkan dan pulihkan |
+| Pekerjaan servis | Saringan semua / belum selesai / hari ini / belum lunas, plus hitungan di beranda |
+| Pemeriksaan | Bagian yang diperiksa (Baik / Perlu perhatian / Rusak), catatan, foto kamera atau galeri, catatan suara ≤15 detik |
+| Simpan pindai | Salinan kode kerusakan + data langsung ke servis, ditandai pindai nyata / data contoh / berkas, plus bandingkan sebelum-sesudah |
+| Estimasi | Baris jasa/sparepart, diskon per baris, tautan ke bagian yang diperiksa, ubah baris |
+| Paket pekerjaan | Template baris yang bisa disalin ke estimasi; contoh bawaan bertanda `[contoh]` dengan harga 0 |
+| Persetujuan pelanggan | Setujui/tolak per baris beserta catatan dan riwayat; hanya baris disetujui dihitung |
+| Laporan & nota | PDF A4 berhalaman, dibagikan lewat WhatsApp/aplikasi lain, plus teks pesan siap kirim |
+| Pembayaran | Jumlah diterima, cara bayar, waktu bayar, sisa tagihan; bayar sebagian tidak dianggap lunas |
+| Profil bengkel | Nama, alamat, telepon, logo, dan catatan penutup yang muncul di cetakan |
+| Jatuh tempo servis | Tanggal/odometer berikutnya per kendaraan dan pesan pengingat siap kirim |
+| Ekspor CSV | Pelanggan, servis, dan nota belum lunas |
 | Tema | Terang, gelap, dan mengikuti sistem |
 | Diagnosis tanpa alat scan | Checklist gejala untuk diesel injeksi mekanis tanpa ECU, kemungkinan penyebab beralasan, dan bukti pemeriksaan |
 | Panduan Bunyi | Daftar jenis bunyi, pemutaran audio lokal offline, impor rekaman, dan rekaman 15 detik terkait kasus terkonfirmasi |
@@ -50,7 +61,7 @@ Fork ini menyederhanakan antarmuka agar mekanik mudah membaca kode, data pemerik
 
 Grafik, gauge/dashboard, HUD, pengaturan tampilan lanjutan, pengelolaan plugin, serta menu Simpan/Buka hasil pemeriksaan masih memiliki implementasi upstream, tetapi disembunyikan dari alur bengkel. Penyembunyian menu Simpan/Buka **tidak digantikan penyimpanan otomatis**.
 
-**Hapus Kode Kerusakan dan Uji Aktuator OBD juga disembunyikan.** Fork ini ditujukan untuk pembacaan diagnostik; jangan mengaktifkan kontrol aktuator atau penghapusan kode untuk penggunaan bengkel normal. Penghapusan kode belum dilengkapi audit yang terhubung ke catatan servis.
+**Uji Aktuator OBD tetap disembunyikan**, termasuk saat "Mode Lanjutan" dinyalakan. **Hapus Kode Kerusakan** kini tampil lagi, tetapi hanya di balik dialog peringatan destruktif: kode yang akan hilang disalin lebih dulu ke layar Simpan pindai, dan setiap penghapusan menulis satu baris `audit_log` (waktu, asal data, kode yang ada sebelumnya).
 
 ### Batas kompatibilitas kendaraan
 
@@ -643,6 +654,9 @@ Roadmap adalah arah pengembangan, **bukan daftar fitur yang sudah tersedia**.
 | 4 | Tautan hasil OBD ke servis dan penyimpanan snapshot otomatis | Catatan manual lintas scanner dan tautan kasus gejala tersedia; snapshot OBD otomatis belum tersedia |
 | 5 | Laporan/invoice PDF dan berbagi melalui share sheet, termasuk WhatsApp | Belum tersedia |
 | 6 | Checklist gejala diesel dengan knowledge base yang dapat diedit | Selesai sebagai draf: 16 keluhan, pertanyaan, peringkat, bukti, bunyi, impor JSON, dan kasus serupa; belum ditinjau mekanik senior |
+| 7 | Alur bengkel harian: pekerjaan, pemeriksaan, estimasi, persetujuan, PDF, pembayaran | Selesai; lihat `docs/PROGRESS.md` untuk bukti per fitur |
+| 8 | Pengingat, ekspor CSV, profil bengkel, mode lanjutan | Selesai; notifikasi latar belakang sengaja tidak ditambahkan |
+| 9 | Ukur dan rapikan | Selesai; APK rilis 3,32 MB, laporan PDF 8 foto 127 ms, lint 0 error |
 
 Perubahan dikerjakan bertahap. Penyimpanan offline dan riwayat per kendaraan perlu selesai sebelum aplikasi dipakai sebagai satu-satunya sumber catatan bengkel.
 

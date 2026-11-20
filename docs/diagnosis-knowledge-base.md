@@ -335,3 +335,26 @@ Cakupan: sulit hidup dingin/panas (termasuk starter tidak memutar mesin), asap h
 
 Panel riwayat menghitung kasus **lain** yang penilaian akhirnya dikonfirmasi mekanik, dengan keluhan, model, tahun dan jenis mesin yang sama. Huruf besar/kecil serta spasi model/jenis mesin dinormalisasi; tahun harus sama. Identitas yang belum diisi tidak dianggap cocok. Panel menampilkan kriteria, jumlah per penilaian akhir, dan tanggal catatan; kotak pemeriksaan kandidat lain tidak ikut dihitung. Hitungan tidak mengubah skor dan tidak menyatakan peluang kerusakan.
 
+
+
+## Checklist tinjauan isi lain
+
+Panduan diagnosis di atas bukan satu-satunya isi yang harus ditinjau sebelum dipakai melayani pelanggan.
+
+### Paket pekerjaan (`Paket pekerjaan`)
+
+- Empat paket bawaan bertanda `[contoh]` dengan harga 0. Ganti nama dan isi barisnya dengan pekerjaan bengkel yang benar-benar dilakukan; jangan biarkan label contoh tertinggal di paket yang dipakai.
+- Isi harga sesuai daftar bengkel. Harga contoh bukan acuan pasar dan tidak boleh dipakai untuk menawar.
+- Pastikan satu baris paket tidak menjanjikan pekerjaan yang belum diperiksa (misalnya "ganti kampas" padahal ketebalan belum diukur).
+- Hapus paket yang tidak pernah dipakai agar daftar tetap pendek saat pelanggan menunggu.
+
+### Waktu dan harga pada estimasi
+
+- Jumlah jam jasa dan harga sparepart diisi mekanik, bukan aplikasi. Aplikasi tidak menebak tarif.
+- Diskon per baris adalah Rupiah bulat; bila potongan berupa persen, hitung sendiri lalu tulis nominalnya.
+- Total disetujui hanya menghitung baris yang benar-benar disetujui pelanggan. Periksa kembali sebelum nota dicetak.
+
+### Data pelanggan dan media
+
+- Foto dan rekaman suara dapat memuat wajah, suara, atau bagian kendaraan orang lain. Minta izin sebelum merekam dan lindungi berkas ZIP cadangan.
+- Jangan menyimpan nomor rangka/mesin pelanggan di tempat umum atau membagikan CADANGAN ke grup yang tidak berkepentingan.

@@ -9,3 +9,8 @@
 **/*.iml
 *~
 local.properties
+
+# Signing material must never enter the repository.
+*.jks
+*.keystore
+keystore.properties

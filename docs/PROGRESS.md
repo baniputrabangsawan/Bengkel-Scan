@@ -221,4 +221,20 @@ Yang diperbaiki karena datanya menuntut (bukan dugaan):
 Belum dioptimalkan karena belum ada bukti kebutuhan: kamus DTC 13 bahasa (`codes_*.properties`, ~2,6 MB mentah) memberi 3,32 MB rilis; menghapus bahasa lain menghemat ruang tetapi menghilangkan kemampuan upstream dan belum diminta.
 
 ### F20. Audit akhir dan rilis
-- [ ] Audit, README, panduan pengguna, checklist mekanik, panduan keystore
+- [x] Audit F0–F19 terhadap deskripsi, dengan bukti tes di ponsel (lihat tiap fitur di atas)
+- [x] README: tabel fitur, roadmap, dan catatan Hapus Kode Kerusakan diperbarui
+- [x] `docs/panduan-pengguna.md` — panduan singkat bernomor untuk mekanik
+- [x] `docs/diagnosis-knowledge-base.md` — checklist tinjauan mekanik senior diperluas (panduan, paket pekerjaan, harga, media)
+- [x] `docs/rilis-bertanda-tangan.md` — keystore, signing, verifikasi, peringatan pencadangan
+- [x] `.gitignore` memblokir `*.jks`, `*.keystore`, `keystore.properties` (dan diperbaiki: baris `local.properties` tidak lagi menyatu)
+
+### Yang belum selesai atau belum diuji
+
+| Hal | Status | Alasan |
+| --- | --- | --- |
+| Koneksi alat OBD nyata | belum diuji | tidak ada alat ELM/ECU di lingkungan ini; semua bukti memakai Mode Latihan atau data sintetis |
+| Kamera fisik | belum diuji | emulator tanpa kamera; alur galeri dan penyalinan ke media privat sudah diuji |
+| Tampilan PDF dibaca manusia | belum | tidak ada pembaca PDF; yang dibuktikan header/trailer PDF, paginasi, dan isi baris |
+| Teks WhatsApp benar-benar terkirim | belum | butuh aplikasi WhatsApp dan nomor tujuan; yang dibuktikan adalah intent dan teksnya |
+| Sakelar Mode Lanjutan diklik manual | belum | build + tes unit lulus; menavigasi layar butuh tampilan yang terlihat |
+| `docs/menu-*.md` | usang | dokumentasi upstream, bukan bagian fork |
