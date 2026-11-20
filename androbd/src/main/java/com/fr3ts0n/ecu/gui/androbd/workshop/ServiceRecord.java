@@ -13,7 +13,7 @@
  */
 package com.fr3ts0n.ecu.gui.androbd.workshop;
 
-/** Immutable service visit row. */
+/** One visit to the workshop for one vehicle. */
 public final class ServiceRecord
 {
 	public final long id;
@@ -22,13 +22,19 @@ public final class ServiceRecord
 	public final ServiceStatus status;
 	public final PaymentStatus paymentStatus;
 	public final String notes;
+	/** Odometer at drop-off, or {@code null} when the mechanic did not record it. */
+	public final Integer odometerKm;
+	public final PaymentMethod paymentMethod;
+	/** Epoch millis when the payment was recorded, or {@code null}. */
+	public final Long paidAt;
 	public final long createdAt;
 	public final long updatedAt;
 	/** Time the service was completed, or {@code null} while not done. */
 	public final Long completedAt;
 
 	ServiceRecord(long id, long vehicleId, String complaint, ServiceStatus status,
-			PaymentStatus paymentStatus, String notes, long createdAt, long updatedAt,
+			PaymentStatus paymentStatus, String notes, Integer odometerKm,
+			PaymentMethod paymentMethod, Long paidAt, long createdAt, long updatedAt,
 			Long completedAt)
 	{
 		this.id = id;
@@ -37,8 +43,17 @@ public final class ServiceRecord
 		this.status = status;
 		this.paymentStatus = paymentStatus;
 		this.notes = notes;
+		this.odometerKm = odometerKm;
+		this.paymentMethod = paymentMethod;
+		this.paidAt = paidAt;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.completedAt = completedAt;
+	}
+
+	/** Work is still open: waiting or in progress. */
+	public boolean open()
+	{
+		return status != ServiceStatus.DONE;
 	}
 }

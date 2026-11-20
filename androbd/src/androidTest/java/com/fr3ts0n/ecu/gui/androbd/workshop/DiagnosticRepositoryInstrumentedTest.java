@@ -62,7 +62,7 @@ public class DiagnosticRepositoryInstrumentedTest
 		database.close();
 		createV1(context.getDatabasePath(databaseName));
 		assertLegacyData();
-		assertEquals(3, database.getReadableDatabase().getVersion());
+		assertEquals(WorkshopDatabase.SCHEMA_VERSION, database.getReadableDatabase().getVersion());
 		for (DiagnosticModule module : DiagnosticModule.values())
 		{
 			assertNull(diagnostics.find(3, module));
@@ -212,7 +212,7 @@ public class DiagnosticRepositoryInstrumentedTest
 		createV1(backup);
 		WorkshopBackup.restore(database, backup);
 		assertLegacyData();
-		assertEquals(3, database.getReadableDatabase().getVersion());
+		assertEquals(WorkshopDatabase.SCHEMA_VERSION, database.getReadableDatabase().getVersion());
 		assertNull(diagnostics.find(3, DiagnosticModule.ENGINE));
 		diagnostics.save(proof(3, DiagnosticModule.TRANSMISSION));
 		assertNotNull(diagnostics.find(3, DiagnosticModule.TRANSMISSION));
