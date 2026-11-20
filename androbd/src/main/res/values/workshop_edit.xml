@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_vehicle_vin">Chassis/engine number (optional)</string>
+    <string name="workshop_vehicle_odometer">Odometer (km, optional)</string>
+    <string name="workshop_vehicle_details_label">Vehicle identity</string>
+    <string name="workshop_customer_edit_menu">Edit customer</string>
+    <string name="workshop_vehicle_edit_menu">Edit vehicle</string>
+    <string name="workshop_customer_update_title">Edit customer</string>
+    <string name="workshop_vehicle_update_title">Edit vehicle</string>
+    <string name="workshop_saved">Saved</string>
+    <string name="workshop_error_odometer">Odometer must be a whole number, 0 or more</string>
+</resources>

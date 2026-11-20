@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_vehicle_vin">Nomor rangka/mesin (opsional)</string>
+    <string name="workshop_vehicle_odometer">Odometer (km, opsional)</string>
+    <string name="workshop_vehicle_details_label">Identitas kendaraan</string>
+    <string name="workshop_customer_edit_menu">Ubah pelanggan</string>
+    <string name="workshop_vehicle_edit_menu">Ubah kendaraan</string>
+    <string name="workshop_customer_update_title">Ubah pelanggan</string>
+    <string name="workshop_vehicle_update_title">Ubah kendaraan</string>
+    <string name="workshop_saved">Tersimpan</string>
+    <string name="workshop_error_odometer">Odometer harus angka bulat, 0 atau lebih</string>
+</resources>
