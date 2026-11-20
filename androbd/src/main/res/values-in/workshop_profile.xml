@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_profile_title">Profil bengkel</string>
+    <string name="workshop_profile_intro">Identitas ini tampil di bagian atas laporan dan nota yang dicetak.</string>
+    <string name="workshop_profile_name">Nama bengkel</string>
+    <string name="workshop_profile_address">Alamat (opsional)</string>
+    <string name="workshop_profile_phone">Nomor telepon (opsional)</string>
+    <string name="workshop_profile_footer">Catatan penutup pada cetakan (opsional)</string>
+    <string name="workshop_profile_footer_hint">Contoh: terima kasih sudah mempercayakan kendaraan Anda.</string>
+    <string name="workshop_profile_logo">Logo bengkel</string>
+    <string name="workshop_profile_logo_pick">Pilih logo</string>
+    <string name="workshop_profile_logo_missing">Belum ada logo. Cetakan memakai nama bengkel saja.</string>
+    <string name="workshop_profile_logo_unsafe">Berkas logo tidak dapat dibaca. Pilih ulang.</string>
+    <string name="workshop_profile_saved">Profil bengkel disimpan</string>
+    <string name="workshop_profile_error_name">Nama bengkel wajib diisi</string>
+    <string name="workshop_profile_save">Simpan profil</string>
+</resources>

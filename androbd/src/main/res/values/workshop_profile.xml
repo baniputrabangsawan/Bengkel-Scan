@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_profile_title">Workshop profile</string>
+    <string name="workshop_profile_intro">This identity appears at the top of printed reports and invoices.</string>
+    <string name="workshop_profile_name">Workshop name</string>
+    <string name="workshop_profile_address">Address (optional)</string>
+    <string name="workshop_profile_phone">Phone (optional)</string>
+    <string name="workshop_profile_footer">Closing note on prints (optional)</string>
+    <string name="workshop_profile_footer_hint">For example: thank you for trusting your vehicle to us.</string>
+    <string name="workshop_profile_logo">Workshop logo</string>
+    <string name="workshop_profile_logo_pick">Choose logo</string>
+    <string name="workshop_profile_logo_missing">No logo yet. Prints use the workshop name only.</string>
+    <string name="workshop_profile_logo_unsafe">Logo file could not be read. Choose it again.</string>
+    <string name="workshop_profile_saved">Workshop profile saved</string>
+    <string name="workshop_profile_error_name">Workshop name is required</string>
+    <string name="workshop_profile_save">Save profile</string>
+</resources>

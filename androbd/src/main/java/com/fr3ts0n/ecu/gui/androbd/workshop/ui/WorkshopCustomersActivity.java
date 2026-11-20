@@ -279,6 +279,11 @@ public class WorkshopCustomersActivity extends AppCompatActivity
 			finish();
 			return true;
 		}
+		if (item.getItemId() == R.id.workshop_profile_menu)
+		{
+			startActivity(new Intent(this, WorkshopProfileActivity.class));
+			return true;
+		}
 		if (item.getItemId() == R.id.workshop_restore)
 		{
 			openBackup.launch(new String[]{"*/*"});
