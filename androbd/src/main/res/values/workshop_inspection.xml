@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_inspection_title">Inspection</string>
+    <string name="workshop_inspection_add">Add inspected part</string>
+    <string name="workshop_inspection_empty">No inspected parts recorded for this service yet.</string>
+    <string name="workshop_inspection_name">Part or assembly</string>
+    <string name="workshop_inspection_name_hint">For example: turbo hose, brake pad</string>
+    <string name="workshop_inspection_state">Condition</string>
+    <string name="workshop_inspection_state_good">Good</string>
+    <string name="workshop_inspection_state_attention">Needs attention</string>
+    <string name="workshop_inspection_state_broken">Damaged</string>
+    <string name="workshop_inspection_note">Note (optional)</string>
+    <string name="workshop_inspection_error_name">Name the part that was inspected</string>
+    <string name="workshop_inspection_saved">Inspection saved</string>
+    <string name="workshop_inspection_delete_title">Remove inspected part?</string>
+    <string name="workshop_inspection_delete_message">Remove \"%1$s\" from this service? Saved photos stay with the service.</string>
+    <string name="workshop_inspection_photo_add">Take photo</string>
+    <string name="workshop_inspection_photo_pick">Choose photo</string>
+    <string name="workshop_inspection_photo_count">%1$d photo(s)</string>
+    <string name="workshop_inspection_photo_failed">Photo could not be saved. Try again.</string>
+    <string name="workshop_inspection_camera_missing">No camera app available. Choose a photo from storage instead.</string>
+    <string name="workshop_inspection_photo_unsafe">That file could not be read. Choose an image.</string>
+    <string name="workshop_inspection_menu">Inspected parts</string>
+</resources>

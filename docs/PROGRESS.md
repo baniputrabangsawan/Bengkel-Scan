@@ -114,7 +114,12 @@ migrasi tidak berulang.
 - [ ] Belum diuji dengan alat OBD nyata; hanya mode Latihan + data sintetis
 
 ### F6. Item pemeriksaan + foto
-- [ ] Item, status, catatan, foto kamera
+- [x] Layar **Pemeriksaan** per servis: tambah/ubah/hapus (hapus lunak), nama, kondisi Baik/Perlu perhatian/Rusak, catatan
+- [x] Foto: kamera (`TakePicture` ke cache lewat FileProvider) atau pilih dari penyimpanan; disalin ke media privat lalu dirujuk
+- [x] `PhotoRepository` menolak path absolut, traversal, dan karakter kontrol (bukan hanya di layar)
+- [x] `provider_paths.xml` tidak lagi mengekspos seluruh storage eksternal
+- [x] Tes `InspectionInstrumentedTest` (5) lulus; layar servis menampilkan jumlah foto
+- [ ] Belum diuji dengan kamera fisik; emulator tanpa kamera memakai galeri
 
 ### F7. Estimasi
 - [ ] Diskon, ubah baris, tautan item

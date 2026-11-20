@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Only folders the app itself owns are shared, never the whole shared storage.
+
+  "app_files" is Android/data/<package>/files: workshop backups, exported .obd
+  snapshots and CSV exports all live there. "pending_photos" is the app cache,
+  used while a camera intent is in flight; DiagnosisMediaStore then copies the
+  result into private storage.
+-->
 <paths>
-    <external-path path="." name="external_storage_root" />
+    <external-files-path path="." name="app_files" />
+    <cache-path path="photos/" name="pending_photos" />
 </paths>

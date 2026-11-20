@@ -38,12 +38,28 @@ public final class PhotoRepository
 		this.database = database;
 	}
 
+	/**
+	 * Reference an already copied photo.
+	 *
+	 * <p>The path must stay inside the app's private media folder: absolute
+	 * paths, traversal and control characters are refused here rather than in
+	 * each screen, so a future caller cannot smuggle one in.</p>
+	 */
 	public long add(PhotoOwner owner, long ownerId, String relativePath, String caption)
 	{
 		if (owner == null) throw new IllegalArgumentException("photo.owner.required");
-		if (relativePath == null || relativePath.trim().isEmpty())
+		if (relativePath == null || relativePath.trim().isEmpty()
+				|| relativePath.startsWith("/") || relativePath.contains("\\")
+				|| relativePath.matches("(?s).*[\\p{Cntrl}:?#%].*"))
 		{
 			throw new IllegalArgumentException("photo.path.required");
+		}
+		for (String segment : relativePath.split("/", -1))
+		{
+			if (segment.isEmpty() || segment.equals(".") || segment.equals(".."))
+			{
+				throw new IllegalArgumentException("photo.path.required");
+			}
 		}
 		ContentValues values = new ContentValues();
 		values.put("owner_kind", owner.name());

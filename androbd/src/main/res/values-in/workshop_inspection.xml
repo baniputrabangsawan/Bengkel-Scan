@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_inspection_title">Pemeriksaan</string>
+    <string name="workshop_inspection_add">Tambah bagian diperiksa</string>
+    <string name="workshop_inspection_empty">Belum ada bagian yang diperiksa pada servis ini.</string>
+    <string name="workshop_inspection_name">Bagian atau komponen</string>
+    <string name="workshop_inspection_name_hint">Contoh: selang turbo, kampas rem</string>
+    <string name="workshop_inspection_state">Kondisi</string>
+    <string name="workshop_inspection_state_good">Baik</string>
+    <string name="workshop_inspection_state_attention">Perlu perhatian</string>
+    <string name="workshop_inspection_state_broken">Rusak</string>
+    <string name="workshop_inspection_note">Catatan (opsional)</string>
+    <string name="workshop_inspection_error_name">Tulis bagian yang diperiksa</string>
+    <string name="workshop_inspection_saved">Pemeriksaan disimpan</string>
+    <string name="workshop_inspection_delete_title">Hapus bagian yang diperiksa?</string>
+    <string name="workshop_inspection_delete_message">Hapus \"%1$s\" dari servis ini? Foto yang sudah tersimpan tetap ikut servis.</string>
+    <string name="workshop_inspection_photo_add">Ambil foto</string>
+    <string name="workshop_inspection_photo_pick">Pilih foto</string>
+    <string name="workshop_inspection_photo_count">%1$d foto</string>
+    <string name="workshop_inspection_photo_failed">Foto gagal disimpan. Coba lagi.</string>
+    <string name="workshop_inspection_camera_missing">Tidak ada aplikasi kamera. Pilih foto dari penyimpanan.</string>
+    <string name="workshop_inspection_photo_unsafe">Berkas tidak dapat dibaca. Pilih berkas gambar.</string>
+    <string name="workshop_inspection_menu">Bagian diperiksa</string>
+</resources>
