@@ -162,6 +162,12 @@ public final class WorkshopRepository
 
 	public long createService(long vehicleId, String complaint)
 	{
+		return createService(vehicleId, complaint, null);
+	}
+
+	/** Create a service, optionally recording the odometer at drop-off. */
+	public long createService(long vehicleId, String complaint, Integer odometerKm)
+	{
 		long now = System.currentTimeMillis();
 		ContentValues values = new ContentValues();
 		values.put("vehicle_id", vehicleId);
@@ -169,6 +175,8 @@ public final class WorkshopRepository
 		values.put("status", ServiceStatus.WAITING.name());
 		values.put("payment_status", PaymentStatus.UNPAID.name());
 		values.put("notes", "");
+		if (odometerKm == null) values.putNull("odometer_km");
+		else values.put("odometer_km", odometerKm);
 		values.put("created_at", now);
 		values.put("updated_at", now);
 		values.putNull("completed_at");
@@ -187,7 +195,8 @@ public final class WorkshopRepository
 
 	/**
 	 * Change workflow state. Moving to {@link ServiceStatus#DONE} stamps
-	 * {@code completed_at}; moving away from it clears the stamp.
+	 * {@code completed_at}; moving away from it clears the stamp so a corrected
+	 * service never keeps a completion time it did not reach.
 	 */
 	public boolean updateServiceStatus(long id, ServiceStatus status)
 	{
@@ -209,8 +218,28 @@ public final class WorkshopRepository
 
 	public boolean setPaymentStatus(long id, PaymentStatus status)
 	{
+		return setPayment(id, status, null, null);
+	}
+
+	/**
+	 * Record payment state, method and time in one write.
+	 *
+	 * <p>Marking {@link PaymentStatus#PAID} stamps {@code paid_at} when the
+	 * caller supplies no time; reverting to unpaid clears it.</p>
+	 */
+	public boolean setPayment(long id, PaymentStatus status, PaymentMethod method, Long paidAt)
+	{
 		ContentValues values = new ContentValues();
 		values.put("payment_status", status.name());
+		if (method != null) values.put("payment_method", method.name());
+		if (status == PaymentStatus.PAID)
+		{
+			values.put("paid_at", paidAt == null ? System.currentTimeMillis() : paidAt);
+		}
+		else
+		{
+			values.putNull("paid_at");
+		}
 		values.put("updated_at", System.currentTimeMillis());
 		return database.getWritableDatabase().update("services", values,
 				"id = ?", new String[]{String.valueOf(id)}) > 0;
@@ -245,33 +274,123 @@ public final class WorkshopRepository
 		return readServices("status = ?", new String[]{status.name()}, "created_at DESC");
 	}
 
-	// ------------------------------------------------------------ estimate items
-
 	public long addEstimateItem(long serviceId, ItemKind kind, String description,
 			double quantity, long unitPrice)
 	{
-		if (quantity <= 0) throw new IllegalArgumentException("quantity must be > 0");
-		if (unitPrice < 0) throw new IllegalArgumentException("unitPrice must be >= 0");
+		return addEstimateItem(serviceId, kind, description, quantity, unitPrice, 0, null);
+	}
+
+	/**
+	 * Add one estimate line.
+	 *
+	 * @param discount whole Rupiah taken off the line, never above the gross
+	 * @param inspectionItemId inspection item this line repairs, or {@code null}
+	 * @throws IllegalArgumentException when the discount exceeds the line gross
+	 */
+	public long addEstimateItem(long serviceId, ItemKind kind, String description,
+			double quantity, long unitPrice, long discount, Long inspectionItemId)
+	{
+		if (quantity <= 0) throw new IllegalArgumentException("estimate.quantity");
+		if (unitPrice < 0) throw new IllegalArgumentException("estimate.unit_price");
+		if (discount < 0) throw new IllegalArgumentException("estimate.discount");
+		if (discount > Math.round(quantity * unitPrice)) throw new IllegalArgumentException("estimate.discount_above_total");
 		ContentValues values = new ContentValues();
 		values.put("service_id", serviceId);
 		values.put("kind", (kind == null ? ItemKind.PART : kind).name());
 		values.put("description", requireText(description, "description"));
 		values.put("quantity", quantity);
 		values.put("unit_price", unitPrice);
+		values.put("discount", discount);
+		values.put("approval", ApprovalState.PENDING.name());
+		if (inspectionItemId == null) values.putNull("inspection_item_id");
+		else values.put("inspection_item_id", inspectionItemId);
 		values.put("position", nextItemPosition(serviceId));
 		return database.getWritableDatabase().insertOrThrow("estimate_items", null, values);
 	}
 
+	/** Update an existing line, keeping its position and approval history. */
+	public boolean updateEstimateItem(long itemId, ItemKind kind, String description,
+			double quantity, long unitPrice, long discount)
+	{
+		if (quantity <= 0) throw new IllegalArgumentException("estimate.quantity");
+		if (unitPrice < 0) throw new IllegalArgumentException("estimate.unit_price");
+		if (discount < 0) throw new IllegalArgumentException("estimate.discount");
+		if (discount > Math.round(quantity * unitPrice)) throw new IllegalArgumentException("estimate.discount_above_total");
+		ContentValues values = new ContentValues();
+		values.put("kind", (kind == null ? ItemKind.PART : kind).name());
+		values.put("description", requireText(description, "description"));
+		values.put("quantity", quantity);
+		values.put("unit_price", unitPrice);
+		values.put("discount", discount);
+		return database.getWritableDatabase().update("estimate_items", values,
+				"id = ?", new String[]{String.valueOf(itemId)}) > 0;
+	}
+
+	/**
+	 * Record a customer decision on one line.
+	 *
+	 * <p>Every change is appended to {@code estimate_approvals}; the item keeps
+	 * only the latest state so a list can be rendered without a history join.</p>
+	 */
+	public boolean setApproval(long itemId, ApprovalState state, String note)
+	{
+		if (state == null) throw new IllegalArgumentException("estimate.approval.required");
+		long now = System.currentTimeMillis();
+		ContentValues history = new ContentValues();
+		history.put("estimate_item_id", itemId);
+		history.put("state", state.name());
+		history.put("note", note == null ? "" : note.trim());
+		history.put("changed_at", now);
+		ContentValues values = new ContentValues();
+		values.put("approval", state.name());
+		SQLiteDatabase db = database.getWritableDatabase();
+		db.beginTransaction();
+		try
+		{
+			if (db.update("estimate_items", values, "id = ?",
+					new String[]{String.valueOf(itemId)}) <= 0)
+			{
+				throw new IllegalArgumentException("estimate.item.unknown");
+			}
+			db.insertOrThrow("estimate_approvals", null, history);
+			db.setTransactionSuccessful();
+			return true;
+		}
+		finally
+		{
+			db.endTransaction();
+		}
+	}
+
+	/** Approval changes for one line, oldest first. */
+	public List<EstimateApproval> approvals(long itemId)
+	{
+		List<EstimateApproval> entries = new ArrayList<>();
+		try (Cursor cursor = database.getReadableDatabase().query("estimate_approvals",
+				new String[]{"id", "estimate_item_id", "state", "note", "changed_at"},
+				"estimate_item_id = ?", new String[]{String.valueOf(itemId)},
+				null, null, "changed_at ASC, id ASC"))
+		{
+			while (cursor.moveToNext())
+			{
+				entries.add(new EstimateApproval(cursor.getLong(0), cursor.getLong(1),
+						ApprovalState.fromStored(cursor.getString(2)), cursor.getString(3),
+						cursor.getLong(4)));
+			}
+		}
+		return entries;
+	}
+
 	public List<EstimateItem> estimateItems(long serviceId)
 	{
-		List<EstimateItem> items = new ArrayList<>();
-		try (Cursor cursor = database.getReadableDatabase().query("estimate_items",
-				ITEM_COLUMNS, "service_id = ?", new String[]{String.valueOf(serviceId)},
-				null, null, "position ASC, id ASC"))
-		{
-			while (cursor.moveToNext()) items.add(readItem(cursor));
-		}
-		return items;
+		return readItems("service_id = ?", new String[]{String.valueOf(serviceId)});
+	}
+
+	/** Only the lines the customer approved; these count toward a work order. */
+	public List<EstimateItem> approvedItems(long serviceId)
+	{
+		return readItems("service_id = ? AND approval = ?",
+				new String[]{String.valueOf(serviceId), ApprovalState.APPROVED.name()});
 	}
 
 	public boolean deleteEstimateItem(long itemId)
@@ -280,11 +399,19 @@ public final class WorkshopRepository
 				"id = ?", new String[]{String.valueOf(itemId)}) > 0;
 	}
 
-	/** Sum of rounded line totals in whole Rupiah. */
+	/** Sum of rounded line totals in whole Rupiah, all lines. */
 	public long estimateTotal(long serviceId)
 	{
 		long total = 0;
 		for (EstimateItem item : estimateItems(serviceId)) total += item.lineTotal();
+		return total;
+	}
+
+	/** Sum of approved lines only; what the customer agreed to pay. */
+	public long approvedTotal(long serviceId)
+	{
+		long total = 0;
+		for (EstimateItem item : approvedItems(serviceId)) total += item.lineTotal();
 		return total;
 	}
 
@@ -304,9 +431,21 @@ public final class WorkshopRepository
 	private static final String[] VEHICLE_COLUMNS = {"id", "customer_id", "plate", "model",
 			"year", "engine_type", "vin", "odometer_km", "created_at"};
 	private static final String[] SERVICE_COLUMNS = {"id", "vehicle_id", "complaint", "status",
-			"payment_status", "notes", "created_at", "updated_at", "completed_at"};
+			"payment_status", "notes", "odometer_km", "payment_method", "paid_at",
+			"created_at", "updated_at", "completed_at"};
 	private static final String[] ITEM_COLUMNS = {"id", "service_id", "kind", "description",
-			"quantity", "unit_price", "position"};
+			"quantity", "unit_price", "discount", "approval", "inspection_item_id", "position"};
+
+	private List<EstimateItem> readItems(String selection, String[] args)
+	{
+		List<EstimateItem> items = new ArrayList<>();
+		try (Cursor cursor = database.getReadableDatabase().query("estimate_items",
+				ITEM_COLUMNS, selection, args, null, null, "position ASC, id ASC"))
+		{
+			while (cursor.moveToNext()) items.add(readItem(cursor));
+		}
+		return items;
+	}
 
 	private List<Customer> readCustomers(String selection, String[] args, String orderBy)
 	{
@@ -359,13 +498,18 @@ public final class WorkshopRepository
 		return new ServiceRecord(c.getLong(0), c.getLong(1), c.getString(2),
 				ServiceStatus.fromStored(c.getString(3)),
 				PaymentStatus.fromStored(c.getString(4)), c.getString(5),
-				c.getLong(6), c.getLong(7), c.isNull(8) ? null : c.getLong(8));
+				c.isNull(6) ? null : c.getInt(6),
+				c.isNull(7) ? PaymentMethod.UNKNOWN : PaymentMethod.fromStored(c.getString(7)),
+				c.isNull(8) ? null : c.getLong(8),
+				c.getLong(9), c.getLong(10), c.isNull(11) ? null : c.getLong(11));
 	}
 
 	private static EstimateItem readItem(Cursor c)
 	{
 		return new EstimateItem(c.getLong(0), c.getLong(1), ItemKind.fromStored(c.getString(2)),
-				c.getString(3), c.getDouble(4), c.getLong(5), c.getInt(6));
+				c.getString(3), c.getDouble(4), c.getLong(5), c.getLong(6),
+				ApprovalState.fromStored(c.getString(7)), c.isNull(8) ? null : c.getLong(8),
+				c.getInt(9));
 	}
 
 	/**

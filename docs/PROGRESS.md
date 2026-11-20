@@ -1,0 +1,142 @@
+# Progress Bengkel Scan
+
+Sumber kebenaran status fitur. Jika konteks gagal, baca file ini lalu `docs/ARCHITECTURE.md`, dan lanjutkan dari
+item pertama yang belum selesai. Status hanya dinaikkan setelah build, tes, dan pemeriksaan di ponsel nyata.
+
+Legenda: `[ ]` belum, `[~]` sebagian, `[x]` selesai.
+
+## Status awal (audit 2026-11-20, HEAD `a5bd68c3`)
+
+Repo sudah memuat lebih banyak daripada yang diasumsikan daftar fitur. Yang sudah ada dipakai ulang, bukan ditulis
+ulang.
+
+| # | Fitur | Status awal | Catatan |
+| --- | --- | --- | --- |
+| F1 | Lapisan database | `[~]` | `WorkshopDatabase` v3: customers, vehicles, services, estimate_items, diagnostics, diagnosis_cases/checks/photos. Belum ada `inspection_items`, `photos`, `scan_snapshots`, `canned_jobs`, `reminders`, `audit_log`, `settings`, soft-delete. |
+| F2 | Profil & pengaturan bengkel | `[ ]` | Belum ada nama/alamat/telepon bengkel, footer PDF, format mata uang. |
+| F3 | Pelanggan & kendaraan | `[x]` | Tambah/ubah/cari, validasi plat longgar (`normalizePlate`), riwayat servis per kendaraan. |
+| F4 | Servis & status | `[~]` | `WAITING→IN_PROGRESS→DONE` + `UNPAID/PAID`. Belum `Lunas`, belum kembali mundur dengan aman, belum daftar "hari ini"/terbuka. |
+| F5 | Pindai OBD terkait servis | `[ ]` | Belum ada snapshot, belum ada sebelum/sesudah, belum ada audit hapus kode. |
+| F6 | Item pemeriksaan + foto | `[ ]` | Belum ada. |
+| F7 | Estimasi | `[~]` | Tambah/hapus baris, total Rupiah. Belum diskon, belum ubah baris, belum tautan ke item pemeriksaan. |
+| F8 | Paket pekerjaan | `[ ]` | Belum ada. |
+| F9 | Persetujuan estimasi | `[ ]` | Belum ada status/riwayat persetujuan per baris. |
+| F10 | PDF + WhatsApp | `[ ]` | Belum ada `PdfDocument`, belum ada nota. `provider_paths.xml` masih mengekspos `external-path .`. |
+| F11 | Pembayaran | `[~]` | Hanya `PAID`/`UNPAID`. Belum sebagian, metode, tanggal, daftar belum lunas. |
+| F12 | Diagnosis tanpa ECU | `[x]` | 16 keluhan, 65 sebab, skor aturan, validasi JSON, impor ekstra, kasus serupa. |
+| F13 | Panduan bunyi | `[x]` | Pemutaran, impor, rekaman ≤15 s terkait kasus terkonfirmasi. |
+| F14 | Catatan suara | `[ ]` | Belum ada. |
+| F15 | Riwayat kasus | `[x]` | Hitungan kasus serupa dengan identitas kendaraan yang sama. |
+| F16 | Pengingat servis | `[ ]` | Belum ada. |
+| F17 | Cadangkan/pulihkan/ekspor | `[~]` | ZIP database+foto+audio dan pulihkan tervalidasi sudah ada. Belum CSV, belum pengingat cadangan. |
+| F18 | Layar OBD lanjutan | `[~]` | `SHOW_ADVANCED_FEATURES` ada (default `false`), belum ada sakelar "Mode Lanjutan" di pengaturan. |
+| F19 | Ukur & optimalkan | `[ ]` | Belum. |
+| F20 | Audit akhir & rilis | `[ ]` | Belum. |
+
+## Rencana yang menunggu persetujuan
+
+Struktur paket: `workshop/` tetap berisi model + repository + aktivitas, ditambah subpaket baru agar aktivitas tidak
+membesar.
+
+```
+workshop/
+├── WorkshopDatabase, WorkshopRepository, DiagnosticRepository      (yang ada, dipertahankan)
+├── model/     model baru: ScanSnapshot, InspectionItem, PhotoRef, CannedJob, Reminder,
+│              EstimateApproval, AuditEntry, WorkshopProfile                       (baru)
+├── data/      ScanSnapshotRepository, InspectionRepository, CannedJobRepository,
+│              ReminderRepository, AuditLogRepository, WorkshopSettingsRepository  (baru)
+├── export/    CsvExporter                                                          (baru)
+├── pdf/       PdfDocumentWriter, PdfReportBuilder, PdfInvoiceBuilder               (baru)
+└── ui/        aktivitas yang ada + layar baru
+diagnosis/     strukturnya tidak diubah; F6/F14 menuangkannya ke tabel bersama
+```
+
+Skema `workshop.db` naik **3 → 4** sekali saja saat F1 (satu `onUpgrade`, bukan migrasi per fitur):
+
+| Tabel | Untuk | Kolom kunci |
+| --- | --- | --- |
+| `workshop_profile` | F2 | satu baris: `name`, `address`, `phone`, `footer`, `logo_path`, `updated_at` |
+| `service_items` | F7/F9 | `service_id`, `kind`, `description`, `quantity`, `unit_price`, `discount`, `inspection_item_id`, `diagnosis_case_id`, `approval`, `position` |
+| `inspection_items` | F6/F14 | `service_id`, `name`, `state` (BAIK/PERHATIAN/RUSAK), `note`, `voice_path`, `updated_at`, `deleted_at` |
+| `photos` | F6 | `owner_kind` (INSPECTION/DIAGNOSIS/SERVICE), `owner_id`, `relative_path`, `caption` |
+| `scan_snapshots` | F5 | `service_id`, `phase` (BEFORE/AFTER), `source` (REAL/DEMO/FILE), `codes_json`, `live_json`, `freeze_json`, `created_at` |
+| `estimate_approvals` | F9 | `service_item_id`, `state`, `note`, `changed_at` (riwayat, bukan satu kolom) |
+| `canned_jobs` + `canned_job_items` | F8 | template + baris contoh |
+| `reminders` | F16 | `vehicle_id`, `due_date`, `due_odometer_km`, `note`, `dismissed_at` |
+| `audit_log` | F5/F11/F17 | `action`, `target_kind`, `target_id`, `detail`, `actor`, `created_at` |
+| `settings` | F2/F17 | `key`, `value` (nilai aplikasi, bukan SharedPreferences) |
+
+Soft-delete (`deleted_at`) hanya untuk `inspection_items` dan `service_items`; sisanya hapus keras dengan cascade.
+`estimate_items` tetap dipakai, lalu diperluas di v4 (kolom `discount`, `inspection_item_id`, `diagnosis_case_id`,
+`approval`) supaya `DiagnosisServiceLink` tidak perlu ditulis ulang; `service_items` tidak dibuat sebagai tabel kedua.
+F14/F16 boleh menambah migrasi `4 → 5` bila memang perlu kolom baru.
+
+Urutan kerja mengikuti F1..F20; F1 mengerjakan seluruh tabel yang dibutuhkan F5, F6, F8, F9, F11, F16, F17 agar
+migrasi tidak berulang.
+
+## Fitur
+
+### F0. Pemeriksaan dasar
+- [x] Build, ponsel, Phase 2 diverifikasi
+- [x] `docs/PROGRESS.md`, `docs/ARCHITECTURE.md`
+- [ ] Rencana disetujui pemilik
+
+### F1. Lapisan database
+- [ ] Tabel baru + migrasi v4 + repository + tes
+
+### F2. Profil dan pengaturan bengkel
+- [ ] Layar profil, penyimpanan, footer PDF, format Rupiah
+
+### F3. Pelanggan dan kendaraan
+- [x] Selesai sebelum fase ini (commit `85458913`/`714875dc`); dipertahankan apa adanya
+
+### F4. Servis dan alur status
+- [ ] Status `PAID`/`Lunas`, kembali mundur, daftar hari ini/terbuka
+
+### F5. Pindai OBD terkait servis
+- [ ] Snapshot, penanda demo/nyata, sebelum-sesudah, audit hapus kode
+
+### F6. Item pemeriksaan + foto
+- [ ] Item, status, catatan, foto kamera
+
+### F7. Estimasi
+- [ ] Diskon, ubah baris, tautan item
+
+### F8. Paket pekerjaan
+- [ ] Template + layar admin + seed 3-5 contoh
+
+### F9. Persetujuan estimasi
+- [ ] Status persetujuan, per baris, riwayat
+
+### F10. PDF + WhatsApp
+- [ ] Laporan, nota, multi-halaman, FileProvider, teks WhatsApp
+
+### F11. Pembayaran
+- [ ] Sebagian, metode, tanggal, daftar belum lunas
+
+### F12. Diagnosis tanpa ECU
+- [x] Selesai sebelum fase ini (commit `c470958d`..`c7b8fcb5`)
+
+### F13. Panduan bunyi
+- [x] Selesai sebelum fase ini (commit `4ed5e436`)
+
+### F14. Catatan suara
+- [ ] Rekaman per item/kasus + pemutaran
+
+### F15. Riwayat kasus
+- [x] Selesai sebelum fase ini (commit `c7b8fcb5`)
+
+### F16. Pengingat servis
+- [ ] Tanggal/odometer, layar jatuh tempo, teks WhatsApp
+
+### F17. Cadangkan, pulihkan, ekspor
+- [ ] CSV + pengingat cadangan (ZIP sudah ada)
+
+### F18. Layar OBD lanjutan
+- [ ] Sakelar "Mode Lanjutan" dengan konfirmasi
+
+### F19. Ukur dan optimalkan
+- [ ] Angka sebelum/sesudah
+
+### F20. Audit akhir dan rilis
+- [ ] Audit, README, panduan pengguna, checklist mekanik, panduan keystore
