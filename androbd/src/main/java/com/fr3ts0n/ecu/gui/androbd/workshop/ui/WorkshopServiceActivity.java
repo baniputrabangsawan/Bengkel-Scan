@@ -36,6 +36,7 @@ import com.fr3ts0n.ecu.gui.androbd.workshop.EstimateItem;
 import com.fr3ts0n.ecu.gui.androbd.workshop.InspectionItem;
 import com.fr3ts0n.ecu.gui.androbd.workshop.InspectionRepository;
 import com.fr3ts0n.ecu.gui.androbd.workshop.ItemKind;
+import com.fr3ts0n.ecu.gui.androbd.workshop.PaymentMethod;
 import com.fr3ts0n.ecu.gui.androbd.workshop.PaymentStatus;
 import com.fr3ts0n.ecu.gui.androbd.workshop.ServiceRecord;
 import com.fr3ts0n.ecu.gui.androbd.workshop.ServiceStatus;
@@ -148,6 +149,7 @@ public class WorkshopServiceActivity extends AppCompatActivity
 			}
 		});
 
+		findViewById(R.id.workshop_payment_record).setOnClickListener(view -> recordPayment());
 		paid = findViewById(R.id.workshop_paid);
 		notes = findViewById(R.id.workshop_notes);
 		total = findViewById(R.id.workshop_total);
@@ -224,6 +226,31 @@ public class WorkshopServiceActivity extends AppCompatActivity
 				: service.status == ServiceStatus.DONE ? 2 : 0);
 		binding = false;
 
+		TextView paymentState = findViewById(R.id.workshop_payment_state);
+		if (paymentState != null)
+		{
+			long agreed = repository.approvedTotal(service.id);
+			StringBuilder text = new StringBuilder();
+			if (service.paidAmount > 0)
+			{
+				text.append(getString(service.partiallyPaid(agreed)
+						? R.string.workshop_payment_partial : R.string.workshop_payment_paid))
+						.append(" · ").append(WorkshopUi.money(service.paidAmount));
+				if (service.paymentMethod != PaymentMethod.UNKNOWN)
+				{
+					text.append(" · ").append(getString(methodLabel(service.paymentMethod)));
+				}
+				if (service.paidAt != null)
+				{
+					text.append(" · ").append(getString(R.string.workshop_payment_paid_at))
+							.append(' ').append(WorkshopUi.dateTime(service.paidAt));
+				}
+				text.append('\n');
+			}
+			text.append(getString(R.string.workshop_payment_outstanding)).append(": ")
+					.append(WorkshopUi.money(service.outstanding(agreed)));
+			paymentState.setText(text.toString());
+		}
 		paid.setOnCheckedChangeListener(null);
 		paid.setChecked(service.paymentStatus == PaymentStatus.PAID);
 		paid.setOnCheckedChangeListener((button, checked) ->
@@ -339,6 +366,81 @@ public class WorkshopServiceActivity extends AppCompatActivity
 				})
 				.show();
 		return true;
+	}
+
+	private static int methodLabel(PaymentMethod method)
+	{
+		switch (method)
+		{
+			case CASH:
+				return R.string.workshop_payment_method_cash;
+			case TRANSFER:
+				return R.string.workshop_payment_method_transfer;
+			case OTHER:
+				return R.string.workshop_payment_method_other;
+			case UNKNOWN:
+			default:
+				return R.string.workshop_payment_method_unknown;
+		}
+	}
+
+	/** Ask how much arrived; the status follows from the amount and the agreed total. */
+	private void recordPayment()
+	{
+		View form = getLayoutInflater().inflate(R.layout.dialog_estimate_item, null);
+		form.findViewById(R.id.workshop_kind).setVisibility(android.view.View.GONE);
+		form.findViewById(R.id.workshop_description).setVisibility(android.view.View.GONE);
+		form.findViewById(R.id.workshop_price).setVisibility(android.view.View.GONE);
+		form.findViewById(R.id.workshop_discount).setVisibility(android.view.View.GONE);
+		form.findViewById(R.id.workshop_inspection_link).setVisibility(android.view.View.GONE);
+		form.findViewById(R.id.workshop_payment_method).setVisibility(android.view.View.VISIBLE);
+		TextInputEditText amount = form.findViewById(R.id.workshop_amount);
+		amount.setVisibility(android.view.View.VISIBLE);
+		Spinner method = form.findViewById(R.id.workshop_payment_method);
+		ArrayAdapter<String> methods = new ArrayAdapter<>(this,
+				android.R.layout.simple_spinner_item,
+				new String[]{getString(R.string.workshop_payment_method_cash),
+						getString(R.string.workshop_payment_method_transfer),
+						getString(R.string.workshop_payment_method_other)});
+		methods.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		method.setAdapter(methods);
+		if (service.paymentMethod == PaymentMethod.TRANSFER) method.setSelection(1);
+		else if (service.paymentMethod == PaymentMethod.OTHER) method.setSelection(2);
+
+		AlertDialog dialog = new AlertDialog.Builder(this)
+				.setTitle(R.string.workshop_payment_record)
+				.setView(form)
+				.setNegativeButton(R.string.workshop_action_cancel, null)
+				.setPositiveButton(R.string.workshop_action_save, null)
+				.create();
+		dialog.setOnShowListener(ignored ->
+				dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view ->
+				{
+					long received = parseRupiah(textOf(amount), -1);
+					if (received <= 0)
+					{
+						amount.setError(getString(R.string.workshop_payment_error_amount));
+						amount.requestFocus();
+						return;
+					}
+					long agreed = repository.approvedTotal(service.id);
+					PaymentStatus status = agreed > 0 && received < agreed
+							? PaymentStatus.UNPAID : PaymentStatus.PAID;
+					PaymentMethod chosen = method.getSelectedItemPosition() == 1
+							? PaymentMethod.TRANSFER
+							: method.getSelectedItemPosition() == 2
+							? PaymentMethod.OTHER : PaymentMethod.CASH;
+					repository.setPayment(service.id, status, chosen, null, received);
+					new com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopSettingsRepository(
+							repository.database())
+							.record("service.payment", "service", service.id,
+									chosen.name() + " " + received);
+					service = repository.findService(service.id);
+					dialog.dismiss();
+					bind();
+					Toast.makeText(this, R.string.workshop_payment_saved, Toast.LENGTH_SHORT).show();
+				}));
+		dialog.show();
 	}
 
 	/** Long press: answer the line, read its history, or remove it. */

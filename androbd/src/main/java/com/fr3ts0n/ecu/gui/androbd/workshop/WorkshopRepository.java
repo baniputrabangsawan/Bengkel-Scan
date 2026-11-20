@@ -229,9 +229,29 @@ public final class WorkshopRepository
 	 */
 	public boolean setPayment(long id, PaymentStatus status, PaymentMethod method, Long paidAt)
 	{
+		return setPayment(id, status, method, paidAt, null);
+	}
+
+	/**
+	 * Record what was received.
+	 *
+	 * @param amount whole Rupiah received; when given, the status follows from it
+	 *               against the agreed total, so a short payment is never marked paid
+	 */
+	public boolean setPayment(long id, PaymentStatus status, PaymentMethod method, Long paidAt,
+			Long amount)
+	{
 		ContentValues values = new ContentValues();
 		values.put("payment_status", status.name());
 		if (method != null) values.put("payment_method", method.name());
+		if (amount != null)
+		{
+			values.put("paid_amount", Math.max(0, amount));
+			if (status == PaymentStatus.PAID && amount <= 0)
+			{
+				values.put("payment_status", PaymentStatus.UNPAID.name());
+			}
+		}
 		if (status == PaymentStatus.PAID)
 		{
 			values.put("paid_at", paidAt == null ? System.currentTimeMillis() : paidAt);
@@ -239,6 +259,7 @@ public final class WorkshopRepository
 		else
 		{
 			values.putNull("paid_at");
+			if (amount == null) values.put("paid_amount", 0);
 		}
 		values.put("updated_at", System.currentTimeMillis());
 		return database.getWritableDatabase().update("services", values,
@@ -450,7 +471,7 @@ public final class WorkshopRepository
 	private static final String[] VEHICLE_COLUMNS = {"id", "customer_id", "plate", "model",
 			"year", "engine_type", "vin", "odometer_km", "created_at"};
 	private static final String[] SERVICE_COLUMNS = {"id", "vehicle_id", "complaint", "status",
-			"payment_status", "notes", "odometer_km", "payment_method", "paid_at",
+			"payment_status", "notes", "odometer_km", "payment_method", "paid_at", "paid_amount",
 			"created_at", "updated_at", "completed_at"};
 	private static final String[] ITEM_COLUMNS = {"id", "service_id", "kind", "description",
 			"quantity", "unit_price", "discount", "approval", "inspection_item_id", "position"};
@@ -519,8 +540,8 @@ public final class WorkshopRepository
 				PaymentStatus.fromStored(c.getString(4)), c.getString(5),
 				c.isNull(6) ? null : c.getInt(6),
 				c.isNull(7) ? PaymentMethod.UNKNOWN : PaymentMethod.fromStored(c.getString(7)),
-				c.isNull(8) ? null : c.getLong(8),
-				c.getLong(9), c.getLong(10), c.isNull(11) ? null : c.getLong(11));
+				c.isNull(8) ? null : c.getLong(8), c.getLong(9),
+				c.getLong(10), c.getLong(11), c.isNull(12) ? null : c.getLong(12));
 	}
 
 	private static EstimateItem readItem(Cursor c)

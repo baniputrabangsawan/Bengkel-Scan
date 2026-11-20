@@ -110,6 +110,22 @@
             </LinearLayout>
 
             <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/workshop_payment_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/WorkshopHomeHelper" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/workshop_payment_record"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:minHeight="56dp"
+                android:text="@string/workshop_payment_record" />
+
+            <TextView
                 android:id="@+id/workshop_paid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

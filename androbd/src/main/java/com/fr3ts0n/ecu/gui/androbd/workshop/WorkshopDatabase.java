@@ -31,7 +31,7 @@ import com.fr3ts0n.ecu.gui.androbd.diagnosis.data.DiagnosisRepository;
 public class WorkshopDatabase extends SQLiteOpenHelper
 {
 	public static final String DEFAULT_NAME = "workshop.db";
-	static final int SCHEMA_VERSION = 4;
+	static final int SCHEMA_VERSION = 5;
 	final Context appContext;
 
 	private static WorkshopDatabase instance;
@@ -106,6 +106,7 @@ public class WorkshopDatabase extends SQLiteOpenHelper
 				+ "odometer_km INTEGER,"
 				+ "payment_method TEXT,"
 				+ "paid_at INTEGER,"
+				+ "paid_amount INTEGER NOT NULL DEFAULT 0,"
 				+ "created_at INTEGER NOT NULL,"
 				+ "updated_at INTEGER NOT NULL,"
 				+ "completed_at INTEGER)");
@@ -138,6 +139,11 @@ public class WorkshopDatabase extends SQLiteOpenHelper
 		if (oldVersion < 2 && newVersion >= 2) createDiagnostics(db);
 		if (oldVersion < 3 && newVersion >= 3) DiagnosisRepository.createTables(db);
 		if (oldVersion < 4 && newVersion >= 4) upgradeToV4(db);
+		if (oldVersion < 5 && newVersion >= 5)
+		{
+			// Version 5 records how much was received, so a partial payment is a fact.
+			addColumn(db, "services", "paid_amount", "INTEGER NOT NULL DEFAULT 0");
+		}
 	}
 
 	/**

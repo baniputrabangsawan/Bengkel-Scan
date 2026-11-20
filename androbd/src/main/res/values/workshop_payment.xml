@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_payment_partial">Partially paid</string>
+    <string name="workshop_payment_method">Payment method</string>
+    <string name="workshop_payment_method_unknown">Not recorded</string>
+    <string name="workshop_payment_method_cash">Cash</string>
+    <string name="workshop_payment_method_transfer">Transfer</string>
+    <string name="workshop_payment_method_other">Other</string>
+    <string name="workshop_payment_paid_at">Paid on</string>
+    <string name="workshop_payment_outstanding">Outstanding</string>
+    <string name="workshop_payment_outstanding_none">Fully paid</string>
+    <string name="workshop_payment_record">Record payment</string>
+    <string name="workshop_payment_amount">Amount received (Rp)</string>
+    <string name="workshop_payment_amount_hint">Less than the total means partially paid.</string>
+    <string name="workshop_payment_error_amount">Amount must be greater than zero</string>
+    <string name="workshop_payment_saved">Payment recorded</string>
+    <string name="workshop_payment_unpaid_list">Unpaid services</string>
+    <string name="workshop_payment_unpaid_empty">No service is waiting for payment.</string>
+    <string name="workshop_payment_clear">Clear payment</string>
+    <string name="workshop_payment_cleared">Payment entry removed</string>
+</resources>

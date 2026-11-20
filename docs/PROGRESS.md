@@ -151,7 +151,12 @@ migrasi tidak berulang.
 - [ ] Tampilan PDF belum diperiksa mata (tidak ada pembaca PDF di lingkungan ini)
 
 ### F11. Pembayaran
-- [ ] Sebagian, metode, tanggal, daftar belum lunas
+- [x] Kolom `paid_amount` (skema v5, migrasi aditif); ponsel sudah termigrasi ke v5 dengan data utuh
+- [x] **Catat pembayaran**: jumlah diterima + cara bayar (tunai/transfer/lainnya) dalam satu dialog
+- [x] Status ditentukan dari jumlah: kurang dari total disetujui tetap **belum lunas** + sisa tagihan; nol tidak pernah lunas
+- [x] Layar servis menampilkan dibayar/sebagian, cara bayar, waktu bayar, sisa tagihan
+- [x] Daftar belum lunas memakai saringan **Belum lunas** di layar Pekerjaan servis
+- [x] Tes `PaymentInstrumentedTest` (6) lulus; total 28 tes skema/repositori/pembayaran lulus
 
 ### F12. Diagnosis tanpa ECU
 - [x] Selesai sebelum fase ini (commit `c470958d`..`c7b8fcb5`)

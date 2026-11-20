@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_payment_partial">Dibayar sebagian</string>
+    <string name="workshop_payment_method">Cara bayar</string>
+    <string name="workshop_payment_method_unknown">Belum dicatat</string>
+    <string name="workshop_payment_method_cash">Tunai</string>
+    <string name="workshop_payment_method_transfer">Transfer</string>
+    <string name="workshop_payment_method_other">Lainnya</string>
+    <string name="workshop_payment_paid_at">Dibayar pada</string>
+    <string name="workshop_payment_outstanding">Sisa tagihan</string>
+    <string name="workshop_payment_outstanding_none">Sudah lunas</string>
+    <string name="workshop_payment_record">Catat pembayaran</string>
+    <string name="workshop_payment_amount">Jumlah diterima (Rp)</string>
+    <string name="workshop_payment_amount_hint">Kurang dari total berarti dibayar sebagian.</string>
+    <string name="workshop_payment_error_amount">Jumlah harus lebih dari nol</string>
+    <string name="workshop_payment_saved">Pembayaran dicatat</string>
+    <string name="workshop_payment_unpaid_list">Servis belum lunas</string>
+    <string name="workshop_payment_unpaid_empty">Tidak ada servis yang menunggu pembayaran.</string>
+    <string name="workshop_payment_clear">Hapus catatan pembayaran</string>
+    <string name="workshop_payment_cleared">Catatan pembayaran dihapus</string>
+</resources>

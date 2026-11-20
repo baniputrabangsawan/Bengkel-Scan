@@ -27,6 +27,8 @@ public final class ServiceRecord
 	public final PaymentMethod paymentMethod;
 	/** Epoch millis when the payment was recorded, or {@code null}. */
 	public final Long paidAt;
+	/** Whole Rupiah actually received; 0 when nothing was recorded. */
+	public final long paidAmount;
 	public final long createdAt;
 	public final long updatedAt;
 	/** Time the service was completed, or {@code null} while not done. */
@@ -34,8 +36,8 @@ public final class ServiceRecord
 
 	ServiceRecord(long id, long vehicleId, String complaint, ServiceStatus status,
 			PaymentStatus paymentStatus, String notes, Integer odometerKm,
-			PaymentMethod paymentMethod, Long paidAt, long createdAt, long updatedAt,
-			Long completedAt)
+			PaymentMethod paymentMethod, Long paidAt, long paidAmount, long createdAt,
+			long updatedAt, Long completedAt)
 	{
 		this.id = id;
 		this.vehicleId = vehicleId;
@@ -46,9 +48,22 @@ public final class ServiceRecord
 		this.odometerKm = odometerKm;
 		this.paymentMethod = paymentMethod;
 		this.paidAt = paidAt;
+		this.paidAmount = paidAmount;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.completedAt = completedAt;
+	}
+
+	/** Outstanding amount against the approved total, never negative. */
+	public long outstanding(long agreedTotal)
+	{
+		return Math.max(0, agreedTotal - paidAmount);
+	}
+
+	/** Some money arrived but less than the agreed total. */
+	public boolean partiallyPaid(long agreedTotal)
+	{
+		return paidAmount > 0 && paidAmount < agreedTotal;
 	}
 
 	/** Work is still open: waiting or in progress. */

@@ -69,7 +69,7 @@ public class WorkshopSchemaV4InstrumentedTest
 		try (WorkshopDatabase database = new WorkshopDatabase(context, name))
 		{
 			SQLiteDatabase db = database.getWritableDatabase();
-			assertEquals(4, db.getVersion());
+			assertTrue("The schema must be at least version 4", db.getVersion() >= 4);
 			for (String table : new String[]{"customers", "vehicles", "services", "estimate_items",
 					"diagnostics", "diagnosis_cases", "inspection_items", "photos",
 					"scan_snapshots", "estimate_approvals", "canned_jobs", "canned_job_items",
@@ -94,7 +94,7 @@ public class WorkshopSchemaV4InstrumentedTest
 		try (WorkshopDatabase database = new WorkshopDatabase(context, name))
 		{
 			SQLiteDatabase db = database.getWritableDatabase();
-			assertEquals(4, db.getVersion());
+			assertTrue("The schema must be at least version 4", db.getVersion() >= 4);
 
 			WorkshopRepository workshop = new WorkshopRepository(database);
 			Customer customer = workshop.findCustomer(1);
