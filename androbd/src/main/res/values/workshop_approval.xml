@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_approval_title">Customer approval</string>
+    <string name="workshop_approval_pending">Not answered</string>
+    <string name="workshop_approval_approved">Approved</string>
+    <string name="workshop_approval_declined">Declined</string>
+    <string name="workshop_approval_approve">Approve line</string>
+    <string name="workshop_approval_decline">Decline line</string>
+    <string name="workshop_approval_note">How was it answered? (optional)</string>
+    <string name="workshop_approval_note_hint">For example: approved via WhatsApp</string>
+    <string name="workshop_approval_saved">Answer saved</string>
+    <string name="workshop_approval_history">Answer history</string>
+    <string name="workshop_approval_history_empty">No answers recorded for this line yet.</string>
+    <string name="workshop_approval_approved_total">Approved total</string>
+    <string name="workshop_approval_declined_total">Declined</string>
+    <string name="workshop_approval_partial">Partially approved</string>
+    <string name="workshop_approval_none">No line approved yet</string>
+    <string name="workshop_approval_all">All lines approved</string>
+    <string name="workshop_approval_all_sent">All lines still unanswered</string>
+</resources>

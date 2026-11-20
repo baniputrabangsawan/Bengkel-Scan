@@ -135,7 +135,11 @@ migrasi tidak berulang.
 - [x] Tes `CannedJobInstrumentedTest` (4) lulus di ponsel
 
 ### F9. Persetujuan estimasi
-- [ ] Status persetujuan, per baris, riwayat
+- [x] Per baris: **Setujui** / **Tolak** dengan catatan ("disetujui lewat WhatsApp")
+- [x] Riwayat jawaban per baris (waktu, jawaban, catatan), ditambah satu baris `audit_log`
+- [x] Hanya baris **disetujui** dihitung ke total disetujui; total keseluruhan tetap terlihat
+- [x] `EstimateApprovalSummary` meringkas disetujui/ditolak/belum, termasuk diskon
+- [x] Tes JVM `EstimateApprovalSummaryTest` (4); total 52 tes JVM lulus
 
 ### F10. PDF + WhatsApp
 - [ ] Laporan, nota, multi-halaman, FileProvider, teks WhatsApp

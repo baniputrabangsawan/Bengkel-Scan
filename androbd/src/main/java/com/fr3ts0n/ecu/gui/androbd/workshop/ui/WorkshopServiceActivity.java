@@ -31,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.fr3ts0n.ecu.gui.androbd.ModernUiUtils;
 import com.fr3ts0n.ecu.gui.androbd.R;
 import com.fr3ts0n.ecu.gui.androbd.SettingsActivity;
+import com.fr3ts0n.ecu.gui.androbd.workshop.ApprovalState;
 import com.fr3ts0n.ecu.gui.androbd.workshop.EstimateItem;
 import com.fr3ts0n.ecu.gui.androbd.workshop.InspectionItem;
 import com.fr3ts0n.ecu.gui.androbd.workshop.InspectionRepository;
@@ -152,7 +153,11 @@ public class WorkshopServiceActivity extends AppCompatActivity
 		empty = findViewById(R.id.workshop_empty);
 		adapter = new WorkshopRowAdapter(this);
 		list.setAdapter(adapter);
-		list.setOnItemLongClickListener(this::confirmDeleteItem);
+		list.setOnItemLongClickListener((parent, view, position, id) ->
+		{
+			itemActions(adapter.getItem(position));
+			return true;
+		});
 		list.setOnItemClickListener((parent, view, position, id) ->
 		{
 			long itemId = adapter.getItem(position).id;
@@ -305,16 +310,115 @@ public class WorkshopServiceActivity extends AppCompatActivity
 				subtitle.append(" · ").append(getString(R.string.workshop_estimate_linked));
 			}
 			rows.add(new WorkshopRow(item.id, item.description, subtitle.toString(),
-					WorkshopUi.money(item.lineTotal())));
+					getString(approvalLabel(item.approval)) + " · "
+							+ WorkshopUi.money(item.lineTotal())));
 		}
 		adapter.submit(rows);
 		empty.setVisibility(rows.isEmpty() ? View.VISIBLE : View.GONE);
-		total.setText(WorkshopUi.money(repository.estimateTotal(service.id)));
+		com.fr3ts0n.ecu.gui.androbd.workshop.EstimateApprovalSummary approval =
+				com.fr3ts0n.ecu.gui.androbd.workshop.EstimateApprovalSummary.of(items);
+		total.setText(WorkshopUi.money(repository.estimateTotal(service.id)) + " · "
+				+ getString(R.string.workshop_approval_approved_total) + " "
+				+ WorkshopUi.money(approval.approvedTotal));
 	}
 
 	private boolean confirmDeleteItem(AdapterView<?> parent, View view, int position, long id)
 	{
 		WorkshopRow row = adapter.getItem(position);
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.workshop_delete_item_title)
+				.setMessage(getString(R.string.workshop_delete_item_message, row.title))
+				.setNegativeButton(R.string.workshop_action_cancel, null)
+				.setPositiveButton(R.string.workshop_action_delete, (dialog, which) ->
+				{
+					repository.deleteEstimateItem(row.id);
+					loadItems();
+				})
+				.show();
+		return true;
+	}
+
+	/** Long press: answer the line, read its history, or remove it. */
+	private void itemActions(WorkshopRow row)
+	{
+		new AlertDialog.Builder(this)
+				.setTitle(row.title)
+				.setItems(new String[]{getString(R.string.workshop_approval_approve),
+						getString(R.string.workshop_approval_decline),
+						getString(R.string.workshop_approval_history),
+						getString(R.string.workshop_action_delete)}, (dialog, which) ->
+				{
+					if (which == 0) answerLine(row.id, ApprovalState.APPROVED);
+					else if (which == 1) answerLine(row.id, ApprovalState.DECLINED);
+					else if (which == 2) showHistory(row.id);
+					else confirmDeleteItem(row);
+				})
+				.setNegativeButton(R.string.workshop_action_cancel, null)
+				.show();
+	}
+
+	/** Record the customer's answer with the note the mechanic typed. */
+	private void answerLine(long itemId, ApprovalState state)
+	{
+		View form = getLayoutInflater().inflate(R.layout.dialog_text, null);
+		TextInputEditText note = form.findViewById(R.id.workshop_text);
+		AlertDialog dialog = new AlertDialog.Builder(this)
+				.setTitle(state == ApprovalState.APPROVED
+						? R.string.workshop_approval_approve : R.string.workshop_approval_decline)
+				.setView(form)
+				.setNegativeButton(R.string.workshop_action_cancel, null)
+				.setPositiveButton(R.string.workshop_action_save, null)
+				.create();
+		dialog.setOnShowListener(ignored ->
+				dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view ->
+				{
+					repository.setApproval(itemId, state, textOf(note));
+					new com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopSettingsRepository(
+							repository.database())
+							.record("estimate.approval", "estimate_item", itemId, state.name());
+					dialog.dismiss();
+					loadItems();
+					Toast.makeText(this, R.string.workshop_approval_saved, Toast.LENGTH_SHORT).show();
+				}));
+		dialog.show();
+	}
+
+	private void showHistory(long itemId)
+	{
+		List<com.fr3ts0n.ecu.gui.androbd.workshop.EstimateApproval> history =
+				repository.approvals(itemId);
+		StringBuilder text = new StringBuilder();
+		for (com.fr3ts0n.ecu.gui.androbd.workshop.EstimateApproval entry : history)
+		{
+			if (text.length() > 0) text.append('\n');
+			text.append(WorkshopUi.dateTime(entry.changedAt)).append(" · ")
+					.append(getString(approvalLabel(entry.state)));
+			if (!entry.note.isEmpty()) text.append(" · ").append(entry.note);
+		}
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.workshop_approval_history)
+				.setMessage(history.isEmpty() ? getString(R.string.workshop_approval_history_empty)
+						: text.toString())
+				.setPositiveButton(android.R.string.ok, null)
+				.show();
+	}
+
+	private static int approvalLabel(ApprovalState state)
+	{
+		switch (state)
+		{
+			case APPROVED:
+				return R.string.workshop_approval_approved;
+			case DECLINED:
+				return R.string.workshop_approval_declined;
+			case PENDING:
+			default:
+				return R.string.workshop_approval_pending;
+		}
+	}
+
+	private boolean confirmDeleteItem(WorkshopRow row)
+	{
 		new AlertDialog.Builder(this)
 				.setTitle(R.string.workshop_delete_item_title)
 				.setMessage(getString(R.string.workshop_delete_item_message, row.title))

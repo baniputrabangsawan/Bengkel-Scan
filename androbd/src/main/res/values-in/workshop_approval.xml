@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_approval_title">Persetujuan pelanggan</string>
+    <string name="workshop_approval_pending">Belum dijawab</string>
+    <string name="workshop_approval_approved">Disetujui</string>
+    <string name="workshop_approval_declined">Ditolak</string>
+    <string name="workshop_approval_approve">Setujui baris</string>
+    <string name="workshop_approval_decline">Tolak baris</string>
+    <string name="workshop_approval_note">Bagaimana jawabannya? (opsional)</string>
+    <string name="workshop_approval_note_hint">Contoh: disetujui lewat WhatsApp</string>
+    <string name="workshop_approval_saved">Jawaban disimpan</string>
+    <string name="workshop_approval_history">Riwayat jawaban</string>
+    <string name="workshop_approval_history_empty">Belum ada jawaban untuk baris ini.</string>
+    <string name="workshop_approval_approved_total">Total disetujui</string>
+    <string name="workshop_approval_declined_total">Ditolak</string>
+    <string name="workshop_approval_partial">Disetujui sebagian</string>
+    <string name="workshop_approval_none">Belum ada baris yang disetujui</string>
+    <string name="workshop_approval_all">Semua baris disetujui</string>
+    <string name="workshop_approval_all_sent">Semua baris belum dijawab</string>
+</resources>
