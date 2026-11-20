@@ -15,10 +15,14 @@ package com.fr3ts0n.ecu.gui.androbd.workshop.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +31,7 @@ import com.fr3ts0n.ecu.gui.androbd.ModernUiUtils;
 import com.fr3ts0n.ecu.gui.androbd.R;
 import com.fr3ts0n.ecu.gui.androbd.SettingsActivity;
 import com.fr3ts0n.ecu.gui.androbd.workshop.Customer;
+import com.fr3ts0n.ecu.gui.androbd.workshop.EngineType;
 import com.fr3ts0n.ecu.gui.androbd.workshop.ServiceRecord;
 import com.fr3ts0n.ecu.gui.androbd.workshop.Vehicle;
 import com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopRepository;
@@ -93,6 +98,15 @@ public class WorkshopVehicleActivity extends AppCompatActivity
 		}
 		Customer customer = repository.findCustomer(vehicle.customerId);
 		if (customer != null) text.append(customer.name);
+		text.append('\n');
+		text.append(vehicle.engineType == EngineType.PETROL
+				? getString(R.string.workshop_engine_petrol)
+				: getString(R.string.workshop_engine_diesel));
+		if (!vehicle.vin.isEmpty()) text.append(" · ").append(vehicle.vin);
+		if (vehicle.odometerKm != null)
+		{
+			text.append(" · ").append(vehicle.odometerKm).append(" km");
+		}
 		((TextView) findViewById(R.id.workshop_summary)).setText(text);
 	}
 
@@ -143,6 +157,14 @@ public class WorkshopVehicleActivity extends AppCompatActivity
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.workshop_edit, menu);
+		menu.findItem(R.id.workshop_edit).setTitle(R.string.workshop_vehicle_edit_menu);
+		return true;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		if (item.getItemId() == android.R.id.home)
@@ -150,6 +172,105 @@ public class WorkshopVehicleActivity extends AppCompatActivity
 			finish();
 			return true;
 		}
+		if (item.getItemId() == R.id.workshop_edit)
+		{
+			editVehicle();
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	/** Change plate, model, year, fuel type, identity number and odometer in place. */
+	private void editVehicle()
+	{
+		View form = getLayoutInflater().inflate(R.layout.dialog_vehicle, null);
+		TextInputEditText plate = form.findViewById(R.id.workshop_plate);
+		TextInputEditText model = form.findViewById(R.id.workshop_model);
+		TextInputEditText year = form.findViewById(R.id.workshop_year);
+		TextInputEditText vin = form.findViewById(R.id.workshop_vin);
+		TextInputEditText odometer = form.findViewById(R.id.workshop_odometer);
+		Spinner engine = form.findViewById(R.id.workshop_engine);
+		ArrayAdapter<String> engines = new ArrayAdapter<>(this,
+				android.R.layout.simple_spinner_item,
+				new String[]{getString(R.string.workshop_engine_diesel),
+						getString(R.string.workshop_engine_petrol)});
+		engines.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		engine.setAdapter(engines);
+
+		plate.setText(vehicle.plate);
+		model.setText(vehicle.model);
+		year.setText(vehicle.year == null ? "" : String.valueOf(vehicle.year));
+		vin.setText(vehicle.vin);
+		odometer.setText(vehicle.odometerKm == null ? "" : String.valueOf(vehicle.odometerKm));
+		engine.setSelection(vehicle.engineType == EngineType.PETROL ? 1 : 0);
+
+		AlertDialog dialog = new AlertDialog.Builder(this)
+				.setTitle(R.string.workshop_vehicle_update_title)
+				.setView(form)
+				.setNegativeButton(R.string.workshop_action_cancel, null)
+				.setPositiveButton(R.string.workshop_action_save, null)
+				.create();
+		dialog.setOnShowListener(ignored ->
+				dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view ->
+				{
+					String plateNumber = textOf(plate);
+					if (plateNumber.isEmpty())
+					{
+						plate.setError(getString(R.string.workshop_error_plate));
+						plate.requestFocus();
+						return;
+					}
+					Integer odometerKm = parseOdometer(textOf(odometer));
+					if (odometerKm == null && !textOf(odometer).isEmpty())
+					{
+						odometer.setError(getString(R.string.workshop_error_odometer));
+						odometer.requestFocus();
+						return;
+					}
+					EngineType type = engine.getSelectedItemPosition() == 1
+							? EngineType.PETROL : EngineType.DIESEL;
+					repository.updateVehicle(vehicle.id, plateNumber, textOf(model),
+							parseYear(textOf(year)), type, textOf(vin), odometerKm);
+					vehicle = repository.findVehicle(vehicle.id);
+					WorkshopUi.hideKeyboard(this);
+					dialog.dismiss();
+					WorkshopUi.prepare(this, vehicle.plate);
+					renderSummary();
+					Toast.makeText(this, R.string.workshop_saved, Toast.LENGTH_SHORT).show();
+				}));
+		dialog.show();
+	}
+
+	private static Integer parseYear(String value)
+	{
+		if (value.isEmpty()) return null;
+		try
+		{
+			int year = Integer.parseInt(value);
+			return year > 0 && year < 3000 ? Integer.valueOf(year) : null;
+		}
+		catch (NumberFormatException ignored)
+		{
+			return null;
+		}
+	}
+
+	private static Integer parseOdometer(String value)
+	{
+		if (value.isEmpty()) return null;
+		try
+		{
+			int km = Integer.parseInt(value);
+			return km >= 0 && km < 10_000_000 ? Integer.valueOf(km) : null;
+		}
+		catch (NumberFormatException ignored)
+		{
+			return null;
+		}
+	}
+
+	private static String textOf(TextInputEditText field)
+	{
+		return field.getText() == null ? "" : field.getText().toString().trim();
 	}
 }

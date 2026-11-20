@@ -15,12 +15,14 @@ package com.fr3ts0n.ecu.gui.androbd.workshop.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -120,6 +122,8 @@ public class WorkshopCustomerActivity extends AppCompatActivity
 		TextInputEditText plate = form.findViewById(R.id.workshop_plate);
 		TextInputEditText model = form.findViewById(R.id.workshop_model);
 		TextInputEditText year = form.findViewById(R.id.workshop_year);
+		TextInputEditText vin = form.findViewById(R.id.workshop_vin);
+		TextInputEditText odometer = form.findViewById(R.id.workshop_odometer);
 		Spinner engine = form.findViewById(R.id.workshop_engine);
 		ArrayAdapter<String> engines = new ArrayAdapter<>(this,
 				android.R.layout.simple_spinner_item,
@@ -146,10 +150,17 @@ public class WorkshopCustomerActivity extends AppCompatActivity
 						return;
 					}
 					Integer modelYear = parseYear(textOf(year));
+					Integer odometerKm = parseOdometer(textOf(odometer));
+					if (odometerKm == null && !textOf(odometer).isEmpty())
+					{
+						odometer.setError(getString(R.string.workshop_error_odometer));
+						odometer.requestFocus();
+						return;
+					}
 					EngineType type = engine.getSelectedItemPosition() == 1
 							? EngineType.PETROL : EngineType.DIESEL;
 					long vehicleId = repository.createVehicle(customer.id, plateNumber,
-							textOf(model), modelYear, type, "", null);
+							textOf(model), modelYear, type, textOf(vin), odometerKm);
 					WorkshopUi.hideKeyboard(this);
 					dialog.dismiss();
 					loadVehicles();
@@ -173,9 +184,32 @@ public class WorkshopCustomerActivity extends AppCompatActivity
 		}
 	}
 
+	/** Whole kilometres, or {@code null} when the field is blank or not a number. */
+	private static Integer parseOdometer(String value)
+	{
+		if (value.isEmpty()) return null;
+		try
+		{
+			int km = Integer.parseInt(value);
+			return km >= 0 && km < 10_000_000 ? Integer.valueOf(km) : null;
+		}
+		catch (NumberFormatException ignored)
+		{
+			return null;
+		}
+	}
+
 	private static String textOf(TextInputEditText field)
 	{
 		return field.getText() == null ? "" : field.getText().toString().trim();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.workshop_edit, menu);
+		menu.findItem(R.id.workshop_edit).setTitle(R.string.workshop_customer_edit_menu);
+		return true;
 	}
 
 	@Override
@@ -186,6 +220,49 @@ public class WorkshopCustomerActivity extends AppCompatActivity
 			finish();
 			return true;
 		}
+		if (item.getItemId() == R.id.workshop_edit)
+		{
+			editCustomer();
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	/** Change name, phone and notes; the row keeps its id so vehicles stay attached. */
+	private void editCustomer()
+	{
+		View form = getLayoutInflater().inflate(R.layout.dialog_customer, null);
+		TextInputEditText name = form.findViewById(R.id.workshop_name);
+		TextInputEditText phone = form.findViewById(R.id.workshop_phone);
+		TextInputEditText notes = form.findViewById(R.id.workshop_notes);
+		name.setText(customer.name);
+		phone.setText(customer.phone);
+		notes.setText(customer.notes);
+
+		AlertDialog dialog = new AlertDialog.Builder(this)
+				.setTitle(R.string.workshop_customer_update_title)
+				.setView(form)
+				.setNegativeButton(R.string.workshop_action_cancel, null)
+				.setPositiveButton(R.string.workshop_action_save, null)
+				.create();
+		dialog.setOnShowListener(ignored ->
+				dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view ->
+				{
+					String customerName = textOf(name);
+					if (customerName.isEmpty())
+					{
+						name.setError(getString(R.string.workshop_error_name));
+						name.requestFocus();
+						return;
+					}
+					repository.updateCustomer(customer.id, customerName, textOf(phone), textOf(notes));
+					customer = repository.findCustomer(customer.id);
+					WorkshopUi.hideKeyboard(this);
+					dialog.dismiss();
+					WorkshopUi.prepare(this, customer.name);
+					renderCustomer();
+					Toast.makeText(this, R.string.workshop_saved, Toast.LENGTH_SHORT).show();
+				}));
+		dialog.show();
 	}
 }

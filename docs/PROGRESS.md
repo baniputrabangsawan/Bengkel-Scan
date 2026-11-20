@@ -90,7 +90,11 @@ migrasi tidak berulang.
 - [ ] Format mata uang: `WorkshopUi.money` sudah Rupiah `id-ID`; pengaturan format ditunda sampai F10 ada kebutuhan nyata
 
 ### F3. Pelanggan dan kendaraan
-- [x] Selesai sebelum fase ini (commit `85458913`/`714875dc`); dipertahankan apa adanya
+- [x] Daftar/cari pelanggan, tambah pelanggan, daftar kendaraan per pelanggan
+- [x] Tambah kendaraan: plat, model, tahun, bahan bakar, nomor rangka/mesin, odometer
+- [x] Ubah pelanggan dan ubah kendaraan lewat menu ⋮ (id baris dipertahankan)
+- [x] Riwayat servis per kendaraan; pencarian plat longgar (`plateKey`), validasi tahun/odometer
+- [x] Tanggal: commit `9224a872` (profil) lalu commit F3
 
 ### F4. Servis dan alur status
 - [ ] Status `PAID`/`Lunas`, kembali mundur, daftar hari ini/terbuka
