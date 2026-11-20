@@ -918,7 +918,7 @@ public class MainActivity extends PluginManager
         for (int id : new int[] {R.id.save, R.id.load, R.id.day_night_mode,
                 R.id.plugin_manager, R.id.reset_preselections, R.id.service_testcontrol,
                 R.id.service_clearcodes})
-            setMenuItemVisible(id, WorkshopFeatures.showMenuItem(id));
+            setMenuItemVisible(id, WorkshopFeatures.showMenuItem(id, advancedMode()));
         // update menu item status for current conversion system
         setConversionSystem(EcuDataItem.cnvSystem);
         
@@ -1097,7 +1097,7 @@ public class MainActivity extends PluginManager
             setObdService(ObdProt.OBD_SVC_NONE, null);
             return true;
         }
-        if (!WorkshopFeatures.showMenuItem(id)) return true;
+        if (!WorkshopFeatures.showMenuItem(id, advancedMode())) return true;
         {
             // Display and UI Management
             if(id == R.id.day_night_mode) {
@@ -1958,7 +1958,7 @@ public class MainActivity extends PluginManager
             MenuItem item = menu.findItem(id);
             if (item != null)
             {
-                item.setVisible(visible && WorkshopFeatures.showMenuItem(id));
+                item.setVisible(visible && WorkshopFeatures.showMenuItem(id, advancedMode()));
             }
         }
     }
@@ -2090,6 +2090,13 @@ public class MainActivity extends PluginManager
     private MODE getMode()
     {
         return mode;
+    }
+
+    /** The mechanic's own switch, separate from the build-time flags. */
+    private boolean advancedMode()
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean(WorkshopFeatures.PREF_ADVANCED_MODE, false);
     }
 
     /**

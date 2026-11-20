@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="advanced_mode">Mode lanjutan</string>
+    <string name="advanced_mode_description">Tampilkan grafik, dasbor, dan layar data tersimpan. Uji aktuator tetap disembunyikan.</string>
+    <string name="advanced_mode_confirm_title">Aktifkan mode lanjutan?</string>
+    <string name="advanced_mode_confirm_message">Layar ini menampilkan tampilan OBD tambahan untuk pengguna berpengalaman. Tidak ada uji aktuator atau coding di sini. Biarkan tertutup saat kerja bengkel biasa supaya grafik tidak disangka diagnosis.</string>
+    <string name="advanced_mode_on">Aktifkan</string>
+    <string name="advanced_mode_cancel">Batal</string>
+    <string name="advanced_mode_denied">Mode lanjutan tetap mati</string>
+    <string name="advanced_mode_enabled">Mode lanjutan aktif</string>
+</resources>

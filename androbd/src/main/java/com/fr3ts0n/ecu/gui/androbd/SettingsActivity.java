@@ -227,6 +227,7 @@ public class SettingsActivity extends AppCompatActivity
 			updateNetworkSelections();
 			setPrefClickListener(KEY_BITCOIN);
 			setPrefClickListener(KEY_OPEN_LOG_DIR);
+			confirmAdvancedMode();
 
 			if (!WorkshopFeatures.SHOW_ADVANCED_FEATURES)
 			{
@@ -252,6 +253,44 @@ public class SettingsActivity extends AppCompatActivity
 			requireActivity().setTitle(getPreferenceScreen().getTitle());
 		}
 
+
+		/**
+		 * Advanced mode is a mechanic-facing switch, so turning it on asks first.
+		 *
+		 * <p>The switch is held off while the dialog is open: only an explicit
+		 * confirmation writes {@code true}. Turning it off needs no ceremony.</p>
+		 */
+		private void confirmAdvancedMode()
+		{
+			Preference found = findPreference(WorkshopFeatures.PREF_ADVANCED_MODE);
+			if (!(found instanceof androidx.preference.SwitchPreferenceCompat)) return;
+			final androidx.preference.SwitchPreferenceCompat switcher =
+					(androidx.preference.SwitchPreferenceCompat) found;
+			switcher.setOnPreferenceChangeListener((preference, newValue) ->
+			{
+				if (!Boolean.TRUE.equals(newValue)) return true;
+				new android.app.AlertDialog.Builder(requireContext())
+						.setTitle(R.string.advanced_mode_confirm_title)
+						.setMessage(R.string.advanced_mode_confirm_message)
+						.setNegativeButton(R.string.advanced_mode_cancel,
+								(dialog, which) -> android.widget.Toast.makeText(requireContext(),
+										R.string.advanced_mode_denied,
+										android.widget.Toast.LENGTH_SHORT).show())
+						.setPositiveButton(R.string.advanced_mode_on, (dialog, which) ->
+						{
+							prefs.edit().putBoolean(WorkshopFeatures.PREF_ADVANCED_MODE, true).apply();
+							switcher.setChecked(true);
+							android.widget.Toast.makeText(requireContext(),
+									R.string.advanced_mode_enabled,
+									android.widget.Toast.LENGTH_SHORT).show();
+						})
+						.show();
+				// Returning false refuses the automatic switch-on; the confirmation
+				// button writes the value itself.
+				return false;
+			});
+			switcher.setChecked(prefs.getBoolean(WorkshopFeatures.PREF_ADVANCED_MODE, false));
+		}
 
 		/**
 		 * Set this fragment as the click listener for a preference, if it exists in the

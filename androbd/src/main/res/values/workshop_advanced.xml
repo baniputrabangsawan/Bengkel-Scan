@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="advanced_mode">Advanced mode</string>
+    <string name="advanced_mode_description">Show charts, dashboard and saved-data screens. Actuator tests stay hidden.</string>
+    <string name="advanced_mode_confirm_title">Turn on advanced mode?</string>
+    <string name="advanced_mode_confirm_message">These screens show extra OBD views for experienced users. They do not add actuator tests or coding. Keep them closed during normal workshop work so nobody mistakes a chart for a diagnosis.</string>
+    <string name="advanced_mode_on">Turn on</string>
+    <string name="advanced_mode_cancel">Cancel</string>
+    <string name="advanced_mode_denied">Advanced mode stays off</string>
+    <string name="advanced_mode_enabled">Advanced mode is on</string>
+</resources>

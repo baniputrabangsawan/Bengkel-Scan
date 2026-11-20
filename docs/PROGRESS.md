@@ -195,7 +195,12 @@ migrasi tidak berulang.
 - [ ] Mengirim CSV ke aplikasi lain belum diuji manual (chooser)
 
 ### F18. Layar OBD lanjutan
-- [ ] Sakelar "Mode Lanjutan" dengan konfirmasi
+- [x] Sakelar **Mode Lanjutan** di Pengaturan → Umum, mati secara bawaan
+- [x] Konfirmasi saat dinyalakan; mematikan tidak perlu konfirmasi
+- [x] Flag build-time tetap berlaku: uji aktuator **tidak pernah** muncul, siapa pun yang menyalakan sakelar
+- [x] Grafik/dasbor/simpan-muat hanya terbuka bila sakelar aktif
+- [x] Tes JVM `WorkshopFeaturesTest` (4); total 62 tes JVM lulus
+- [ ] Sakelar belum dicoba jari di ponsel (butuh navigasi layar; build + tes lulus)
 
 ### F19. Ukur dan optimalkan
 - [ ] Angka sebelum/sesudah
