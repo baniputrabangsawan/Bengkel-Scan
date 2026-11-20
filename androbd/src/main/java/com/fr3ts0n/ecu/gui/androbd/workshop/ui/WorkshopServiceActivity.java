@@ -79,6 +79,13 @@ public class WorkshopServiceActivity extends AppCompatActivity
 				: vehicle.plate);
 		((TextView) findViewById(R.id.workshop_summary)).setText(
 				service.complaint + "\n" + WorkshopUi.dateTime(service.createdAt));
+		findViewById(R.id.workshop_scan).setOnClickListener(view ->
+				startActivity(new Intent(this, WorkshopScanActivity.class)
+						.putExtra(WorkshopUi.EXTRA_SERVICE_ID, service.id)
+						.putExtra(WorkshopScanActivity.EXTRA_MODE, modeName())));
+		findViewById(R.id.workshop_scan_compare).setOnClickListener(view ->
+				startActivity(new Intent(this, WorkshopScanCompareActivity.class)
+						.putExtra(WorkshopUi.EXTRA_SERVICE_ID, service.id)));
 		findViewById(R.id.workshop_diagnostics).setOnClickListener(view ->
 				startActivity(new Intent(this, WorkshopDiagnosticsActivity.class)
 						.putExtra(WorkshopUi.EXTRA_SERVICE_ID, service.id)));
@@ -203,6 +210,60 @@ public class WorkshopServiceActivity extends AppCompatActivity
 			notes.setText(service.notes);
 		}
 		loadItems();
+		loadScans();
+	}
+
+	/** Mode reported by the main screen; the snapshot never guesses its own provenance. */
+	private String modeName()
+	{
+		return com.fr3ts0n.ecu.gui.androbd.MainActivity.modeName();
+	}
+
+	/**
+	 * Show what has already been frozen for this service, with demo data
+	 * clearly labelled. Read-only: nothing here can change the protocol lists.
+	 */
+	private void loadScans()
+	{
+		TextView view = findViewById(R.id.workshop_scan_list);
+		if (view == null) return;
+		java.util.List<com.fr3ts0n.ecu.gui.androbd.workshop.ScanSnapshot> snapshots =
+				new com.fr3ts0n.ecu.gui.androbd.workshop.ScanSnapshotRepository(repository.database())
+						.forService(service.id);
+		if (snapshots.isEmpty())
+		{
+			view.setVisibility(android.view.View.GONE);
+			return;
+		}
+		StringBuilder text = new StringBuilder();
+		for (com.fr3ts0n.ecu.gui.androbd.workshop.ScanSnapshot snapshot : snapshots)
+		{
+			if (text.length() > 0) text.append('\n');
+			text.append(getString(snapshot.phase == com.fr3ts0n.ecu.gui.androbd.workshop.ScanPhase.AFTER
+							? R.string.workshop_scan_phase_after : R.string.workshop_scan_phase_before))
+					.append(" · ").append(WorkshopUi.dateTime(snapshot.createdAt))
+					.append(" · ").append(getString(sourceLabelOf(snapshot.source)))
+					.append(" · ")
+					.append(getString(R.string.workshop_scan_codes,
+							com.fr3ts0n.ecu.gui.androbd.workshop.ScanSnapshotWriter
+									.size(snapshot.codesJson)));
+		}
+		view.setText(text.toString());
+		view.setVisibility(android.view.View.VISIBLE);
+	}
+
+	private static int sourceLabelOf(com.fr3ts0n.ecu.gui.androbd.workshop.ScanSource source)
+	{
+		switch (source)
+		{
+			case REAL:
+				return R.string.workshop_scan_source_real;
+			case FILE:
+				return R.string.workshop_scan_source_file;
+			case DEMO:
+			default:
+				return R.string.workshop_scan_source_demo;
+		}
 	}
 
 	private void loadItems()

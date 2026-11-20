@@ -105,7 +105,13 @@ migrasi tidak berulang.
 - [ ] Bekas uji pada `services` id 43 mengembalikan audit_log tambahan; bukan data pelanggan, boleh dibiarkan
 
 ### F5. Pindai OBD terkait servis
-- [ ] Snapshot, penanda demo/nyata, sebelum-sesudah, audit hapus kode
+- [x] Layar **Simpan pindai** menyalin kode kerusakan + data langsung saat dibuka (sebelum daftar bisa terhapus)
+- [x] Asal data ditulis: pindai nyata / data contoh / berkas tersimpan; mode tak dikenal selalu dianggap contoh
+- [x] Daftar pindai tersimpan tampil di layar servis (posisi, waktu, asal, jumlah kode)
+- [x] **Sebelum/sesudah**: simpan dua posisi, bandingkan kode yang hilang/baru/sama
+- [x] **Hapus Kode Kerusakan** aktif lagi, tetap di balik dialog peringatan destruktif, kode yang akan hilang disalin dulu, dan setiap penghapusan menulis `audit_log`
+- [x] Tes: `ScanSnapshotInstrumentedTest` (5) + `ScanComparisonInstrumentedTest` (6) lulus di ponsel
+- [ ] Belum diuji dengan alat OBD nyata; hanya mode Latihan + data sintetis
 
 ### F6. Item pemeriksaan + foto
 - [ ] Item, status, catatan, foto kamera

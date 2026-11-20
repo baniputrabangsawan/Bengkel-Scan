@@ -107,6 +107,16 @@
             android:exported="false"
             android:label="@string/workshop_customers_title" />
         <activity
+            android:name=".workshop.ui.WorkshopScanActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/workshop_scan_title" />
+        <activity
+            android:name=".workshop.ui.WorkshopScanCompareActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/workshop_scan_compare_title" />
+        <activity
             android:name=".workshop.ui.WorkshopJobsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"

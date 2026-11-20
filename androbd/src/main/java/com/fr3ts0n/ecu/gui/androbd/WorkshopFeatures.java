@@ -5,8 +5,12 @@ final class WorkshopFeatures
 {
     static final boolean SHOW_ADVANCED_FEATURES = false;
     static final boolean SHOW_ACTUATOR_TEST_CONTROLS = false;
-    // Keep clearing hidden until service-linked audit logging is implemented.
-    static final boolean SHOW_CLEAR_FAULT_CODES = false;
+    /**
+     * Clearing is offered again now that every clearing writes an audit line and
+     * the codes about to be destroyed are captured first. It still requires the
+     * explicit destructive confirmation dialog; this flag only shows the menu.
+     */
+    static final boolean SHOW_CLEAR_FAULT_CODES = true;
 
     private WorkshopFeatures()
     {

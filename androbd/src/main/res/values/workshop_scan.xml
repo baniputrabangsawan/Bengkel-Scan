@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_scan_title">Save scan to service</string>
+    <string name="workshop_scan_intro">The reading is copied now, so it stays even if the scan list changes or another vehicle is connected later.</string>
+    <string name="workshop_scan_phase">Position</string>
+    <string name="workshop_scan_phase_before">Before repair</string>
+    <string name="workshop_scan_phase_after">After repair</string>
+    <string name="workshop_scan_source_real">Real scan from the connected adapter</string>
+    <string name="workshop_scan_source_demo">Demo data — not from a vehicle</string>
+    <string name="workshop_scan_source_file">Loaded from a saved file — not a live reading</string>
+    <string name="workshop_scan_empty">There is no reading in memory yet. Open Kode Kerusakan or Data Langsung, wait for data, then save again.</string>
+    <string name="workshop_scan_note">Note (optional)</string>
+    <string name="workshop_scan_save">Save scan</string>
+    <string name="workshop_scan_saved">Scan saved for this service</string>
+    <string name="workshop_scan_codes">%1$d fault codes</string>
+    <string name="workshop_scan_readings">%1$d live readings</string>
+    <string name="workshop_scan_compare_title">Before and after repair</string>
+    <string name="workshop_scan_compare_empty">Save a scan before and after the repair to compare them here.</string>
+    <string name="workshop_scan_compare_before">Before</string>
+    <string name="workshop_scan_compare_after">After</string>
+    <string name="workshop_scan_compare_codes_removed">Codes no longer reported: %1$d</string>
+    <string name="workshop_scan_compare_codes_added">Codes newly reported: %1$d</string>
+    <string name="workshop_scan_compare_codes_same">Codes reported in both scans: %1$d</string>
+    <string name="workshop_scan_demo_warning">This is demo data. Do not treat it as a vehicle reading.</string>
+    <string name="workshop_scan_menu">Save scan</string>
+    <string name="workshop_scan_compare_menu">Before/after comparison</string>
+</resources>

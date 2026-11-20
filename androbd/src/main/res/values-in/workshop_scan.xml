@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="workshop_scan_title">Simpan hasil pindai ke servis</string>
+    <string name="workshop_scan_intro">Pembacaan disalin sekarang, jadi tetap ada walaupun daftar pindai berubah atau kendaraan lain disambungkan nanti.</string>
+    <string name="workshop_scan_phase">Posisi</string>
+    <string name="workshop_scan_phase_before">Sebelum perbaikan</string>
+    <string name="workshop_scan_phase_after">Sesudah perbaikan</string>
+    <string name="workshop_scan_source_real">Pindai nyata dari alat yang tersambung</string>
+    <string name="workshop_scan_source_demo">Data contoh — bukan dari kendaraan</string>
+    <string name="workshop_scan_source_file">Dibuka dari berkas tersimpan — bukan bacaan langsung</string>
+    <string name="workshop_scan_empty">Belum ada hasil pindai di memori. Buka Kode Kerusakan atau Data Langsung, tunggu data muncul, lalu simpan lagi.</string>
+    <string name="workshop_scan_note">Catatan (opsional)</string>
+    <string name="workshop_scan_save">Simpan pindai</string>
+    <string name="workshop_scan_saved">Hasil pindai disimpan untuk servis ini</string>
+    <string name="workshop_scan_codes">%1$d kode kerusakan</string>
+    <string name="workshop_scan_readings">%1$d data langsung</string>
+    <string name="workshop_scan_compare_title">Sebelum dan sesudah perbaikan</string>
+    <string name="workshop_scan_compare_empty">Simpan hasil pindai sebelum dan sesudah perbaikan untuk dibandingkan di sini.</string>
+    <string name="workshop_scan_compare_before">Sebelum</string>
+    <string name="workshop_scan_compare_after">Sesudah</string>
+    <string name="workshop_scan_compare_codes_removed">Kode yang tidak muncul lagi: %1$d</string>
+    <string name="workshop_scan_compare_codes_added">Kode baru yang muncul: %1$d</string>
+    <string name="workshop_scan_compare_codes_same">Kode yang muncul di kedua pindai: %1$d</string>
+    <string name="workshop_scan_demo_warning">Ini data contoh. Jangan dianggap bacaan kendaraan.</string>
+    <string name="workshop_scan_menu">Simpan pindai</string>
+    <string name="workshop_scan_compare_menu">Bandingkan sebelum/sesudah</string>
+</resources>

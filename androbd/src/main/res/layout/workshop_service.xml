@@ -43,6 +43,22 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/diagnosis_start_title" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/workshop_scan"
+                style="@style/WorkshopHomeSecondaryAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/workshop_scan_menu" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/workshop_scan_compare"
+                style="@style/WorkshopHomeSecondaryAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/workshop_scan_compare_menu" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,6 +129,20 @@
         android:accessibilityHeading="true"
         android:text="@string/workshop_estimate_heading"
         android:textAppearance="@style/WorkshopHomeSectionHeading" />
+
+    <TextView
+        android:id="@+id/workshop_scan_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/result_row_surface"
+        android:minHeight="56dp"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp"
+        android:textAppearance="@style/WorkshopHomeHelper"
+        android:visibility="gone" />
 
     <FrameLayout
         android:layout_width="match_parent"

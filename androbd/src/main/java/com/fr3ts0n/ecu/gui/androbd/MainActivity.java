@@ -928,6 +928,15 @@ public class MainActivity extends PluginManager
         return true;
     }
 
+    /** Process-wide mode, so another screen can state provenance instead of guessing. */
+    private static volatile MODE liveMode = MODE.OFFLINE;
+
+    /** Mode name for screens that must label demo data; never infers a connection. */
+    public static String modeName()
+    {
+        return liveMode == null ? "OFFLINE" : liveMode.name();
+    }
+
     /** Route the home dashboard through the existing diagnostic menu actions. */
     public void onWorkshopHomeClick(View view)
     {
@@ -2090,6 +2099,7 @@ public class MainActivity extends PluginManager
      */
     private void setMode(MODE mode)
     {
+        liveMode = mode;
         // if this is a mode change, or file reload ...
         if (mode != this.mode || mode == MODE.FILE)
         {
@@ -2807,6 +2817,10 @@ public class MainActivity extends PluginManager
      */
     private void clearObdFaultCodes()
     {
+        // Capture what is being destroyed before the adapter forgets it; the
+        // snapshot is the only remaining evidence afterwards.
+        final String destroyedCodes = com.fr3ts0n.ecu.gui.androbd.workshop.ScanSnapshotWriter
+                .codesJson(com.fr3ts0n.ecu.gui.androbd.workshop.ScanSnapshotWriter.faultCodes());
         dlgBuilder
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(R.string.obd_clearcodes)
@@ -2821,10 +2835,23 @@ public class MainActivity extends PluginManager
                                 CommService.elm.setService(ObdProt.OBD_SVC_CLEAR_CODES);
                                 // set service READ_CODES to re-read the codes
                                 CommService.elm.setService(ObdProt.OBD_SVC_READ_CODES);
+                                auditCodeClear(destroyedCodes);
                             }
                         })
                 .setNegativeButton(R.string.button_no, null)
                 .show();
+    }
+
+    /** One audit line per clearing, with the codes that were reported beforehand. */
+    private void auditCodeClear(String destroyedCodes)
+    {
+        com.fr3ts0n.ecu.gui.androbd.workshop.ScanSource source =
+                com.fr3ts0n.ecu.gui.androbd.workshop.ScanSnapshotWriter
+                        .currentSource(liveMode == null ? "OFFLINE" : liveMode.name());
+        new com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopSettingsRepository(
+                com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopDatabase.getInstance(this))
+                .record("codes.cleared", "obd", null,
+                        source.name() + " " + destroyedCodes);
     }
 
     /**
