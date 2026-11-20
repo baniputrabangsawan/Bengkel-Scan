@@ -85,7 +85,9 @@ migrasi tidak berulang.
 - [ ] Tabel baru + migrasi v4 + repository + tes
 
 ### F2. Profil dan pengaturan bengkel
-- [ ] Layar profil, penyimpanan, footer PDF, format Rupiah
+- [x] Layar profil (nama, alamat, telepon, catatan penutup, logo) — commit `F2`
+- [x] Disimpan di tabel `workshop_profile`; logo masuk folder media privat
+- [ ] Format mata uang: `WorkshopUi.money` sudah Rupiah `id-ID`; pengaturan format ditunda sampai F10 ada kebutuhan nyata
 
 ### F3. Pelanggan dan kendaraan
 - [x] Selesai sebelum fase ini (commit `85458913`/`714875dc`); dipertahankan apa adanya
