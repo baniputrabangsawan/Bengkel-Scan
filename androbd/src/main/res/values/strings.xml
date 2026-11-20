@@ -82,7 +82,7 @@ period of time while the ECU recalibrates itself.
     <string name="select_all">Select all</string>
     <string name="search_hint">Search…</string>
     <string name="scanner_connection_help">Plug the scan tool into the vehicle OBD socket. Turn the ignition to ON, then select Connect.</string>
-    <string name="diagnosis_hint">A fault code is a diagnostic clue, not proof that a particular part has failed. Check the symptoms, wiring, and test results before replacing parts.</string>
+    <string name="diagnosis_hint">A code is a diagnostic clue, not proof of a failed part. A low/high circuit signal does not necessarily mean low/high pressure or temperature. Bank means a group of cylinders; sensor numbering follows the vehicle reference.</string>
     <string name="live_data_hint">Live data shows current sensor readings and ECU values. Compare readings with the vehicle specifications and operating conditions.</string>
     <string name="freeze_frame_hint">Freeze frame data records the vehicle conditions when a fault was detected. Use it to help understand when the fault occurred.</string>
     <string name="saved_file_message">Saved %1$d bytes to %2$s</string>

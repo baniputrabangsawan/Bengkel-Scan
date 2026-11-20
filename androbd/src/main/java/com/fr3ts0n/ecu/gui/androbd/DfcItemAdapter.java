@@ -25,12 +25,15 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.fr3ts0n.common.UTF8Control;
 import com.fr3ts0n.ecu.EcuCodeItem;
 import com.fr3ts0n.ecu.prot.obd.ObdProt;
 import com.fr3ts0n.pvs.IndexedProcessVar;
 import com.fr3ts0n.pvs.PvList;
 
 import java.util.Collection;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Adapter to display OBD DFCs
@@ -39,6 +42,22 @@ import java.util.Collection;
  */
 public class DfcItemAdapter extends ObdItemAdapter
 {
+	private ResourceBundle indonesianCodes;
+
+	/** Re-label saved or cached readings without changing the original evidence. */
+	private String codeDescription(String code, String original)
+	{
+		String language = getContext().getResources().getConfiguration().locale.getLanguage();
+		if (!"id".equals(language) && !"in".equals(language)) return statusText(original);
+		if (indonesianCodes == null)
+		{
+			// Explicit bundle: legacy "in" and modern "id" must not fall back to English.
+			indonesianCodes = ResourceBundle.getBundle(
+					"com.fr3ts0n.ecu.prot.obd.res.codes_id", Locale.ROOT, new UTF8Control());
+		}
+		return indonesianCodes.containsKey(code) ? indonesianCodes.getString(code) : statusText(original);
+	}
+
 	private static final class CodeViewHolder
 	{
 		final boolean compact;
@@ -124,7 +143,7 @@ public class DfcItemAdapter extends ObdItemAdapter
 		holder.icon.setVisibility(noCodes ? View.GONE : View.VISIBLE);
 		holder.status.setText(statusLabel == 0 ? "" : getContext().getString(statusLabel));
 		holder.status.setVisibility(!noCodes && statusLabel != 0 ? View.VISIBLE : View.GONE);
-		holder.description.setText(statusText(String.valueOf(currPv.get(EcuCodeItem.FID_DESCRIPT))));
+		holder.description.setText(codeDescription(code, String.valueOf(currPv.get(EcuCodeItem.FID_DESCRIPT))));
 		// Keep the selected value compact; the dialog retains the complete description.
 		holder.description.setVisibility(!compact || dropDown || noCodes ? View.VISIBLE : View.GONE);
 		holder.context.setVisibility(noCodes ? View.VISIBLE : View.GONE);

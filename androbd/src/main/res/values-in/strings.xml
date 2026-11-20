@@ -219,7 +219,7 @@ Lakukan uji ini hanya di tempat pengujian yang aman. Dengan melanjutkan, Anda me
     <string name="select_all">Pilih Semua</string>
     <string name="search_hint">Cari…</string>
     <string name="scanner_connection_help">Pasang alat scan ke soket OBD kendaraan. Putar kunci kontak ke ON, lalu pilih Hubungkan Alat Scan.</string>
-    <string name="diagnosis_hint">Kode Kerusakan adalah petunjuk diagnosis, bukan kepastian bahwa komponen tertentu rusak. Periksa gejala, kabel, dan hasil pengujian sebelum mengganti komponen.</string>
+    <string name="diagnosis_hint">Kode adalah petunjuk pemeriksaan, bukan vonis komponen rusak. Sinyal rangkaian rendah/tinggi tidak selalu berarti tekanan atau suhu rendah/tinggi. Bank = kelompok silinder; nomor sensor mengikuti acuan kendaraan.</string>
     <string name="live_data_hint">Data Langsung menampilkan bacaan sensor dan nilai dari ECU saat ini. Bandingkan bacaan dengan spesifikasi kendaraan dan kondisi pengoperasiannya.</string>
     <string name="freeze_frame_hint">Data Saat Kerusakan merekam kondisi kendaraan saat gangguan terdeteksi. Gunakan data ini untuk memahami kapan gangguan terjadi.</string>
     <string name="saved_file_message">Hasil pemeriksaan disimpan: %1$d byte di %2$s</string>

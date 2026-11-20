@@ -46,5 +46,5 @@
     <string name="obd_value_pump_diagnostics">Pompa diperintahkan menyala untuk pemeriksaan</string>
     <string name="obd_value_not_obd">Tidak mendukung standar OBD</string>
     <string name="obd_value_no_codes">Tidak ada Kode Kerusakan</string>
-    <string name="obd_value_unknown_code">Kode khusus pabrikan. Periksa buku servis kendaraan.</string>
+    <string name="obd_value_unknown_code">Arti kode belum tersedia di kamus aplikasi. Periksa laporan alat scan dan manual servis kendaraan.</string>
 </resources>

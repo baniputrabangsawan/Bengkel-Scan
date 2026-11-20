@@ -1,6 +1,7 @@
 package com.fr3ts0n.ecu.gui.androbd;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
@@ -21,8 +22,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /** Exercises recycled presentation without opening an activity or connecting to a vehicle. */
 @RunWith(AndroidJUnit4.class)
@@ -32,6 +36,14 @@ public class DiagnosticPresentationInstrumentedTest
     {
         return new ContextThemeWrapper(
                 InstrumentationRegistry.getInstrumentation().getTargetContext(), R.style.AppTheme);
+    }
+
+    private Context context(Locale locale)
+    {
+        Context base = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Configuration configuration = new Configuration(base.getResources().getConfiguration());
+        configuration.setLocale(locale);
+        return new ContextThemeWrapper(base.createConfigurationContext(configuration), R.style.AppTheme);
     }
 
     private EcuCodeItem code(String value, int status)
@@ -120,6 +132,76 @@ public class DiagnosticPresentationInstrumentedTest
             row = adapter.getView(0, row, parent);
             assertEquals(View.VISIBLE, row.findViewById(R.id.bar).getVisibility());
             assertEquals(View.VISIBLE, row.findViewById(R.id.obd_units).getVisibility());
+        });
+    }
+
+    @Test
+    public void indonesianRowsDistinguishLowPressureFromLowCircuitSignalWithoutRewritingEvidence()
+    {
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+            Context context = context(new Locale("id", "ID"));
+            DfcItemAdapter adapter = new DfcItemAdapter(context, R.layout.obd_item, new PvList());
+            FrameLayout parent = new FrameLayout(context);
+            EcuCodeItem pressure = code("P0087", ObdProt.OBD_SVC_READ_CODES);
+            adapter.add(pressure);
+            View row = adapter.getView(0, null, parent);
+            String description = ((TextView) row.findViewById(R.id.obd_label))
+                    .getText().toString().toLowerCase(Locale.ROOT);
+            assertTrue(description, description.contains("tekanan") && description.contains("rendah"));
+            assertEquals("Manufacturer description", pressure.get(EcuCodeItem.FID_DESCRIPT));
+
+            adapter.clear();
+            adapter.add(code("P0102", ObdProt.OBD_SVC_PENDINGCODES));
+            row = adapter.getView(0, row, parent);
+            description = ((TextView) row.findViewById(R.id.obd_label))
+                    .getText().toString().toLowerCase(Locale.ROOT);
+            assertTrue(description, description.contains("rangkaian") && description.contains("rendah"));
+            assertFalse(description, description.contains("tekanan"));
+            assertEquals("P0102", ((TextView) row.findViewById(R.id.obd_units)).getText().toString());
+            assertEquals(context.getString(R.string.result_status_pending),
+                    ((TextView) row.findViewById(R.id.result_status)).getText().toString());
+
+            adapter.clear();
+            adapter.add(code("P0103", ObdProt.OBD_SVC_READ_CODES));
+            row = adapter.getView(0, row, parent);
+            description = ((TextView) row.findViewById(R.id.obd_label))
+                    .getText().toString().toLowerCase(Locale.ROOT);
+            assertTrue(description, description.contains("rangkaian") && description.contains("tinggi"));
+            assertFalse(description, description.contains("rendah"));
+        });
+    }
+
+    @Test
+    public void indonesianFreezeFrameChoicesTranslateButUnknownManufacturerCodesKeepTheirDescription()
+    {
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+            Context context = context(new Locale("in"));
+            DfcItemAdapter adapter = new DfcItemAdapter(context, R.layout.obd_item, new PvList());
+            adapter.add(code("P0299", ObdProt.OBD_SVC_READ_CODES));
+            Spinner parent = new Spinner(context);
+            View dropdown = adapter.getDropDownView(0, null, parent);
+            String description = ((TextView) dropdown.findViewById(R.id.obd_label))
+                    .getText().toString().toLowerCase(Locale.ROOT);
+            assertTrue(description, description.contains("tekanan") && description.contains("rendah"));
+
+            adapter.clear();
+            adapter.add(code("P1999", ObdProt.OBD_SVC_READ_CODES));
+            dropdown = adapter.getDropDownView(0, dropdown, parent);
+            assertEquals("Manufacturer description",
+                    ((TextView) dropdown.findViewById(R.id.obd_label)).getText().toString());
+        });
+    }
+
+    @Test
+    public void englishRowsKeepTheSuppliedDescription()
+    {
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
+            Context context = context(Locale.ENGLISH);
+            DfcItemAdapter adapter = new DfcItemAdapter(context, R.layout.obd_item, new PvList());
+            adapter.add(code("P0299", ObdProt.OBD_SVC_READ_CODES));
+            View row = adapter.getView(0, null, new FrameLayout(context));
+            assertEquals("Manufacturer description",
+                    ((TextView) row.findViewById(R.id.obd_label)).getText().toString());
         });
     }
 }

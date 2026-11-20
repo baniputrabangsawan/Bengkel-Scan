@@ -122,11 +122,19 @@ identifies sample data. Freeze-frame availability follows the existing menu
 state and explains when fault codes must be read first. Home buttons route to
 the existing diagnostic handlers, not a second protocol implementation.
 
-Fault-code rows separate code, original description, and actual stored/pending/
-permanent state. Unknown-code descriptions remain unchanged; the existing
-Indonesian fallback is retained. A no-code response is not presented as proof
-that the entire vehicle is healthy. Freeze-frame selection stays compact, with
-complete descriptions available in the selection dialog.
+Fault-code rows separate code, localized description, and actual stored/pending/
+permanent state. The 3,584 bundled standard descriptions have an offline Indonesian
+catalogue at `library/src/main/java/com/fr3ts0n/ecu/prot/obd/res/codes_id.properties`.
+The adapter loads that explicit bundle for both `id` and legacy `in` UI locales,
+including saved readings, without rewriting original evidence or non-Indonesian
+descriptions. Unknown descriptions remain unchanged; the standard unknown-code
+fallback says the meaning is unavailable, not that the vehicle is healthy or the
+code necessarily manufacturer-specific. Undefined source terms retain a vehicle-
+manual caveat. Low/high circuit signals remain distinct from physical pressure
+or temperature; bank and sensor identifiers are preserved, never inferred as sides.
+A no-code response is not presented as proof that the entire vehicle is healthy.
+Freeze-frame selection stays compact, with complete localized descriptions
+available in the selection dialog. Catalogue entries do not add ECU coverage.
 
 Readiness/enum values wrap as text without numeric progress bars. Numeric
 readings retain their values, units, and ranges. Material3 DayNight, upstream
