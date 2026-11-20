@@ -21,4 +21,12 @@
     <string name="workshop_inspection_camera_missing">No camera app available. Choose a photo from storage instead.</string>
     <string name="workshop_inspection_photo_unsafe">That file could not be read. Choose an image.</string>
     <string name="workshop_inspection_menu">Inspected parts</string>
+    <string name="workshop_inspection_voice_title">Voice note</string>
+    <string name="workshop_inspection_voice_record">Record a note (max 15 s)</string>
+    <string name="workshop_inspection_voice_play">Play the note</string>
+    <string name="workshop_inspection_voice_delete">Delete the note</string>
+    <string name="workshop_inspection_voice_recording">Recording… press stop when done</string>
+    <string name="workshop_inspection_voice_saved">Voice note saved</string>
+    <string name="workshop_inspection_voice_missing">No voice note recorded</string>
+    <string name="workshop_inspection_voice_button">Voice note</string>
 </resources>

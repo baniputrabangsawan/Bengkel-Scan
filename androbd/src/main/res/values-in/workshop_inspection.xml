@@ -21,4 +21,12 @@
     <string name="workshop_inspection_camera_missing">Tidak ada aplikasi kamera. Pilih foto dari penyimpanan.</string>
     <string name="workshop_inspection_photo_unsafe">Berkas tidak dapat dibaca. Pilih berkas gambar.</string>
     <string name="workshop_inspection_menu">Bagian diperiksa</string>
+    <string name="workshop_inspection_voice_title">Catatan suara</string>
+    <string name="workshop_inspection_voice_record">Rekam catatan (maks 15 detik)</string>
+    <string name="workshop_inspection_voice_play">Putar catatan</string>
+    <string name="workshop_inspection_voice_delete">Hapus catatan</string>
+    <string name="workshop_inspection_voice_recording">Merekam… tekan berhenti bila selesai</string>
+    <string name="workshop_inspection_voice_saved">Catatan suara disimpan</string>
+    <string name="workshop_inspection_voice_missing">Belum ada catatan suara</string>
+    <string name="workshop_inspection_voice_button">Catatan suara</string>
 </resources>

@@ -167,7 +167,13 @@ migrasi tidak berulang.
 - [x] Diverifikasi ulang: pemutaran + pemutar audio lulus di ponsel
 
 ### F14. Catatan suara
-- [ ] Rekaman per item/kasus + pemutaran
+- [x] `VoiceNoteRecorder` bersama (maks 15 detik, MediaRecorder AAC, hanya saat tombol ditekan)
+- [x] Dari dialog item pemeriksaan: rekam, putar (`DiagnosisAudioPlayer`), hapus catatan
+- [x] Izin mikrofon diminta saat dibutuhkan saja; rekaman berhenti di `onStop`
+- [x] Path rekaman disimpan di `inspection_items.voice_path` (media privat)
+- [x] Tidak ada speech-to-text
+- [x] Perbaikan bug: `workshop_payment_state` tidak lagi menimpa id switch `workshop_paid` (crash ClassCastException)
+- [x] Regresi 35 tes lulus; aplikasi jalan tanpa `FATAL EXCEPTION`
 
 ### F15. Riwayat kasus
 - [x] Selesai sebelum fase ini (commit `c7b8fcb5`)

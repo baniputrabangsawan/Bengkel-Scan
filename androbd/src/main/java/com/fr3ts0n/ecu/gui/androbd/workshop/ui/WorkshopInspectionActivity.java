@@ -69,6 +69,11 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 	private long pendingPhotoItem = -1;
 	private String pendingPhotoPath;
 
+	private final VoiceNoteRecorder voice = new VoiceNoteRecorder();
+	private final android.os.Handler handler = new android.os.Handler(android.os.Looper.getMainLooper());
+	private long pendingVoiceItem = -1;
+	private com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.DiagnosisAudioPlayer player;
+
 	private final androidx.activity.result.ActivityResultLauncher<Uri> takePicture =
 			registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts
 					.TakePicture(), saved ->
@@ -102,6 +107,27 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 		inspections = new InspectionRepository(repository.database());
 		photos = new PhotoRepository(repository.database());
 		media = new DiagnosisMediaStore(this);
+		player = new com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.DiagnosisAudioPlayer(this, media,
+				new com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.DiagnosisAudioPlayer.Listener()
+				{
+					@Override
+					public void onStateChanged(
+							com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.DiagnosisAudioPlayer.State state)
+					{
+						if (state == com.fr3ts0n.ecu.gui.androbd.diagnosis.ui
+								.DiagnosisAudioPlayer.State.IDLE)
+						{
+							// Playback finished on its own.
+						}
+					}
+
+					@Override
+					public void onError()
+					{
+						Toast.makeText(WorkshopInspectionActivity.this,
+								R.string.workshop_inspection_voice_missing, Toast.LENGTH_SHORT).show();
+					}
+				});
 
 		empty = findViewById(R.id.workshop_empty);
 		ListView list = findViewById(R.id.workshop_list);
@@ -122,6 +148,14 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 	{
 		super.onResume();
 		if (repository != null) load();
+	}
+
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		if (voice.recording()) finishVoice(false);
+		player.release();
 	}
 
 	private void load()
@@ -222,6 +256,13 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 				dialog.dismiss();
 				choosePhotoSource(itemId);
 			});
+			dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setText(
+					R.string.workshop_inspection_voice_button);
+			dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(view ->
+			{
+				dialog.dismiss();
+				voiceActions(itemId);
+			});
 			dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view ->
 			{
 				String part = textOf(name);
@@ -239,6 +280,125 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 			});
 		});
 		dialog.show();
+	}
+
+	/** Voice note for an inspected part: record, play back, or delete. */
+	void voiceActions(final long itemId)
+	{
+		InspectionItem item = inspections.find(itemId);
+		if (item == null) return;
+		boolean hasNote = item.voiceNote();
+		String[] labels = new String[]{getString(R.string.workshop_inspection_voice_record),
+				hasNote ? getString(R.string.workshop_inspection_voice_play)
+						: getString(R.string.workshop_inspection_voice_missing),
+				getString(R.string.workshop_inspection_voice_delete)};
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.workshop_inspection_voice_title)
+				.setItems(labels, (dialog, which) ->
+				{
+					if (which == 0) recordVoice(itemId);
+					else if (which == 1 && hasNote) playVoice(item);
+					else if (which == 2 && hasNote) clearVoice(itemId);
+				})
+				.setNegativeButton(R.string.workshop_action_cancel, null)
+				.show();
+	}
+
+	private void recordVoice(final long itemId)
+	{
+		if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO)
+				!= android.content.pm.PackageManager.PERMISSION_GRANTED)
+		{
+			requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO}, 1);
+			pendingVoiceItem = itemId;
+			return;
+		}
+		try
+		{
+			File target = media.createRecordingFile();
+			pendingVoiceItem = itemId;
+			voice.start(target, () -> finishVoice(true), () -> finishVoice(false));
+			handler.postDelayed(voiceLimit, VoiceNoteRecorder.MAX_DURATION_MS);
+			Toast.makeText(this, R.string.workshop_inspection_voice_recording, Toast.LENGTH_SHORT)
+					.show();
+		}
+		catch (IOException error)
+		{
+			Log.e(TAG, "Voice note failed to start", error);
+			Toast.makeText(this, R.string.workshop_inspection_photo_failed, Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private final Runnable voiceLimit = () -> finishVoice(true);
+
+	private void finishVoice(boolean keep)
+	{
+		handler.removeCallbacks(voiceLimit);
+		long itemId = pendingVoiceItem;
+		if (!voice.recording())
+		{
+			pendingVoiceItem = -1;
+			return;
+		}
+		File written = keep ? voice.stopKeeping() : null;
+		if (!keep) voice.stopAndDiscard();
+		pendingVoiceItem = -1;
+		if (written == null || itemId < 0)
+		{
+			if (written != null) written.delete();
+			return;
+		}
+		try
+		{
+			inspections.setVoicePath(itemId, media.relativePath(written));
+			load();
+			Toast.makeText(this, R.string.workshop_inspection_voice_saved, Toast.LENGTH_SHORT).show();
+		}
+		catch (IOException error)
+		{
+			Log.e(TAG, "Voice note could not be stored", error);
+			written.delete();
+		}
+	}
+
+	private void playVoice(InspectionItem item)
+	{
+		// The player reports failures through its listener; a missing file simply
+		// produces onError there instead of an exception here.
+		player.togglePrivate(item.voicePath);
+	}
+
+	private void clearVoice(long itemId)
+	{
+		InspectionItem item = inspections.find(itemId);
+		if (item != null && item.voiceNote())
+		{
+			try
+			{
+				File stored = media.resolve(item.voicePath);
+				if (stored.isFile()) stored.delete();
+			}
+			catch (IOException ignored)
+			{
+				// The reference is cleared below regardless; a stray file is harmless.
+			}
+		}
+		inspections.setVoicePath(itemId, "");
+		load();
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results)
+	{
+		super.onRequestPermissionsResult(requestCode, permissions, results);
+		if (requestCode == 1 && results.length > 0
+				&& results[0] == android.content.pm.PackageManager.PERMISSION_GRANTED
+				&& pendingVoiceItem > 0)
+		{
+			long item = pendingVoiceItem;
+			pendingVoiceItem = -1;
+			recordVoice(item);
+		}
 	}
 
 	/** Camera first, gallery second: both are one tap from the item dialog. */

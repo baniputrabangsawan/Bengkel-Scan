@@ -109,7 +109,7 @@
                     android:paddingEnd="12dp" />
             </LinearLayout>
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <TextView
                 android:id="@+id/workshop_payment_state"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                 android:minHeight="56dp"
                 android:text="@string/workshop_payment_record" />
 
-            <TextView
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/workshop_paid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
