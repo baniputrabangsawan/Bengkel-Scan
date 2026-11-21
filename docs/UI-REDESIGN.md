@@ -492,3 +492,37 @@ Nothing was removed: every previous link is still present, GPL text and attribut
 restored from the last commit (`git checkout --`) and the change re-applied; the file parses and builds. My own
 capture recordings in `/tmp` (421 MB of `.mkv`) were deleted to recover space. Disk is still at 1.4 GB free, so
 builds remain possible but tight — worth clearing space on your side too.
+
+## Step 3.6 — Workshop screens (done)
+
+### What changed
+
+| Change | File |
+| --- | --- |
+| **Defect fixed:** payment dialog is now its own form (amount + method) instead of the estimate dialog with children hidden, which showed a stray quantity box, the discount helper and the inspected-part label | new `dialog_payment.xml`; `WorkshopServiceActivity.recordPayment` |
+| **Defect fixed:** reminder dialog is its own form, so the date hint and the `dd-MM-yyyy` parser agree | new `dialog_reminder.xml`; `WorkshopVehicleActivity.setReminder` |
+| Five dead fields removed from the estimate dialog (payment label/spinner, amount, reminder day/odometer) — nothing referenced them any more | `dialog_estimate_item.xml` |
+| **Defect fixed:** scan provenance printed the enum (`REAL`, `FILE`, `DEMO`); one helper now returns the Indonesian sentence, used by the comparison screen, the service panel and the scan screen | `WorkshopUi.scanSourceLabel`, three call sites |
+| **Defect fixed:** the invoice printed `DONE` / `PAID`; the printed words now come from the caller's localized labels | `WorkshopPdf.statusLabel/paymentLabel`, `Labels` extended, `WorkshopPdfActivity`, two PDF tests |
+| Estimate dialog fields switched to the shared `UiField` style | `dialog_estimate_item.xml` |
+
+### Verification
+
+- `assembleDebug` + `assembleDebugAndroidTest`: BUILD SUCCESSFUL; JVM 178 tests, 0 failures; lint 0 errors.
+- Device: `WorkshopRepositoryInstrumentedTest`, `InspectionInstrumentedTest`, `CannedJobInstrumentedTest`,
+  `CsvExporterInstrumentedTest` → **OK (18 tests)**; `WorkshopPdfInstrumentedTest`, `ScanComparisonInstrumentedTest`,
+  `PaymentInstrumentedTest` → **OK (15 tests)**.
+- Payment dialog on the phone now contains exactly: title, amount hint, amount field, "Cara bayar", method spinner
+  (Tunai), Cancel/Save. The previous build also showed a quantity box and the inspected-part label.
+- Jobs filter switching verified by pixel band: tapping "Hari ini" moved the filled `#0B4A63` band from x 343–651 to
+  737–920, so the selected state really is the tapped filter.
+- Captures: `docs/design/after/workshop-jobs-light.png`, `workshop-service-light.png`,
+  `workshop-payment-light.png`, `workshop-hub-light.png`, `workshop-profile-light.png`.
+
+### Honest limits
+
+- The reminder dialog's new layout is built and compiled but I could not open it on the device: it lives behind the
+  vehicle screen's overflow menu, and reaching that screen requires a seeded vehicle row that the demo data no longer
+  has in a tappable state. The layout and its two field ids are exercised only by compilation.
+- `uiautomator dump` on this phone always reads display 0 (the owner's screen), so all element verification above used
+  my own virtual-display screenshots and pixel probes, not dumps.

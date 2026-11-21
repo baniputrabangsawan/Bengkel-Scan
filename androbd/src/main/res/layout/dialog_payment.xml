@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Record a payment: how much arrived and how it was paid. A dedicated form, not the estimate
+  dialog with its children hidden — that reuse left the quantity box, the discount helper and
+  the "related inspected part" label visible in a dialog that has nothing to do with them.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/ui_space_4"
+    android:paddingTop="@dimen/ui_space_1"
+    android:paddingEnd="@dimen/ui_space_4"
+    android:paddingBottom="@dimen/ui_space_2">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_space_3"
+        android:text="@string/workshop_payment_amount_hint"
+        android:textAppearance="@style/UiText.Meta" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/UiField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/workshop_payment_amount">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/workshop_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="12"
+            android:maxLines="1"
+            android:textAppearance="@style/UiText.Body" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_space_4"
+        android:text="@string/workshop_payment_method"
+        android:textAppearance="@style/UiText.FieldLabel" />
+
+    <Spinner
+        android:id="@+id/workshop_payment_method"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_space_1"
+        android:minHeight="@dimen/ui_touch_primary" />
+</LinearLayout>

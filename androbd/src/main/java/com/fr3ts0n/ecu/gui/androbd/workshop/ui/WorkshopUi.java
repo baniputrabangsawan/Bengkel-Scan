@@ -116,4 +116,19 @@ public final class WorkshopUi
 				return RowTone.NEUTRAL;
 		}
 	}
+
+	/** One place that turns scan provenance into the sentence the mechanic reads. */
+	public static int scanSourceLabel(com.fr3ts0n.ecu.gui.androbd.workshop.ScanSource source)
+	{
+		switch (source)
+		{
+			case REAL:
+				return R.string.workshop_scan_source_real;
+			case FILE:
+				return R.string.workshop_scan_source_file;
+			case DEMO:
+			default:
+				return R.string.workshop_scan_source_demo;
+		}
+	}
 }

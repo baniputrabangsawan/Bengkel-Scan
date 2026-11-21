@@ -24,7 +24,9 @@ import com.fr3ts0n.ecu.gui.androbd.workshop.InspectionState;
 import com.fr3ts0n.ecu.gui.androbd.workshop.Photo;
 import com.fr3ts0n.ecu.gui.androbd.workshop.PhotoOwner;
 import com.fr3ts0n.ecu.gui.androbd.workshop.PhotoRepository;
+import com.fr3ts0n.ecu.gui.androbd.workshop.PaymentStatus;
 import com.fr3ts0n.ecu.gui.androbd.workshop.ServiceRecord;
+import com.fr3ts0n.ecu.gui.androbd.workshop.ServiceStatus;
 import com.fr3ts0n.ecu.gui.androbd.workshop.Vehicle;
 import com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopProfile;
 import com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopRepository;
@@ -84,6 +86,11 @@ public final class WorkshopPdf
 		public final String broken;
 		public final String demoData;
 		public final String sticker;
+		public final String statusWaiting;
+		public final String statusInProgress;
+		public final String statusDone;
+		public final String paymentPaid;
+		public final String paymentUnpaid;
 
 		@SuppressWarnings("checkstyle:ParameterNumber")
 		public Labels(String reportTitle, String invoiceTitle, String customer, String vehicle,
@@ -91,7 +98,9 @@ public final class WorkshopPdf
 				String inspectedParts, String estimate, String approvedTotal, String notes,
 				String notRecorded, String noCodes, String noParts, String noItems, String status,
 				String payment, String total, String link, String disclaimer, String good,
-				String attention, String broken, String demoData, String sticker)
+				String attention, String broken, String demoData, String sticker,
+				String statusWaiting, String statusInProgress, String statusDone,
+				String paymentPaid, String paymentUnpaid)
 		{
 			this.reportTitle = reportTitle;
 			this.invoiceTitle = invoiceTitle;
@@ -119,7 +128,35 @@ public final class WorkshopPdf
 			this.broken = broken;
 			this.demoData = demoData;
 			this.sticker = sticker;
+			this.statusWaiting = statusWaiting;
+			this.statusInProgress = statusInProgress;
+			this.statusDone = statusDone;
+			this.paymentPaid = paymentPaid;
+			this.paymentUnpaid = paymentUnpaid;
 		}
+	}
+
+	/**
+	 * The printed words for a workflow state. The enum names are storage values; printing them
+	 * put "DONE" and "PAID" on a customer's invoice.
+	 */
+	private static String statusLabel(ServiceStatus status, Labels labels)
+	{
+		switch (status)
+		{
+			case IN_PROGRESS:
+				return labels.statusInProgress;
+			case DONE:
+				return labels.statusDone;
+			case WAITING:
+			default:
+				return labels.statusWaiting;
+		}
+	}
+
+	private static String paymentLabel(PaymentStatus status, Labels labels)
+	{
+		return status == PaymentStatus.PAID ? labels.paymentPaid : labels.paymentUnpaid;
 	}
 
 	/** Report: identity, complaint, the before scan in words, inspection with photos, estimate. */
@@ -235,8 +272,8 @@ public final class WorkshopPdf
 			header(writer, profile, labels.invoiceTitle);
 			writer.body(labels.customer + ": " + (customer == null ? labels.notRecorded : customer.name));
 			writer.body(labels.vehicle + ": " + vehicleLine(vehicle, labels));
-			writer.body(labels.status + ": " + service.status.name() + " · " + labels.payment + ": "
-					+ service.paymentStatus.name());
+			writer.body(labels.status + ": " + statusLabel(service.status, labels) + " · "
+					+ labels.payment + ": " + paymentLabel(service.paymentStatus, labels));
 			writer.rule();
 
 			NumberFormat rupiah = NumberFormat.getIntegerInstance(new Locale("in", "ID"));

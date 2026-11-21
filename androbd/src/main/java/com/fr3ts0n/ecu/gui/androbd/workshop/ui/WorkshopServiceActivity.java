@@ -297,7 +297,7 @@ public class WorkshopServiceActivity extends AppCompatActivity
 			text.append(getString(snapshot.phase == com.fr3ts0n.ecu.gui.androbd.workshop.ScanPhase.AFTER
 							? R.string.workshop_scan_phase_after : R.string.workshop_scan_phase_before))
 					.append(" · ").append(WorkshopUi.dateTime(snapshot.createdAt))
-					.append(" · ").append(getString(sourceLabelOf(snapshot.source)))
+					.append(" · ").append(getString(WorkshopUi.scanSourceLabel(snapshot.source)))
 					.append(" · ")
 					.append(getString(R.string.workshop_scan_codes,
 							com.fr3ts0n.ecu.gui.androbd.workshop.ScanSnapshotWriter
@@ -305,20 +305,6 @@ public class WorkshopServiceActivity extends AppCompatActivity
 		}
 		view.setText(text.toString());
 		view.setVisibility(android.view.View.VISIBLE);
-	}
-
-	private static int sourceLabelOf(com.fr3ts0n.ecu.gui.androbd.workshop.ScanSource source)
-	{
-		switch (source)
-		{
-			case REAL:
-				return R.string.workshop_scan_source_real;
-			case FILE:
-				return R.string.workshop_scan_source_file;
-			case DEMO:
-			default:
-				return R.string.workshop_scan_source_demo;
-		}
 	}
 
 	private void loadItems()
@@ -387,15 +373,8 @@ public class WorkshopServiceActivity extends AppCompatActivity
 	/** Ask how much arrived; the status follows from the amount and the agreed total. */
 	private void recordPayment()
 	{
-		View form = getLayoutInflater().inflate(R.layout.dialog_estimate_item, null);
-		form.findViewById(R.id.workshop_kind).setVisibility(android.view.View.GONE);
-		form.findViewById(R.id.workshop_description).setVisibility(android.view.View.GONE);
-		form.findViewById(R.id.workshop_price).setVisibility(android.view.View.GONE);
-		form.findViewById(R.id.workshop_discount).setVisibility(android.view.View.GONE);
-		form.findViewById(R.id.workshop_inspection_link).setVisibility(android.view.View.GONE);
-		form.findViewById(R.id.workshop_payment_method).setVisibility(android.view.View.VISIBLE);
+		View form = getLayoutInflater().inflate(R.layout.dialog_payment, null);
 		TextInputEditText amount = form.findViewById(R.id.workshop_amount);
-		amount.setVisibility(android.view.View.VISIBLE);
 		Spinner method = form.findViewById(R.id.workshop_payment_method);
 		ArrayAdapter<String> methods = new ArrayAdapter<>(this,
 				android.R.layout.simple_spinner_item,

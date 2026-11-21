@@ -106,7 +106,12 @@ public class WorkshopPdfActivity extends AppCompatActivity
 				getString(R.string.workshop_inspection_state_attention),
 				getString(R.string.workshop_inspection_state_broken),
 				getString(R.string.workshop_scan_demo_warning),
-				"");
+				"",
+				getString(R.string.workshop_status_waiting),
+				getString(R.string.workshop_status_in_progress),
+				getString(R.string.workshop_status_done),
+				getString(R.string.workshop_payment_paid),
+				getString(R.string.workshop_payment_unpaid));
 	}
 
 	/** Write one document; failure is reported, never silently skipped. */

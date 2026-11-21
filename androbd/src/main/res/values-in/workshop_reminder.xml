@@ -21,4 +21,5 @@
     <string name="workshop_due_message_km"> (odometer %1$d km)</string>
     <string name="workshop_due_pick">Pilih kendaraan</string>
     <string name="workshop_due_menu">Jatuh tempo servis</string>
+    <string name="workshop_due_help">Itsi tanggal (dd-MM-yyyy) atau odometer servis berikutnya. Salah satu saja boleh.</string>
 </resources>

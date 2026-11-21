@@ -104,16 +104,7 @@ public class WorkshopScanActivity extends AppCompatActivity
 
 	private int sourceLabel()
 	{
-		switch (source)
-		{
-			case REAL:
-				return R.string.workshop_scan_source_real;
-			case FILE:
-				return R.string.workshop_scan_source_file;
-			case DEMO:
-			default:
-				return R.string.workshop_scan_source_demo;
-		}
+		return WorkshopUi.scanSourceLabel(source);
 	}
 
 	private void save()

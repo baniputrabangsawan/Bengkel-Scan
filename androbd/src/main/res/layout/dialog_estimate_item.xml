@@ -26,7 +26,7 @@
         android:paddingEnd="12dp" />
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        style="@style/UiField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ui_space_3"
@@ -41,7 +41,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        style="@style/UiField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ui_space_3"
@@ -57,7 +57,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        style="@style/UiField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ui_space_3"
@@ -72,7 +72,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        style="@style/UiField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ui_space_3"
@@ -105,74 +105,4 @@
         android:paddingStart="12dp"
         android:paddingEnd="12dp" />
 
-    <TextView
-        android:id="@+id/workshop_payment_method_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/workshop_payment_method"
-        android:textColor="@color/workshop_secondary_text"
-        android:textAppearance="@style/UiText.Meta"
-        android:visibility="gone" />
-
-    <Spinner
-        android:id="@+id/workshop_payment_method"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ui_space_1"
-        android:background="@drawable/result_row_surface"
-        android:minHeight="@dimen/ui_touch_primary"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:visibility="gone" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ui_space_3"
-        android:hint="@string/workshop_payment_amount"
-        app:helperText="@string/workshop_payment_amount_hint">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/workshop_amount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLines="1"
-            android:visibility="gone" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ui_space_3"
-        android:hint="@string/workshop_due_date">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/workshop_reminder_day"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="date"
-            android:maxLength="10"
-            android:maxLines="1"
-            android:visibility="gone" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ui_space_3"
-        android:hint="@string/workshop_due_odometer">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/workshop_reminder_odometer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLines="1"
-            android:visibility="gone" />
-    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

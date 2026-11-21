@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Set the next service target: a date, an odometer, or both. A dedicated form so the date field
+  can carry a hint that matches the parser (dd-MM-yyyy), instead of a bare numeric keyboard on a
+  field the code then parses as day-month-year.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/ui_space_4"
+    android:paddingTop="@dimen/ui_space_1"
+    android:paddingEnd="@dimen/ui_space_4"
+    android:paddingBottom="@dimen/ui_space_2">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ui_space_3"
+        android:text="@string/workshop_due_help"
+        android:textAppearance="@style/UiText.Meta" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/UiField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/workshop_due_date">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/workshop_reminder_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:maxLength="10"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/UiField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/workshop_due_odometer">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/workshop_reminder_odometer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="7"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

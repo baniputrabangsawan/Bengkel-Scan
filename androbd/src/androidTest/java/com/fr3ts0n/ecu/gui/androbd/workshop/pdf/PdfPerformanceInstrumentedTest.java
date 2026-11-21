@@ -119,7 +119,8 @@ public class PdfPerformanceInstrumentedTest
 				"Masuk", "Pelanggan", "Kode", "Pemeriksaan", "Estimasi", "Disetujui", "Catatan",
 				"-", "-", "-", "-", "Status", "Bayar", "Total", "Tertaut",
 				"Hasil ini hanya saran. Keputusan akhir ada pada mekanik.",
-				"Baik", "Perlu perhatian", "Rusak", "Data contoh", "");
+				"Baik", "Perlu perhatian", "Rusak", "Data contoh", "",
+				"Menunggu", "Sedang dikerjakan", "Selesai", "Sudah dibayar", "Belum dibayar");
 	}
 
 	private File writePng(File target)

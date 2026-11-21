@@ -79,10 +79,11 @@ public class WorkshopScanCompareActivity extends AppCompatActivity
 		afterView.setText(describe(after) + "\n" + codesOf(after));
 	}
 
-	private static String describe(ScanSnapshot snapshot)
+	private String describe(ScanSnapshot snapshot)
 	{
 		if (snapshot == null) return "";
-		return WorkshopUi.dateTime(snapshot.createdAt) + " · " + snapshot.source.name();
+		return WorkshopUi.dateTime(snapshot.createdAt) + " · "
+				+ getString(WorkshopUi.scanSourceLabel(snapshot.source));
 	}
 
 	private static String codesOf(ScanSnapshot snapshot)

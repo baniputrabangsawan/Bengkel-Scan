@@ -189,17 +189,9 @@ public class WorkshopVehicleActivity extends AppCompatActivity
 	/** Set the next service date and/or odometer for this vehicle. */
 	private void setReminder()
 	{
-		View form = getLayoutInflater().inflate(R.layout.dialog_estimate_item, null);
-		form.findViewById(R.id.workshop_kind).setVisibility(View.GONE);
-		form.findViewById(R.id.workshop_description).setVisibility(View.GONE);
-		form.findViewById(R.id.workshop_quantity).setVisibility(View.GONE);
-		form.findViewById(R.id.workshop_price).setVisibility(View.GONE);
-		form.findViewById(R.id.workshop_discount).setVisibility(View.GONE);
-		form.findViewById(R.id.workshop_inspection_link).setVisibility(View.GONE);
+		View form = getLayoutInflater().inflate(R.layout.dialog_reminder, null);
 		TextInputEditText day = form.findViewById(R.id.workshop_reminder_day);
 		TextInputEditText odometer = form.findViewById(R.id.workshop_reminder_odometer);
-		day.setVisibility(View.VISIBLE);
-		odometer.setVisibility(View.VISIBLE);
 		odometer.setText(vehicle.odometerKm == null ? "" : String.valueOf(vehicle.odometerKm));
 
 		AlertDialog dialog = new AlertDialog.Builder(this)
