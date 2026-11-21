@@ -256,9 +256,11 @@ public final class WorkshopRepository
 		if (effectiveAmount != null)
 		{
 			values.put("paid_amount", Math.max(0, effectiveAmount));
-			if (status == PaymentStatus.PAID && effectiveAmount <= 0)
+			// Zero received never settles a job that still owes money. A job whose agreed
+			// total is zero owes nothing, so one tap is a complete settlement there (a free
+			// check, or a job whose lines are all still pending).
+			if (status == PaymentStatus.PAID && effectiveAmount <= 0 && approvedTotal(id) > 0)
 			{
-				// Zero received never settles a job.
 				effectiveStatus = PaymentStatus.UNPAID;
 			}
 		}

@@ -463,11 +463,15 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 			clearPendingPhoto();
 			return;
 		}
+		// Capture the pending file now: a second pick before this worker finishes replaces the
+		// field, and the cleanup below must delete the file this job used, not the next one's.
+		final String pendingPath = pendingPhotoPath;
+		final Uri pendingUri = source;
 		new Thread(() ->
 		{
 			try
 			{
-				File stored = media.importPhoto(source);
+				File stored = media.importPhoto(pendingUri);
 				photos.add(PhotoOwner.INSPECTION, itemId, media.relativePath(stored), "");
 				runOnUiThread(() ->
 				{
@@ -487,6 +491,11 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 			}
 			finally
 			{
+				if (pendingPath != null)
+				{
+					File pending = new File(pendingPath);
+					if (pending.exists()) pending.delete();
+				}
 				runOnUiThread(this::clearPendingPhoto);
 			}
 		}, "inspection-photo").start();
