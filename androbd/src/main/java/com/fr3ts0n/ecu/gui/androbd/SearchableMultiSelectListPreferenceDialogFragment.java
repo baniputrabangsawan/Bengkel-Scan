@@ -103,6 +103,9 @@ public class SearchableMultiSelectListPreferenceDialogFragment
         search.setHint(R.string.search_hint);
 
         final ListView listView = new ListView(getContext());
+        // The theme hides scrollbars, but this list is built in code and is the one place a
+        // platform default could still show a track.
+        listView.setVerticalScrollBarEnabled(false);
 
         final ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(
                 getContext(),

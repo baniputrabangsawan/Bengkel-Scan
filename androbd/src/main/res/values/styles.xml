@@ -12,6 +12,10 @@
         <item name="android:windowLightStatusBar">@bool/workshop_light_system_bars</item>
         <item name="android:activatedBackgroundIndicator">@drawable/activated_background</item>
         <item name="android:fitsSystemWindows">false</item>
+        <!-- No visible scrollbar anywhere: the list edge is already obvious. -->
+        <item name="android:scrollbars">none</item>
+        <item name="android:scrollbarStyle">insideOverlay</item>
+        <item name="android:scrollbarFadeDuration">0</item>
 
         <item name="colorPrimary">@color/workshop_primary</item>
         <item name="colorOnPrimary">@color/workshop_on_primary</item>

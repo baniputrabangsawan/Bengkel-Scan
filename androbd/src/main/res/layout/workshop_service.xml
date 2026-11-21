@@ -193,8 +193,7 @@
             android:clipToPadding="false"
             android:divider="@null"
             android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:scrollbars="vertical" />
+            android:paddingBottom="4dp" />
 
         <TextView
             android:id="@+id/workshop_empty"

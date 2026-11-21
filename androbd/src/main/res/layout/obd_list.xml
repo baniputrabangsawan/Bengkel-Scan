@@ -52,8 +52,6 @@
         android:choiceMode="multipleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="@dimen/ui_space_2"
-        android:fastScrollEnabled="true"
-        android:scrollbarStyle="outsideOverlay"
         android:clipToPadding="false"
         android:paddingTop="@dimen/ui_space_3"
         android:paddingBottom="@dimen/ui_space_4" />

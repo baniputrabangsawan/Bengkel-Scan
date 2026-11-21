@@ -77,14 +77,16 @@ public class ModernUiUtils {
         // Optimize scrolling performance  
         listView.setScrollingCacheEnabled(true);
         
-        // Enable fast scroll for large lists
-        listView.setFastScrollEnabled(true);
+        // No fast-scroll thumb and no scrollbar: the request is to keep the list edge clean.
+        listView.setFastScrollEnabled(false);
+        listView.setVerticalScrollBarEnabled(false);
+        listView.setHorizontalScrollBarEnabled(false);
         
         // Optimize drawing cache
         listView.setDrawingCacheEnabled(true);
         
         // Set optimal scrollbar properties
-        listView.setScrollbarFadingEnabled(true);
+        listView.setScrollbarFadingEnabled(false);
     }
 
     /**
