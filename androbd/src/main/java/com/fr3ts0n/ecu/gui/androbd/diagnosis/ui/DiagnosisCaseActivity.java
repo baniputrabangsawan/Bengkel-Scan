@@ -222,27 +222,57 @@ public class DiagnosisCaseActivity extends AppCompatActivity
         }
     }
 
+    /** Decode off the main thread: a full-size camera photo is a visible stall on this hardware. */
     private void openPhoto(DiagnosisRepository.Photo photo)
     {
+        final File file;
         try
         {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 2;
-            Bitmap bitmap = BitmapFactory.decodeFile(media.resolve(photo.relativePath).getPath(), options);
-            if (bitmap == null) throw new IOException("Unreadable photograph");
-            ImageView image = new ImageView(this);
-            image.setAdjustViewBounds(true);
-            image.setImageBitmap(bitmap);
-            image.setContentDescription(photo.caption.isEmpty() ? getString(R.string.diagnosis_photo_label, photo.id) : photo.caption);
-            AlertDialog dialog = new AlertDialog.Builder(this).setView(image).setPositiveButton(R.string.diagnosis_photo_close, null).create();
-            dialog.setOnDismissListener(ignored -> { image.setImageDrawable(null); bitmap.recycle(); });
-            dialog.show();
+            file = media.resolve(photo.relativePath);
         }
         catch (IOException | RuntimeException e)
         {
-            Log.e("Diagnosis", "Photo display failed", e);
+            Log.e("Diagnosis", "Photo path refused", e);
             Toast.makeText(this, R.string.diagnosis_photo_error, Toast.LENGTH_LONG).show();
+            return;
         }
+        final String path = file.getPath();
+        final String caption = photo.caption.isEmpty()
+                ? getString(R.string.diagnosis_photo_label, photo.id) : photo.caption;
+        new Thread(() ->
+        {
+            Bitmap bitmap = null;
+            try
+            {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 2;
+                bitmap = BitmapFactory.decodeFile(path, options);
+                if (bitmap == null) throw new IOException("Unreadable photograph");
+            }
+            catch (IOException | RuntimeException e)
+            {
+                Log.e("Diagnosis", "Photo display failed", e);
+                runOnUiThread(() -> Toast.makeText(this, R.string.diagnosis_photo_error,
+                        Toast.LENGTH_LONG).show());
+                return;
+            }
+            final Bitmap decoded = bitmap;
+            runOnUiThread(() ->
+            {
+                ImageView image = new ImageView(this);
+                image.setAdjustViewBounds(true);
+                image.setImageBitmap(decoded);
+                image.setContentDescription(caption);
+                AlertDialog dialog = new AlertDialog.Builder(this).setView(image)
+                        .setPositiveButton(R.string.diagnosis_photo_close, null).create();
+                dialog.setOnDismissListener(ignored ->
+                {
+                    image.setImageDrawable(null);
+                    decoded.recycle();
+                });
+                dialog.show();
+            });
+        }, "diagnosis-photo").start();
     }
 
     @Override protected void onActivityResult(int request, int result, Intent data)

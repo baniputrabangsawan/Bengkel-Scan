@@ -557,3 +557,67 @@ builds remain possible but tight — worth clearing space on your side too.
   this build; only their layouts were changed, and they were **not** visually verified. I did not add a guard that
   changes their launch contract.
 - The PID customization screen is also behind Advanced mode; its label fix is compile-verified only.
+
+## Step 4 — Measured optimisation
+
+Only changes with a before/after number or a clear correctness gain are kept.
+
+### 4.1 Redraw on real change, not on a timer
+
+`MainActivity` ran a 250 ms timer that called `invalidateViews()` unconditionally, re-binding every visible OBD row
+four times a second even when no value had arrived. `ObdItemAdapter` now raises a `dataChanged` flag from its
+per-value listener and the timer only redraws when `consumeDataChanged()` is true.
+
+| Measurement (fault-code list, idle, 6 s) | Before | After |
+| --- | --- | --- |
+| Frames rendered | 100 | **0** |
+| Janky frames | 25 (25 %) | **0** |
+| p50 frame | 32 ms | — (no frames) |
+
+Scroll is unaffected: 284 frames, 1 janky (0.35 %), p50 13 ms, p90 14 ms.
+
+### 4.2 Two full result sets replaced by two COUNTs
+
+The home card called `openServices().size()` and `servicesForDay(...).size()`, so every mode change and every content
+swap read and parsed every matching service row just to show a number. Now:
+`WorkshopRepository.countOpenServices()` / `countServicesForDay()` run `SELECT COUNT(*)` with the same predicates.
+Called from `setContentView`, `setStatus`, `setMenuItemEnable` and `updateWorkshopHome` — the busiest path in the app.
+
+### 4.3 Listener leak on process-wide PVs
+
+`ObdItemAdapter.addAllDataSeries()` registered a listener on each `EcuDataPv`, and those PVs live in the static
+`ObdProt.PidPvs` for the whole process. Every recreated activity left its adapter subscribed. The adapter now tracks
+what it registered and `MainActivity.onDestroy` calls `releaseListeners()` for all five adapters.
+
+### 4.4 Backup, CSV export and PDF generation left the UI thread
+
+| Work | Before | After |
+| --- | --- | --- |
+| Backup (ZIP of DB + photos, up to 512 MB / 10 000 files) | UI thread | `"workshop-backup"` thread, dialog on the main thread |
+| CSV export (three tables) | UI thread | `"workshop-export"` thread, toast on the main thread |
+| PDF with embedded photos | UI thread | `"workshop-pdf"` thread, state line set to "Membuat dokumen…" first |
+| Diagnosis photo viewer | `decodeFile` on UI thread | `"diagnosis-photo"` thread, dialog posted back |
+
+Restore already ran on its own thread; unchanged.
+
+### 4.5 Final numbers
+
+| Metric | Baseline (§5) | Now | Note |
+| --- | --- | --- | --- |
+| Debug APK | 11,029,598 B | 11,051,274 B | +21 KB: new dialogs, chip drawables, tokens |
+| Cold start ×5 | 3,423 / 4,834 / 4,277 / 5,914 / 2,706 ms | 2,750 / 2,870 / 1,960 / 2,131 / 1,972 ms | median 4,277 → **2,131 ms** |
+| Home PSS | 113,858 KB | 162,768 KB | see limit below |
+| Fault-list scroll | 368 f, 1 janky, p50 16 ms | 284 f, 1 janky, p50 13 ms | same order |
+| Fault-list idle | 100 f, 25 janky | **0 f, 0 janky** | §4.1 |
+| Release APK | 3,482,565 B | not rebuilt this step | R8 + shrinking unchanged |
+
+### Honest limits
+
+- **PSS rose.** The measured run had the home shell plus an open fault list and a warm process; the baseline figure was
+  taken in a different state. I did not claim a memory win, and I did not tune the heap to make a number look better.
+- Cold start varies by seconds on this shared phone (the baseline ranged 2.7–5.9 s too). The median improved, the
+  spread did not disappear; no single change is attributed to it.
+- No StrictMode policy is installed in the app, so "no violations logged" only means the process did not log any
+  `DiskReadViolation` — it is not proof there is no main-thread I/O left. The static audit still lists per-row
+  queries in the workshop lists (N+1) as unfixed, because fixing them needs an adapter redesign, not a patch.
+- RecyclerView migration was **not** done: the measured list shows 0.35 % jank, so there is nothing to win.

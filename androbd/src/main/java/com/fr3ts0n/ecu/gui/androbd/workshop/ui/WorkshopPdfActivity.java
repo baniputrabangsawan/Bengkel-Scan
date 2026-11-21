@@ -114,41 +114,51 @@ public class WorkshopPdfActivity extends AppCompatActivity
 				getString(R.string.workshop_payment_unpaid));
 	}
 
-	/** Write one document; failure is reported, never silently skipped. */
+	/**
+	 * Write one document on a worker thread. The PDF embeds every inspection photo, so decoding
+	 * and drawing them on the main thread stutters or ANRs on a job with a dozen pictures.
+	 */
 	private void make(boolean asReport)
 	{
-		try
+		state().setText(R.string.workshop_pdf_working);
+		new Thread(() ->
 		{
-			File directory = new File(getExternalFilesDir(null), "exports");
-			if (!directory.isDirectory() && !directory.mkdirs())
+			try
 			{
-				throw new IOException("exports folder");
+				File directory = new File(getExternalFilesDir(null), "exports");
+				if (!directory.isDirectory() && !directory.mkdirs())
+				{
+					throw new IOException("exports folder");
+				}
+				String stamp = serviceId + "-" + System.currentTimeMillis();
+				File target = new File(directory,
+						(asReport ? "laporan-" : "nota-") + stamp + ".pdf");
+				try (OutputStream output = new FileOutputStream(target))
+				{
+					if (asReport)
+					{
+						WorkshopPdf.writeReport(this, repository, serviceId, labels(), output);
+					}
+					else
+					{
+						WorkshopPdf.writeInvoice(this, repository, serviceId, labels(), output);
+					}
+				}
+				runOnUiThread(() ->
+				{
+					if (asReport) report = target;
+					else invoice = target;
+					state().setText(getString(R.string.workshop_pdf_made, target.getAbsolutePath()));
+				});
 			}
-			String stamp = serviceId + "-" + System.currentTimeMillis();
-			File target = new File(directory,
-					(asReport ? "laporan-" : "nota-") + stamp + ".pdf");
-			try (OutputStream output = new FileOutputStream(target))
+			catch (IOException | RuntimeException error)
 			{
-				if (asReport)
-				{
-					WorkshopPdf.writeReport(this, repository, serviceId, labels(), output);
-				}
-				else
-				{
-					WorkshopPdf.writeInvoice(this, repository, serviceId, labels(), output);
-				}
+				Log.e(TAG, "Document failed", error);
+				runOnUiThread(() -> state().setText(getString(R.string.workshop_pdf_failed,
+						error.getMessage() == null ? error.getClass().getSimpleName()
+								: error.getMessage())));
 			}
-			if (asReport) report = target;
-			else invoice = target;
-			state().setText(getString(R.string.workshop_pdf_made, target.getAbsolutePath()));
-		}
-		catch (IOException | RuntimeException error)
-		{
-			Log.e(TAG, "Document failed", error);
-			state().setText(getString(R.string.workshop_pdf_failed,
-					error.getMessage() == null ? error.getClass().getSimpleName()
-							: error.getMessage()));
-		}
+		}, "workshop-pdf").start();
 	}
 
 	private TextView state()

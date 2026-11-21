@@ -72,52 +72,64 @@ final class WorkshopDataActions
 
 	private static void export(AppCompatActivity activity, WorkshopRepository repository, int which)
 	{
-		try
+		// Writing a CSV reads every row; on a full workshop it is not a UI-thread task.
+		new Thread(() ->
 		{
-			File folder = new File(activity.getExternalFilesDir(null), "exports");
-			if (!folder.isDirectory() && !folder.mkdirs()) throw new IOException("exports folder");
-			String stamp = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(new Date());
-			String name = which == 0 ? "pelanggan-" : which == 1 ? "servis-" : "belum-lunas-";
-			File target = new File(folder, name + stamp + ".csv");
-			try (Writer out = new OutputStreamWriter(new FileOutputStream(target),
-					StandardCharsets.UTF_8))
+			try
 			{
-				// BOM so a spreadsheet opens Indonesian text correctly.
-				out.write('\uFEFF');
-				if (which == 0) CsvExporter.writeCustomers(repository, out);
-				else if (which == 1) CsvExporter.writeServices(repository, out);
-				else CsvExporter.writeUnpaid(repository, out);
+				File folder = new File(activity.getExternalFilesDir(null), "exports");
+				if (!folder.isDirectory() && !folder.mkdirs()) throw new IOException("exports folder");
+				String stamp = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(new Date());
+				String name = which == 0 ? "pelanggan-" : which == 1 ? "servis-" : "belum-lunas-";
+				File target = new File(folder, name + stamp + ".csv");
+				try (Writer out = new OutputStreamWriter(new FileOutputStream(target),
+						StandardCharsets.UTF_8))
+				{
+					// BOM so a spreadsheet opens Indonesian text correctly.
+					out.write('\uFEFF');
+					if (which == 0) CsvExporter.writeCustomers(repository, out);
+					else if (which == 1) CsvExporter.writeServices(repository, out);
+					else CsvExporter.writeUnpaid(repository, out);
+				}
+				activity.runOnUiThread(() -> Toast.makeText(activity,
+						activity.getString(R.string.workshop_export_done, target.getName()),
+						Toast.LENGTH_LONG).show());
 			}
-			Toast.makeText(activity, activity.getString(R.string.workshop_export_done, target.getName()),
-					Toast.LENGTH_LONG).show();
-		}
-		catch (IOException | RuntimeException error)
-		{
-			showError(activity, R.string.workshop_export_failed, error);
-		}
+			catch (IOException | RuntimeException error)
+			{
+				activity.runOnUiThread(() ->
+						showError(activity, R.string.workshop_export_failed, error));
+			}
+		}, "workshop-export").start();
 	}
 
 	static void backup(AppCompatActivity activity, WorkshopRepository repository)
 	{
-		try
+		// A backup can be hundreds of megabytes of photos; zipping it on the UI thread is the
+		// one credible ANR path in the workshop flow.
+		new Thread(() ->
 		{
-			File target = WorkshopBackup.defaultExportFile(activity);
-			WorkshopBackup.export(repository.database(), target);
-			new WorkshopSettingsRepository(repository.database())
-					.put(KEY_LAST_BACKUP, String.valueOf(System.currentTimeMillis()));
-			new AlertDialog.Builder(activity)
-					.setTitle(R.string.workshop_backup_title)
-					.setMessage(activity.getString(R.string.workshop_backup_done,
-							target.getAbsolutePath()))
-					.setPositiveButton(android.R.string.ok, null)
-					.setNeutralButton(R.string.workshop_backup_share,
-							(dialog, which) -> shareBackup(activity, target))
-					.show();
-		}
-		catch (IOException | RuntimeException error)
-		{
-			showError(activity, R.string.workshop_backup_failed, error);
-		}
+			try
+			{
+				File target = WorkshopBackup.defaultExportFile(activity);
+				WorkshopBackup.export(repository.database(), target);
+				new WorkshopSettingsRepository(repository.database())
+						.put(KEY_LAST_BACKUP, String.valueOf(System.currentTimeMillis()));
+				activity.runOnUiThread(() -> new AlertDialog.Builder(activity)
+						.setTitle(R.string.workshop_backup_title)
+						.setMessage(activity.getString(R.string.workshop_backup_done,
+								target.getAbsolutePath()))
+						.setPositiveButton(android.R.string.ok, null)
+						.setNeutralButton(R.string.workshop_backup_share,
+								(dialog, which) -> shareBackup(activity, target))
+						.show());
+			}
+			catch (IOException | RuntimeException error)
+			{
+				activity.runOnUiThread(() ->
+						showError(activity, R.string.workshop_backup_failed, error));
+			}
+		}, "workshop-backup").start();
 	}
 
 	private static void shareBackup(AppCompatActivity activity, File file)

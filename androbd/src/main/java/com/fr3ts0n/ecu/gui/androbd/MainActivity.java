@@ -404,7 +404,12 @@ public class MainActivity extends PluginManager
                         break;
 
                     case MESSAGE_UPDATE_VIEW:
-                        getListView().invalidateViews();
+                        // Redraw only when a reading actually changed. The timer still ticks at
+                        // 250 ms, but an idle ECU no longer re-binds every visible row 4x/s.
+                        if (currDataAdapter != null && currDataAdapter.consumeDataChanged())
+                        {
+                            getListView().invalidateViews();
+                        }
                         break;
 
                     // handle state change in OBD protocol
@@ -801,6 +806,12 @@ public class MainActivity extends PluginManager
 
         /* don't listen to ELM data changes any more */
         removeDataListeners();
+        // the per-value listeners sat on process-wide PVs, so they outlived this activity
+        for (ObdItemAdapter adapter : new ObdItemAdapter[]{mPidAdapter, mVidAdapter,
+                mTidAdapter, mDfcAdapter, mPluginDataAdapter})
+        {
+            if (adapter != null) adapter.releaseListeners();
+        }
         // don't listen to ELM property changes any more
         CommService.elm.removePropertyChangeListener(this);
 
@@ -1007,6 +1018,7 @@ public class MainActivity extends PluginManager
     {
         TextView detail = findViewById(R.id.home_jobs_detail);
         if (detail == null) return;
+        // Called from setContentView and from every mode change; two COUNTs, no row parsing.
         com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopRepository repository =
                 com.fr3ts0n.ecu.gui.androbd.workshop.ui.WorkshopUi.repository(this);
         java.util.Calendar calendar = java.util.Calendar.getInstance();
@@ -1015,8 +1027,8 @@ public class MainActivity extends PluginManager
         calendar.set(java.util.Calendar.SECOND, 0);
         calendar.set(java.util.Calendar.MILLISECOND, 0);
         long start = calendar.getTimeInMillis();
-        int open = repository.openServices().size();
-        int today = repository.servicesForDay(start, start + 24L * 60 * 60 * 1000).size();
+        int open = repository.countOpenServices();
+        int today = repository.countServicesForDay(start, start + 24L * 60 * 60 * 1000);
         detail.setText(getString(R.string.home_jobs_summary, open, today));
     }
 

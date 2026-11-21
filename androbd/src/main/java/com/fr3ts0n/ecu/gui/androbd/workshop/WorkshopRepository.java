@@ -295,6 +295,28 @@ public final class WorkshopRepository
 		return readServices("status = ?", new String[]{status.name()}, "created_at DESC");
 	}
 
+	/** How many jobs are still open. Counts in SQL instead of reading and parsing every row. */
+	public int countOpenServices()
+	{
+		return countServices("status != ?", new String[]{ServiceStatus.DONE.name()});
+	}
+
+	/** How many jobs were created inside the window. */
+	public int countServicesForDay(long dayStart, long dayEnd)
+	{
+		return countServices("created_at >= ? AND created_at < ?",
+				new String[]{String.valueOf(dayStart), String.valueOf(dayEnd)});
+	}
+
+	private int countServices(String selection, String[] args)
+	{
+		try (Cursor cursor = database.getReadableDatabase().rawQuery(
+				"SELECT COUNT(*) FROM services WHERE " + selection, args))
+		{
+			return cursor.moveToFirst() ? cursor.getInt(0) : 0;
+		}
+	}
+
 	/** Every service job, newest first. */
 	public List<ServiceRecord> allServices()
 	{

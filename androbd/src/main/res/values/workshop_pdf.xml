@@ -10,4 +10,5 @@
     <string name="workshop_pdf_failed">Document could not be made: %1$s</string>
     <string name="workshop_pdf_no_customer">No customer phone number recorded</string>
     <string name="workshop_pdf_text_body">%1$s\n%2$s\n%3$s\nTotal approved: %4$s\n%5$s</string>
+    <string name="workshop_pdf_working">Building the document…</string>
 </resources>

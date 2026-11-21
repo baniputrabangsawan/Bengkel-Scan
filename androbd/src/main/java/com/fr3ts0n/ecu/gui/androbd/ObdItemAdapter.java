@@ -81,6 +81,14 @@ class ObdItemAdapter extends ArrayAdapter<Object>
      * allow data updates to be handled
      */
     static boolean allowDataUpdates = true;
+    /**
+     * Set when a value actually changed. The screen redraws on this flag instead of
+     * invalidating every row four times a second regardless of whether anything arrived.
+     */
+    private volatile boolean dataChanged;
+    /** PVs this adapter put a listener on; kept so they can be detached on destroy. */
+    private final transient java.util.List<IndexedProcessVar> seriesListeners =
+            new java.util.ArrayList<>();
     private final transient SharedPreferences prefs;
     private ObdUiValues valueLabels;
 
@@ -280,6 +288,28 @@ class ObdItemAdapter extends ArrayAdapter<Object>
     }
 
     /**
+     * Detach from the shared process variables. The PVs live in a static list for the whole
+     * process, so without this every recreated activity's adapter stayed reachable and kept
+     * receiving updates.
+     */
+    synchronized void releaseListeners()
+    {
+        for (IndexedProcessVar pv : seriesListeners)
+        {
+            pv.removePvChangeListener(dataChangeHandler);
+        }
+        seriesListeners.clear();
+    }
+
+    /** True once, when a value changed since the last redraw. */
+    boolean consumeDataChanged()
+    {
+        boolean changed = dataChanged;
+        dataChanged = false;
+        return changed;
+    }
+
+    /**
      * Handler for data item changes
      */
     PvChangeListener dataChangeHandler = new PvChangeListener()
@@ -290,6 +320,7 @@ class ObdItemAdapter extends ArrayAdapter<Object>
             // handle data item updates
             if (allowDataUpdates)
             {
+                dataChanged = true;
                 IndexedProcessVar pv = (IndexedProcessVar) event.getSource();
                 XYSeries series = (XYSeries) pv.get(FID_DATA_SERIES);
                 if (series != null)
@@ -328,6 +359,7 @@ class ObdItemAdapter extends ArrayAdapter<Object>
                 series = new XYSeries(String.valueOf(pv.get(EcuDataPv.FID_DESCRIPT)));
                 pv.put(FID_DATA_SERIES, series);
                 pv.addPvChangeListener(dataChangeHandler, PvChangeEvent.PV_MODIFIED);
+                seriesListeners.add(pv);
             }
 
             // assemble data items for plugin notification
