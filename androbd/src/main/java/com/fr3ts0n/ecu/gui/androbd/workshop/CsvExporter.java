@@ -80,12 +80,11 @@ public final class CsvExporter
 		{
 			Vehicle vehicle = repository.findVehicle(service.vehicleId);
 			Customer customer = vehicle == null ? null : repository.findCustomer(vehicle.customerId);
-			long agreed = repository.approvedTotal(service.id);
 			out.write(quote(customer == null ? "" : customer.name) + SEPARATOR
 					+ quote(customer == null ? "" : customer.phone) + SEPARATOR
 					+ quote(vehicle == null ? "" : vehicle.plate) + SEPARATOR
 					+ quote(date.format(new Date(service.createdAt))) + SEPARATOR
-					+ Math.max(0, agreed - service.paidAmount) + "\n");
+					+ repository.balanceDue(service.id) + "\n");
 		}
 	}
 

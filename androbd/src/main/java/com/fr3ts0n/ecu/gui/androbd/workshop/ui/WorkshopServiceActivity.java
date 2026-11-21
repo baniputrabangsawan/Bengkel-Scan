@@ -248,7 +248,7 @@ public class WorkshopServiceActivity extends AppCompatActivity
 				text.append('\n');
 			}
 			text.append(getString(R.string.workshop_payment_outstanding)).append(": ")
-					.append(WorkshopUi.money(service.outstanding(agreed)));
+					.append(WorkshopUi.money(repository.balanceDue(service.id)));
 			paymentState.setText(text.toString());
 		}
 		paid.setOnCheckedChangeListener(null);

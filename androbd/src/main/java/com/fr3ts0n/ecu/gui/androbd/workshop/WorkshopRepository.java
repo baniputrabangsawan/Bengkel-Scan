@@ -485,6 +485,17 @@ public final class WorkshopRepository
 	}
 
 	/** Sum of approved lines only; what the customer agreed to pay. */
+	/**
+	 * What the customer still owes. Uses the approved total when anything was approved, and
+	 * falls back to the whole estimate otherwise: an unbilled job is not a settled job.
+	 */
+	public long balanceDue(long serviceId)
+	{
+		long agreed = approvedTotal(serviceId);
+		if (agreed == 0) agreed = estimateTotal(serviceId);
+		return Math.max(0, agreed - findService(serviceId).paidAmount);
+	}
+
 	public long approvedTotal(long serviceId)
 	{
 		long total = 0;
