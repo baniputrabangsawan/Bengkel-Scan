@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/workshop_page_background"
+    style="@style/UiScreen"
     android:fillViewport="true"
     android:focusableInTouchMode="true"
     android:descendantFocusability="beforeDescendants">
@@ -11,8 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
@@ -68,7 +67,7 @@
                     style="@style/WorkshopHomePrimaryAction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/ui_space_4"
                     android:onClick="onWorkshopHomeClick"
                     android:text="@string/action_connect" />
             </LinearLayout>
@@ -94,7 +93,7 @@
                 style="@style/WorkshopHomeTile"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="6dp"
+                android:layout_marginEnd="@dimen/ui_space_2"
                 android:layout_weight="1"
                 android:onClick="onWorkshopHomeClick">
 
@@ -122,7 +121,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="@dimen/ui_space_2"
                         android:text="@string/home_faults_hint"
                         android:textAppearance="@style/WorkshopHomeHelper" />
                 </LinearLayout>
@@ -133,7 +132,7 @@
                 style="@style/WorkshopHomeTile"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="@dimen/ui_space_2"
                 android:layout_weight="1"
                 android:onClick="onWorkshopHomeClick">
 
@@ -161,7 +160,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="@dimen/ui_space_2"
                         android:text="@string/home_live_hint"
                         android:textAppearance="@style/WorkshopHomeHelper" />
                 </LinearLayout>
@@ -180,7 +179,7 @@
                 style="@style/WorkshopHomeTile"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="6dp"
+                android:layout_marginEnd="@dimen/ui_space_2"
                 android:layout_weight="1"
                 android:onClick="onWorkshopHomeClick">
 
@@ -209,7 +208,7 @@
                         android:id="@+id/home_freeze_hint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="@dimen/ui_space_2"
                         android:text="@string/home_freeze_unavailable_hint"
                         android:textAppearance="@style/WorkshopHomeHelper" />
                 </LinearLayout>
@@ -220,7 +219,7 @@
                 style="@style/WorkshopHomeTile"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="@dimen/ui_space_2"
                 android:layout_weight="1"
                 android:onClick="onWorkshopHomeClick">
 
@@ -248,7 +247,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="@dimen/ui_space_2"
                         android:text="@string/home_vehicle_hint"
                         android:textAppearance="@style/WorkshopHomeHelper" />
                 </LinearLayout>
@@ -283,31 +282,53 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/ui_space_3"
                     android:accessibilityHeading="true"
-                    android:text="@string/workshop_data_title"
+                    android:text="@string/home_workshop_title"
                     android:textAppearance="@style/WorkshopHomeSectionHeading" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/ui_space_2"
-                    android:text="@string/home_workshop_title"
+                    android:text="@string/home_workshop_action"
                     android:textAppearance="@style/WorkshopHomeTileTitle" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="@dimen/ui_space_2"
                     android:text="@string/home_workshop_hint"
                     android:textAppearance="@style/WorkshopHomeHelper" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- The hub: profile, due reminders, job packages, export, backup, restore. -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/home_data"
+            style="@style/WorkshopHomeTile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ui_space_3"
+            android:onClick="onWorkshopHomeClick">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/ui_card_padding">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/ui_space_3"
-                    android:text="@string/home_workshop_action"
-                    android:textColor="@color/workshop_primary"
-                    android:textAppearance="@style/UiText.Body"
-                    android:textStyle="bold" />
+                    android:text="@string/workshop_data_title"
+                    android:textAppearance="@style/WorkshopHomeTileTitle" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ui_space_1"
+                    android:text="@string/home_data_hint"
+                    android:textAppearance="@style/WorkshopHomeHelper" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -316,7 +337,7 @@
             style="@style/WorkshopHomeTile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/ui_space_4"
             android:enabled="true"
             android:onClick="onWorkshopHomeClick">
 
@@ -337,7 +358,7 @@
                     android:id="@+id/home_jobs_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="@dimen/ui_space_2"
                     android:text="@string/home_jobs_hint"
                     android:textAppearance="@style/WorkshopHomeHelper" />
 
@@ -357,7 +378,7 @@
             style="@style/WorkshopHomeSecondaryAction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/ui_space_4"
             android:onClick="onWorkshopHomeClick"
             android:text="@string/diagnosis_start_title" />
 
@@ -366,7 +387,7 @@
             style="@style/WorkshopHomeSecondaryAction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/ui_space_4"
             android:onClick="onWorkshopHomeClick"
             android:text="@string/diagnostic_guides" />
 
@@ -375,7 +396,7 @@
             style="@style/WorkshopHomeSecondaryAction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/ui_space_4"
             android:onClick="onWorkshopHomeClick"
             android:text="@string/home_settings_label" />
 

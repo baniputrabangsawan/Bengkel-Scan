@@ -80,4 +80,12 @@
     <string name="workshop_action_delete">Delete</string>
     <string name="workshop_no_phone">Phone number not recorded</string>
     <string name="workshop_no_model">Model not recorded</string>
+
+    <string name="workshop_hub_intro">Every workshop tool lives here. Choose one.</string>
+    <string name="workshop_hub_profile_hint">Name, address, phone and logo printed on reports.</string>
+    <string name="workshop_hub_due_hint">Vehicles whose date or odometer has been reached.</string>
+    <string name="workshop_hub_canned_hint">Reusable sets of work lines.</string>
+    <string name="workshop_hub_data_heading">Files and backup</string>
+    <string name="workshop_hub_restore_hint">Restoring replaces current data after a safety copy is made.</string>
+    <string name="home_data_hint">Workshop tools, export, backup and restore.</string>
 </resources>

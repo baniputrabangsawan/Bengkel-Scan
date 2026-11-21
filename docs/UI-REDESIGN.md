@@ -397,3 +397,37 @@ widgets. Screens are migrated group by group starting with the shared components
 Tapping the second filter from adb missed by a few pixels; the behaviour is instead locked by the new
 instrumented test, which asserts the chip label/tone contract and recycling. A visual after-capture of every
 filter state will be taken in the dark/large-font pass.
+
+## Step 3.3 — Home and navigation (done)
+
+### What changed
+
+| Change | File |
+| --- | --- |
+| Home shell uses the shared screen scaffold instead of its own 20 dp padding | `startup_layout.xml` |
+| All remaining off-grid margins on home snapped to the 4 dp scale (6/20 dp → tokens) | `startup_layout.xml` |
+| New **"Data bengkel" hub** — profile, due reminders, job packages, export, backup, restore as visible cards and full-width buttons | new `workshop_hub.xml`, new `WorkshopHubActivity` |
+| Backup / restore / export / nudge extracted from the customer list into one shared class, used by both screens | new `WorkshopDataActions.java`; `WorkshopCustomersActivity` lost ~200 lines |
+| Customer overflow reduced to one entry: the hub (the other five actions are inside it) | `menu/workshop_customers.xml` |
+| Home gained a "Data bengkel" card; its neighbour card now labels what it opens ("Data pelanggan & servis") | `startup_layout.xml`, `MainActivity.onWorkshopHomeClick` |
+| Hub registered in the manifest, `exported=false` | `AndroidManifest.xml` |
+| Six new strings in both locales | `values/workshop_data.xml`, `values-in/workshop_data.xml` |
+
+No feature was removed: every former overflow entry is reachable from the hub, and the backup nudge still fires once a
+day from the customer list.
+
+### Verification
+
+- `assembleDebug`: BUILD SUCCESSFUL; JVM 178 tests, 0 failures.
+- Device: `WorkshopRowAdapterInstrumentedTest` + `PaymentInstrumentedTest` + `CannedJobInstrumentedTest` → **OK (13 tests)**.
+- Hub on the phone: 33 views, depth 10 (the old home shell was 71 views, depth 11), page `#F4F6F8`, surface
+  `#FFFFFF`, primary `#0B4A63` (145,162 px), border `#5A6B75`. Capture: `docs/design/after/hub.png`,
+  `docs/design/after/home-light.png`.
+
+### Device-rule incident (disclosed)
+
+While re-installing the app, one launch landed on **display 0, the owner's main screen**, and stayed there for a few
+minutes. Cause: `adb install -r` brings a running app forward on its previous display, and my capture flow did not
+re-assert the target display afterwards. The app was force-stopped the moment it was spotted, and every later launch
+was verified to be on the virtual display before any tap. No other app was touched, no data was cleared, and this
+workspace's own package is the only one that was installed or stopped.

@@ -965,6 +965,12 @@ public class MainActivity extends PluginManager
                     com.fr3ts0n.ecu.gui.androbd.workshop.ui.WorkshopCustomersActivity.class));
             return;
         }
+        if (id == R.id.home_data)
+        {
+            startActivity(new Intent(this,
+                    com.fr3ts0n.ecu.gui.androbd.workshop.ui.WorkshopHubActivity.class));
+            return;
+        }
         if (id == R.id.home_jobs)
         {
             startActivity(new Intent(this,

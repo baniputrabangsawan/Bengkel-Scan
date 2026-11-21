@@ -1,24 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  The customer list keeps one overflow entry: the "Data bengkel" hub. Profile, export, due
+  reminders, job packages and restore moved into the hub itself, where they are visible cards
+  instead of hidden menu lines. Nothing was removed from the app.
+-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/workshop_profile_menu"
-        android:title="@string/workshop_profile_title"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/workshop_export_csv"
-        android:title="@string/workshop_export_csv"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/workshop_due_menu"
-        android:title="@string/workshop_due_menu"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/workshop_canned_menu"
-        android:title="@string/workshop_canned_menu"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/workshop_restore"
-        android:title="@string/workshop_restore_menu"
+        android:id="@+id/workshop_hub_menu"
+        android:title="@string/workshop_data_title"
         app:showAsAction="never" />
 </menu>

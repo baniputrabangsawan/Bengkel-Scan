@@ -80,4 +80,12 @@
     <string name="workshop_action_delete">Hapus</string>
     <string name="workshop_no_phone">Nomor HP belum dicatat</string>
     <string name="workshop_no_model">Model belum dicatat</string>
+
+    <string name="workshop_hub_intro">Semua alat bantu bengkel ada di sini. Pilih salah satu.</string>
+    <string name="workshop_hub_profile_hint">Nama, alamat, telepon, dan logo yang tercetak di laporan.</string>
+    <string name="workshop_hub_due_hint">Kendaraan yang tanggal atau odometernya sudah tercapai.</string>
+    <string name="workshop_hub_canned_hint">Paket baris pekerjaan yang sering dipakai.</string>
+    <string name="workshop_hub_data_heading">Berkas dan cadangan</string>
+    <string name="workshop_hub_restore_hint">Pemulihan menimpa data sekarang setelah salinan pengaman dibuat.</string>
+    <string name="home_data_hint">Alat bantu bengkel, ekspor, cadangan, dan pemulihan.</string>
 </resources>
