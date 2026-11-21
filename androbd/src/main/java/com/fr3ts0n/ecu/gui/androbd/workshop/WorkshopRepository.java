@@ -242,17 +242,30 @@ public final class WorkshopRepository
 			Long amount)
 	{
 		ContentValues values = new ContentValues();
-		values.put("payment_status", status.name());
-		if (method != null) values.put("payment_method", method.name());
-		if (amount != null)
+
+		// Amount is optional on purpose: "Lunas" is one tap and must not demand a number.
+		// A paid job therefore settles to the agreed total when no amount is given, so the
+		// row can never say PAID while still owing the whole bill.
+		Long effectiveAmount = amount;
+		if (status == PaymentStatus.PAID && effectiveAmount == null)
 		{
-			values.put("paid_amount", Math.max(0, amount));
-			if (status == PaymentStatus.PAID && amount <= 0)
+			effectiveAmount = approvedTotal(id);
+		}
+
+		PaymentStatus effectiveStatus = status;
+		if (effectiveAmount != null)
+		{
+			values.put("paid_amount", Math.max(0, effectiveAmount));
+			if (status == PaymentStatus.PAID && effectiveAmount <= 0)
 			{
-				values.put("payment_status", PaymentStatus.UNPAID.name());
+				// Zero received never settles a job.
+				effectiveStatus = PaymentStatus.UNPAID;
 			}
 		}
-		if (status == PaymentStatus.PAID)
+		values.put("payment_status", effectiveStatus.name());
+		if (method != null) values.put("payment_method", method.name());
+
+		if (effectiveStatus == PaymentStatus.PAID)
 		{
 			values.put("paid_at", paidAt == null ? System.currentTimeMillis() : paidAt);
 		}

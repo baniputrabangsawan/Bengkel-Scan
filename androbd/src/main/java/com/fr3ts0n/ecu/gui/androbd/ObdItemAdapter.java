@@ -358,6 +358,12 @@ class ObdItemAdapter extends ArrayAdapter<Object>
             {
                 series = new XYSeries(String.valueOf(pv.get(EcuDataPv.FID_DESCRIPT)));
                 pv.put(FID_DATA_SERIES, series);
+            }
+            // The series survives in the process-wide PV, but our listener does not: a previous
+            // activity detached it. Subscribing only when the series was missing meant live data
+            // stopped updating for good after the first Activity was recreated.
+            if (!seriesListeners.contains(pv))
+            {
                 pv.addPvChangeListener(dataChangeHandler, PvChangeEvent.PV_MODIFIED);
                 seriesListeners.add(pv);
             }
@@ -393,6 +399,11 @@ class ObdItemAdapter extends ArrayAdapter<Object>
     @Override
     public void pvChanged(PvChangeEvent event)
     {
+        // The list membership or a row's values changed: the screen must redraw. Subclasses
+        // (DTC, VIN, TID, plugin) never register the per-value handler, so this is their only
+        // way to be seen by the redraw gate.
+        dataChanged = true;
+
         // handle data list updates
         switch (event.getType())
         {

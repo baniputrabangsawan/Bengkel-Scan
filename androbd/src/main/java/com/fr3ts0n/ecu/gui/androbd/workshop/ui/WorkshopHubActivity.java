@@ -14,7 +14,6 @@
 package com.fr3ts0n.ecu.gui.androbd.workshop.ui;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;

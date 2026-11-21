@@ -449,30 +449,47 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 		pickPicture.launch(new String[]{"image/*"});
 	}
 
-	/** Copy the photo into private storage, then reference it. */
+	/**
+	 * Copy the photo into private storage, then reference it.
+	 *
+	 * <p>Runs on a worker thread: the import re-encodes a full camera image (up to 20 MB), and
+	 * doing that in the activity-result callback froze the screen for seconds.</p>
+	 */
 	private void attachPendingPhoto(Uri source)
 	{
-		long itemId = pendingPhotoItem;
+		final long itemId = pendingPhotoItem;
 		if (itemId < 0)
 		{
 			clearPendingPhoto();
 			return;
 		}
-		try
+		new Thread(() ->
 		{
-			File stored = media.importPhoto(source);
-			photos.add(PhotoOwner.INSPECTION, itemId, media.relativePath(stored), "");
-			load();
-		}
-		catch (IOException | RuntimeException error)
-		{
-			Log.e(TAG, "Photo import failed", error);
-			Toast.makeText(this, R.string.workshop_inspection_photo_unsafe, Toast.LENGTH_LONG).show();
-		}
-		finally
-		{
-			clearPendingPhoto();
-		}
+			try
+			{
+				File stored = media.importPhoto(source);
+				photos.add(PhotoOwner.INSPECTION, itemId, media.relativePath(stored), "");
+				runOnUiThread(() ->
+				{
+					if (isFinishing() || isDestroyed()) return;
+					load();
+				});
+			}
+			catch (IOException | RuntimeException error)
+			{
+				Log.e(TAG, "Photo import failed", error);
+				runOnUiThread(() ->
+				{
+					if (isFinishing() || isDestroyed()) return;
+					Toast.makeText(this, R.string.workshop_inspection_photo_unsafe,
+							Toast.LENGTH_LONG).show();
+				});
+			}
+			finally
+			{
+				runOnUiThread(this::clearPendingPhoto);
+			}
+		}, "inspection-photo").start();
 	}
 
 	private void clearPendingPhoto()

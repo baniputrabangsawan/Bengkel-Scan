@@ -52,6 +52,12 @@ public class WorkshopPdfActivity extends AppCompatActivity
 	private static final String TAG = "WorkshopPdf";
 
 	private WorkshopRepository repository;
+	/** Called on the main thread with the built document, or with null when building failed. */
+	private interface DocumentReady
+	{
+		void onDocument(File file);
+	}
+
 	private long serviceId;
 	private File report;
 	private File invoice;
@@ -120,6 +126,16 @@ public class WorkshopPdfActivity extends AppCompatActivity
 	 */
 	private void make(boolean asReport)
 	{
+		make(asReport, null);
+	}
+
+	/**
+	 * @param onReady run on the main thread with the finished file, or with null on failure.
+	 *                Share needs this: it used to call make() and read the field immediately,
+	 *                which now raced the worker and shared nothing.
+	 */
+	private void make(boolean asReport, DocumentReady onReady)
+	{
 		state().setText(R.string.workshop_pdf_working);
 		new Thread(() ->
 		{
@@ -149,14 +165,19 @@ public class WorkshopPdfActivity extends AppCompatActivity
 					if (asReport) report = target;
 					else invoice = target;
 					state().setText(getString(R.string.workshop_pdf_made, target.getAbsolutePath()));
+					if (onReady != null) onReady.onDocument(target);
 				});
 			}
 			catch (IOException | RuntimeException error)
 			{
 				Log.e(TAG, "Document failed", error);
-				runOnUiThread(() -> state().setText(getString(R.string.workshop_pdf_failed,
-						error.getMessage() == null ? error.getClass().getSimpleName()
-								: error.getMessage())));
+				runOnUiThread(() ->
+				{
+					state().setText(getString(R.string.workshop_pdf_failed,
+							error.getMessage() == null ? error.getClass().getSimpleName()
+									: error.getMessage()));
+					if (onReady != null) onReady.onDocument(null);
+				});
 			}
 		}, "workshop-pdf").start();
 	}
@@ -166,16 +187,21 @@ public class WorkshopPdfActivity extends AppCompatActivity
 		return findViewById(R.id.workshop_pdf_state);
 	}
 
-	/** Share whichever document exists; make the report first if none does. */
+	/** Share whichever document exists; build the report first when none does. */
 	private void shareFile()
 	{
-		File target = invoice != null ? invoice : report;
-		if (target == null)
+		File existing = invoice != null ? invoice : report;
+		if (existing != null)
 		{
-			make(true);
-			target = report;
+			share(existing);
+			return;
 		}
-		if (target == null) return;
+		make(true, this::share);
+	}
+
+	private void share(File target)
+	{
+		if (target == null || !target.isFile()) return;
 		Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", target);
 		Intent send = new Intent(Intent.ACTION_SEND)
 				.setType("application/pdf")
