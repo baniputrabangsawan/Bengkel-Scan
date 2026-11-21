@@ -1,15 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Design tokens, night theme. Same roles as values/colors.xml; lightened where a fill
+  becomes a label, darkened where a label becomes a fill. Ratios in docs/UI-REDESIGN.md.
+-->
 <resources>
-    <color name="row_activated">#224C57</color>
-    <color name="workshop_primary">#67E8F9</color>
-    <color name="workshop_on_primary">#111827</color>
-    <color name="workshop_surface">#111827</color>
-    <color name="workshop_on_surface">#F9FAFB</color>
-    <color name="workshop_secondary_text">#D1D5DB</color>
-    <color name="workshop_surface_variant">#1F2937</color>
-    <color name="workshop_outline">#9CA3AF</color>
-    <color name="workshop_warning_surface">#450A0A</color>
-    <color name="workshop_warning_text">#FECACA</color>
-    <color name="workshop_page_background">#0B1220</color>
-    <color name="workshop_border">#334155</color>
+    <!-- Surfaces -->
+    <color name="workshop_page_background">#0B1114</color>
+    <color name="workshop_surface">#121A1F</color>
+    <color name="workshop_surface_variant">#1D272D</color>
+    <color name="workshop_selected_surface">#123946</color>
+
+    <!-- Text -->
+    <color name="workshop_on_surface">#E8EEF2</color>
+    <color name="workshop_secondary_text">#B7C4CD</color>
+    <color name="workshop_text_disabled">#8A97A0</color>
+
+    <!-- Action -->
+    <color name="workshop_primary">#CFEAF3</color>
+    <color name="workshop_on_primary">#04222D</color>
+
+    <!-- Lines -->
+    <color name="workshop_outline">#6B7C85</color>
+    <color name="workshop_border">#6B7C85</color>
+    <color name="workshop_divider">#33424B</color>
+
+    <!-- Interaction -->
+    <color name="workshop_ripple">#33CFEAF3</color>
+    <color name="row_activated">#123946</color>
+
+    <!-- Status families -->
+    <color name="workshop_status_neutral_surface">#243037</color>
+    <color name="workshop_status_neutral_text">#E8EEF2</color>
+    <color name="workshop_status_info_surface">#123946</color>
+    <color name="workshop_status_info_text">#9EDCF2</color>
+    <color name="workshop_status_success_surface">#14351F</color>
+    <color name="workshop_status_success_text">#A7E8BE</color>
+    <color name="workshop_status_warning_surface">#3A2A12</color>
+    <color name="workshop_status_warning_text">#FCD9A5</color>
+    <color name="workshop_status_danger_surface">#3A1A1A</color>
+    <color name="workshop_status_danger_text">#FBC7C7</color>
+
+    <!-- Safety banner -->
+    <color name="workshop_warning_surface">#3A1A1A</color>
+    <color name="workshop_warning_text">#FBC7C7</color>
+
+    <!-- Branding -->
+    <color name="workshop_icon_background">#CFEAF3</color>
+    <color name="workshop_icon_foreground">#04222D</color>
 </resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status chip surface. The label colour is set by the matching UiChip.* style. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/workshop_status_neutral_surface" />
+    <corners android:radius="@dimen/ui_chip_corner" />
+</shape>

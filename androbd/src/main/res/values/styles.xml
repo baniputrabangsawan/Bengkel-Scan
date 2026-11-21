@@ -1,30 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="Theme.Material3.DayNight" >
+    <!--
+      Application theme.
+
+      Themed items live in AppTheme.Base, and every qualified variant (values-v27) re-declares
+      AppTheme as a child of that base. A style declared in a qualified folder replaces the
+      default one entirely, so putting only one item in values-v27 used to drop every colour
+      mapping and the action-bar style on API 27+.
+    -->
+    <style name="AppTheme.Base" parent="Theme.Material3.DayNight">
         <item name="android:windowLightStatusBar">@bool/workshop_light_system_bars</item>
         <item name="android:activatedBackgroundIndicator">@drawable/activated_background</item>
         <item name="android:fitsSystemWindows">false</item>
+
         <item name="colorPrimary">@color/workshop_primary</item>
         <item name="colorOnPrimary">@color/workshop_on_primary</item>
-        <item name="colorSecondary">@color/workshop_primary</item>
-        <item name="colorOnSecondary">@color/workshop_on_primary</item>
         <item name="colorPrimaryContainer">@color/workshop_surface_variant</item>
         <item name="colorOnPrimaryContainer">@color/workshop_on_surface</item>
+        <item name="colorSecondary">@color/workshop_primary</item>
+        <item name="colorOnSecondary">@color/workshop_on_primary</item>
+        <item name="colorSecondaryContainer">@color/workshop_surface_variant</item>
+        <item name="colorOnSecondaryContainer">@color/workshop_on_surface</item>
+
         <item name="colorSurface">@color/workshop_surface</item>
         <item name="colorOnSurface">@color/workshop_on_surface</item>
         <item name="colorSurfaceVariant">@color/workshop_surface_variant</item>
         <item name="colorOnSurfaceVariant">@color/workshop_secondary_text</item>
         <item name="colorOutline">@color/workshop_outline</item>
+        <item name="colorOutlineVariant">@color/workshop_divider</item>
+        <item name="colorError">@color/workshop_status_danger_text</item>
+        <item name="colorOnError">@color/workshop_status_danger_surface</item>
+        <item name="colorErrorContainer">@color/workshop_status_danger_surface</item>
+        <item name="colorOnErrorContainer">@color/workshop_status_danger_text</item>
+
         <item name="colorControlNormal">@color/workshop_on_surface</item>
-        <item name="android:colorBackground">@color/workshop_surface</item>
+        <item name="colorControlActivated">@color/workshop_primary</item>
+        <item name="colorControlHighlight">@color/workshop_ripple</item>
+
+        <item name="android:colorBackground">@color/workshop_page_background</item>
+        <item name="android:windowBackground">@color/workshop_page_background</item>
         <item name="android:textColorPrimary">@color/workshop_on_surface</item>
         <item name="android:textColorSecondary">@color/workshop_secondary_text</item>
-        <item name="listPreferredItemHeightSmall">@dimen/workshop_touch_target</item>
-        <item name="android:listPreferredItemHeightSmall">@dimen/workshop_touch_target</item>
+
+        <item name="listPreferredItemHeightSmall">@dimen/ui_touch_primary</item>
+        <item name="android:listPreferredItemHeightSmall">@dimen/ui_touch_primary</item>
         <item name="actionBarStyle">@style/WorkshopActionBar</item>
-        <item name="colorControlActivated">@color/workshop_primary</item>
+        <item name="materialAlertDialogTheme">@style/UiDialogTheme</item>
     </style>
+
+    <style name="AppTheme" parent="AppTheme.Base" />
+
     <style name="WorkshopActionBar" parent="Widget.AppCompat.ActionBar.Solid">
-        <item name="background">@color/workshop_surface_variant</item>
+        <item name="background">@color/workshop_surface</item>
+        <item name="titleTextStyle">@style/UiActionBarTitle</item>
+    </style>
+
+    <style name="UiActionBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/workshop_on_surface</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>

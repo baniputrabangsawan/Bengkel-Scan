@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Type scale. Sizes are in sp so the user's font scale multiplies them; nothing here is
+  below 14 sp. Controls use minHeight, never a fixed height, so text can grow.
+-->
+<resources>
+    <!-- One big number: a total, an odometer, a live sensor value. -->
+    <style name="UiText.Display" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">@color/workshop_on_surface</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="UiText.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/workshop_on_surface</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="UiText.Section" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/workshop_on_surface</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="UiText.Item" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/workshop_on_surface</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="UiText.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/workshop_on_surface</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="UiText.Meta" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/workshop_secondary_text</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="UiText.Chip" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textColor">@color/workshop_on_surface</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Field captions above a control, and the label inside a TextInputLayout. -->
+    <style name="UiText.FieldLabel" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/workshop_on_surface</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Large-font safety: this style is applied to every screen heading that can wrap. -->
+    <style name="UiText.Title.Wrap" parent="UiText.Title">
+        <item name="android:singleLine">false</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+</resources>

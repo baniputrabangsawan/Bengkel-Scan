@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- API 27+ understands this attribute; older devices keep the default nav bar. -->
-    <style name="AppTheme" parent="Theme.Material3.DayNight">
+    <!--
+      API 27+ understands this attribute. AppTheme must stay a child of AppTheme.Base:
+      a style in a qualified folder replaces the default definition entirely.
+    -->
+    <style name="AppTheme" parent="AppTheme.Base">
         <item name="android:windowLightNavigationBar">@bool/workshop_light_system_bars</item>
     </style>
 </resources>

@@ -1,79 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="WorkshopHomePanel" parent="Widget.Material3.CardView.Filled">
-        <item name="cardBackgroundColor">@color/workshop_surface</item>
-        <item name="cardCornerRadius">16dp</item>
-        <item name="cardElevation">0dp</item>
-        <item name="cardUseCompatPadding">false</item>
-        <item name="cardPreventCornerOverlap">false</item>
-        <item name="strokeColor">@color/workshop_border</item>
-        <item name="strokeWidth">1dp</item>
-    </style>
+    <!--
+      Home-shell styles. These are aliases of the shared components in ui_components.xml so
+      the home page, the workshop screens and the dialogs cannot drift apart: changing
+      UiCard or UiButton changes every screen at once.
+    -->
+    <style name="WorkshopHomePanel" parent="UiCard" />
 
     <style name="WorkshopHomeTile" parent="WorkshopHomePanel">
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
-        <item name="android:enabled">false</item>
-        <item name="android:minHeight">56dp</item>
+        <item name="android:minHeight">@dimen/ui_touch_primary</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
 
-    <style name="WorkshopHomeHeading" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:textColor">@color/workshop_on_surface</item>
-        <item name="android:textSize">22sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+    <style name="WorkshopHomeHeading" parent="UiText.Title" />
 
-    <style name="WorkshopHomeSectionHeading" parent="TextAppearance.Material3.TitleMedium">
-        <item name="android:textColor">@color/workshop_on_surface</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+    <style name="WorkshopHomeSectionHeading" parent="UiText.Section" />
 
-    <style name="WorkshopHomeTileTitle" parent="TextAppearance.Material3.TitleMedium">
-        <item name="android:textColor">@color/workshop_on_surface</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+    <style name="WorkshopHomeTileTitle" parent="UiText.Item" />
 
-    <style name="WorkshopHomeHelper" parent="TextAppearance.Material3.BodyMedium">
-        <item name="android:textColor">@color/workshop_secondary_text</item>
-        <item name="android:textSize">14sp</item>
-    </style>
+    <style name="WorkshopHomeHelper" parent="UiText.Meta" />
 
-    <style name="WorkshopHomePrimaryAction" parent="Widget.Material3.Button">
-        <item name="android:minHeight">56dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:singleLine">false</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="cornerRadius">16dp</item>
-    </style>
+    <style name="WorkshopHomePrimaryAction" parent="UiButton" />
 
-    <style name="WorkshopHomeSecondaryAction" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="android:minHeight">56dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:singleLine">false</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="cornerRadius">16dp</item>
-        <item name="strokeColor">@color/workshop_border</item>
-    </style>
+    <style name="WorkshopHomeSecondaryAction" parent="UiButton.Secondary" />
 
-    <style name="WorkshopHomeTextAction" parent="Widget.Material3.Button.TextButton">
-        <item name="android:minHeight">56dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:singleLine">false</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-    </style>
+    <style name="WorkshopHomeTextAction" parent="UiButton.Text" />
 </resources>

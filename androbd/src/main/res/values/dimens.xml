@@ -1,10 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Spacing, size and shape tokens. 4 dp grid. Layouts must reference these instead of
+  literal dp values; a literal is only acceptable for a one-off illustration.
+-->
 <resources>
+    <!-- Grid -->
+    <dimen name="ui_space_1">4dp</dimen>
+    <dimen name="ui_space_2">8dp</dimen>
+    <dimen name="ui_space_3">12dp</dimen>
+    <dimen name="ui_space_4">16dp</dimen>
+    <dimen name="ui_space_6">24dp</dimen>
+    <dimen name="ui_space_8">32dp</dimen>
 
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="workshop_touch_target">56dp</dimen>
-    <dimen name="workshop_row_height">64dp</dimen>
+    <!-- Screen scaffold -->
+    <dimen name="ui_screen_padding_horizontal">16dp</dimen>
+    <dimen name="ui_screen_padding_top">16dp</dimen>
+    <dimen name="ui_screen_padding_bottom">24dp</dimen>
+    <dimen name="ui_section_gap">12dp</dimen>
+
+    <!-- Components -->
+    <dimen name="ui_card_padding">16dp</dimen>
+    <dimen name="ui_card_corner">12dp</dimen>
+    <dimen name="ui_card_corner_large">16dp</dimen>
+    <dimen name="ui_card_stroke">1dp</dimen>
+    <dimen name="ui_row_min_height">64dp</dimen>
+    <dimen name="ui_touch_min">48dp</dimen>
+    <dimen name="ui_touch_primary">56dp</dimen>
+    <dimen name="ui_field_gap">12dp</dimen>
+    <dimen name="ui_chip_corner">8dp</dimen>
+    <dimen name="ui_chip_padding_horizontal">8dp</dimen>
+    <dimen name="ui_chip_padding_vertical">4dp</dimen>
+
+    <!--
+      Legacy names kept so existing layouts build; they now point at the same scale.
+      New work uses the ui_* names above.
+    -->
+    <dimen name="activity_horizontal_margin">@dimen/ui_screen_padding_horizontal</dimen>
+    <dimen name="workshop_touch_target">@dimen/ui_touch_primary</dimen>
+    <dimen name="workshop_row_height">@dimen/ui_row_min_height</dimen>
     <dimen name="workshop_label_size">16sp</dimen>
     <dimen name="workshop_value_size">18sp</dimen>
-
 </resources>
