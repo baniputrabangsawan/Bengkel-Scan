@@ -24,7 +24,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/ui_space_2"
             android:text="@string/home_subheading"
             android:textAppearance="@style/WorkshopHomeHelper" />
 
@@ -32,13 +32,13 @@
             style="@style/WorkshopHomePanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="@dimen/ui_space_6">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="@dimen/ui_card_padding">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                     android:id="@+id/home_connection_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/ui_space_2"
                     android:accessibilityLiveRegion="polite"
                     android:text="@string/home_status_offline"
                     android:textAppearance="@style/WorkshopHomeSectionHeading" />
@@ -59,7 +59,7 @@
                     android:id="@+id/home_connection_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/ui_space_2"
                     android:text="@string/home_offline_detail"
                     android:textAppearance="@style/WorkshopHomeHelper" />
 
@@ -77,8 +77,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="@dimen/ui_space_6"
+            android:layout_marginBottom="@dimen/ui_space_3"
             android:accessibilityHeading="true"
             android:text="@string/home_checks_heading"
             android:textAppearance="@style/WorkshopHomeSectionHeading" />
@@ -102,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/ui_card_padding">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="24dp"
@@ -115,7 +115,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="@dimen/ui_space_3"
                         android:text="@string/obd_codes"
                         android:textAppearance="@style/WorkshopHomeTileTitle" />
 
@@ -141,7 +141,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/ui_card_padding">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="24dp"
@@ -154,7 +154,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="@dimen/ui_space_3"
                         android:text="@string/obd_data"
                         android:textAppearance="@style/WorkshopHomeTileTitle" />
 
@@ -171,7 +171,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="@dimen/ui_space_3"
             android:baselineAligned="false"
             android:orientation="horizontal">
 
@@ -188,7 +188,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/ui_card_padding">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="24dp"
@@ -201,7 +201,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="@dimen/ui_space_3"
                         android:text="@string/service_freezeframes"
                         android:textAppearance="@style/WorkshopHomeTileTitle" />
 
@@ -228,7 +228,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/ui_card_padding">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="24dp"
@@ -241,7 +241,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="@dimen/ui_space_3"
                         android:text="@string/obd_veh_info"
                         android:textAppearance="@style/WorkshopHomeTileTitle" />
 
@@ -260,7 +260,7 @@
             style="@style/WorkshopHomeTile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/ui_space_6"
             android:enabled="true"
             android:onClick="onWorkshopHomeClick">
 
@@ -268,7 +268,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="@dimen/ui_card_padding">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="24dp"
@@ -281,7 +281,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="@dimen/ui_space_3"
                     android:accessibilityHeading="true"
                     android:text="@string/workshop_data_title"
                     android:textAppearance="@style/WorkshopHomeSectionHeading" />
@@ -289,7 +289,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/ui_space_2"
                     android:text="@string/home_workshop_title"
                     android:textAppearance="@style/WorkshopHomeTileTitle" />
 
@@ -303,10 +303,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="@dimen/ui_space_3"
                     android:text="@string/home_workshop_action"
                     android:textColor="@color/workshop_primary"
-                    android:textSize="15sp"
+                    android:textAppearance="@style/UiText.Body"
                     android:textStyle="bold" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -324,7 +324,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="@dimen/ui_card_padding">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -344,10 +344,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="@dimen/ui_space_3"
                     android:text="@string/home_jobs_action"
                     android:textColor="@color/workshop_primary"
-                    android:textSize="15sp"
+                    android:textAppearance="@style/UiText.Body"
                     android:textStyle="bold" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -382,7 +382,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/ui_space_6"
             android:gravity="center"
             android:text="@string/home_attribution"
             android:textAppearance="@style/WorkshopHomeHelper" />

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/ui_card_padding"
     android:background="@drawable/result_row_surface">
 
     <LinearLayout
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="monospace"
-            android:textSize="24sp"
+            android:textAppearance="@style/UiText.Title"
             android:textStyle="bold"
             android:textDirection="ltr"
             android:textColor="@color/workshop_on_surface" />
@@ -37,14 +37,14 @@
         android:id="@+id/result_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/ui_space_2"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:background="@drawable/result_status_badge"
         android:textColor="@color/workshop_on_surface"
-        android:textSize="14sp" />
+        android:textAppearance="@style/UiText.Meta" />
 
     <TextView
         android:id="@+id/obd_label"
@@ -52,17 +52,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textColor="@color/workshop_on_surface"
-        android:textSize="16sp"
+        android:textAppearance="@style/UiText.Body"
         android:lineSpacingMultiplier="1.2" />
 
     <TextView
         android:id="@+id/result_context"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/ui_space_2"
         android:text="@string/result_no_codes_scope"
         android:textColor="@color/workshop_secondary_text"
-        android:textSize="14sp"
+        android:textAppearance="@style/UiText.Meta"
         android:lineSpacingMultiplier="1.2"
         android:visibility="gone" />
 </LinearLayout>

@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="16dp">
+        android:paddingTop="@dimen/ui_screen_padding_top">
 
         <TextView
             android:layout_width="match_parent"
@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="16dp">
+        android:paddingTop="@dimen/ui_screen_padding_top">
 
         <TextView
             android:layout_width="match_parent"
@@ -121,7 +121,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="16dp">
+        android:paddingTop="@dimen/ui_screen_padding_top">
 
         <TextView
             android:layout_width="match_parent"

@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  One workshop list row: title, optional meta line, optional status chip.
+
+  The whole row is a single accessibility stop (screenReaderFocusable on API 28+, where the
+  platform can merge children) and always at least 64 dp tall, so it stays tappable with
+  gloves on. The status chip carries a label, never colour alone.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
+    android:layout_marginTop="@dimen/ui_space_1"
+    android:layout_marginBottom="@dimen/ui_space_1"
     android:background="@drawable/result_row_surface"
     android:gravity="center_vertical"
-    android:minHeight="64dp"
+    android:minHeight="@dimen/ui_row_min_height"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:paddingStart="@dimen/ui_card_padding"
+    android:paddingTop="@dimen/ui_space_3"
+    android:paddingEnd="@dimen/ui_card_padding"
+    android:paddingBottom="@dimen/ui_space_3">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -20,26 +30,37 @@
             android:id="@+id/workshop_row_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/workshop_on_surface"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textAppearance="@style/UiText.Item"
+            android:maxLines="3"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/workshop_row_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/workshop_secondary_text"
-            android:textSize="14sp" />
+            android:layout_marginTop="@dimen/ui_space_1"
+            android:textAppearance="@style/UiText.Meta" />
     </LinearLayout>
 
+    <!-- Status text used where the row already reads as a sentence (estimate lines). -->
     <TextView
         android:id="@+id/workshop_row_trailing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:textColor="@color/workshop_primary"
-        android:textSize="14sp"
+        android:layout_marginStart="@dimen/ui_space_3"
+        android:gravity="end"
+        android:maxLines="2"
+        android:textAppearance="@style/UiText.Meta"
+        android:textColor="@color/workshop_on_surface"
         android:textStyle="bold"
+        android:visibility="gone" />
+
+    <!-- Status chip used where the row state is a workflow or safety decision. -->
+    <TextView
+        android:id="@+id/workshop_row_chip"
+        style="@style/UiChip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ui_space_3"
         android:visibility="gone" />
 </LinearLayout>

@@ -27,7 +27,7 @@
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/ui_space_3"
         android:hint="@string/workshop_vehicle_model">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -42,7 +42,7 @@
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/ui_space_3"
         android:hint="@string/workshop_vehicle_year">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -58,7 +58,7 @@
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/ui_space_3"
         android:hint="@string/workshop_vehicle_vin">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -73,7 +73,7 @@
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/ui_space_3"
         android:hint="@string/workshop_vehicle_odometer">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -91,15 +91,15 @@
         android:layout_marginTop="16dp"
         android:text="@string/workshop_vehicle_engine"
         android:textColor="@color/workshop_secondary_text"
-        android:textSize="14sp" />
+        android:textAppearance="@style/UiText.Meta" />
 
     <Spinner
         android:id="@+id/workshop_engine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="@dimen/ui_space_1"
         android:background="@drawable/result_row_surface"
-        android:minHeight="56dp"
+        android:minHeight="@dimen/ui_touch_primary"
         android:paddingStart="12dp"
         android:paddingEnd="12dp" />
 </LinearLayout>

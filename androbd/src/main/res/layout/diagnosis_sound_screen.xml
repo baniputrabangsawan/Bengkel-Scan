@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/ui_card_padding">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
             android:id="@+id/diagnosis_sound_notice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="@dimen/ui_space_3"
             android:accessibilityLiveRegion="polite"
             android:textIsSelectable="true"
             android:textAppearance="@style/WorkshopHomeHelper" />
@@ -33,19 +33,19 @@
             android:id="@+id/diagnosis_sound_selector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="56dp" />
+            android:minHeight="@dimen/ui_touch_primary" />
         <TextView
             android:id="@+id/diagnosis_sound_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/ui_space_2"
             android:textIsSelectable="true"
             android:textAppearance="@style/WorkshopHomeHelper" />
         <TextView
             android:id="@+id/diagnosis_sound_when"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/ui_space_2"
             android:textIsSelectable="true"
             android:textAppearance="@style/WorkshopHomeHelper" />
         <TextView
@@ -59,7 +59,7 @@
             android:id="@+id/diagnosis_sound_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/ui_space_2"
             android:accessibilityLiveRegion="polite"
             android:text="@string/diagnosis_sound_loading"
             android:textAppearance="@style/WorkshopHomeHelper" />
@@ -72,14 +72,14 @@
             android:id="@+id/diagnosis_sound_import"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="56dp"
+            android:minHeight="@dimen/ui_touch_primary"
             android:enabled="false"
             android:text="@string/diagnosis_sound_import" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/diagnosis_sound_record"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="56dp"
+            android:minHeight="@dimen/ui_touch_primary"
             android:enabled="false"
             android:text="@string/diagnosis_sound_record" />
         <TextView

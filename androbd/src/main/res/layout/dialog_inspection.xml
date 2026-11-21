@@ -33,15 +33,15 @@
             android:layout_marginTop="16dp"
             android:text="@string/workshop_inspection_state"
             android:textColor="@color/workshop_secondary_text"
-            android:textSize="14sp" />
+            android:textAppearance="@style/UiText.Meta" />
 
         <Spinner
             android:id="@+id/workshop_inspection_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/ui_space_1"
             android:background="@drawable/result_row_surface"
-            android:minHeight="56dp"
+            android:minHeight="@dimen/ui_touch_primary"
             android:paddingStart="12dp"
             android:paddingEnd="12dp" />
 

@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/ui_card_padding">
         <TextView
             android:id="@+id/guide_vehicle_context"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="@dimen/ui_space_3"
             android:textAppearance="@style/WorkshopHomeHelper"
             android:textIsSelectable="true"
             android:visibility="gone" />
@@ -28,13 +28,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/ui_space_2"
             android:text="@string/guide_scope"
             android:textAppearance="@style/WorkshopHomeHelper" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/ui_space_2"
             android:layout_marginBottom="16dp"
             android:text="@string/guide_applicability"
             android:textAppearance="@style/WorkshopHomeHelper" />
@@ -74,7 +74,7 @@
                 android:id="@+id/guide_result_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="@dimen/ui_space_3"
                 android:accessibilityLiveRegion="polite"
                 android:textAppearance="@style/WorkshopHomeHelper" />
             <LinearLayout

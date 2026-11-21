@@ -105,13 +105,13 @@ public class WorkshopDueActivity extends AppCompatActivity
 			}
 			if (!reminder.note.isEmpty()) subtitle.append(" · ").append(reminder.note);
 			rows.add(new WorkshopRow(reminder.id, vehicle.plate, subtitle.toString(),
-					getString(label(state, soon))));
+					getString(label(state)), tone(state)));
 		}
 		adapter.submit(rows);
 		empty.setVisibility(rows.isEmpty() ? android.view.View.VISIBLE : android.view.View.GONE);
 	}
 
-	private static int label(ReminderStatus.State state, boolean soon)
+	private static int label(ReminderStatus.State state)
 	{
 		switch (state)
 		{
@@ -121,8 +121,14 @@ public class WorkshopDueActivity extends AppCompatActivity
 				return R.string.workshop_due_today;
 			case NOT_DUE:
 			default:
-				return soon ? R.string.workshop_due_soon : R.string.workshop_due_soon;
+				return R.string.workshop_due_soon;
 		}
+	}
+
+	/** Overdue is the only red state here; a reminder that is merely near is a warning. */
+	private static RowTone tone(ReminderStatus.State state)
+	{
+		return state == ReminderStatus.State.OVERDUE ? RowTone.DANGER : RowTone.WARNING;
 	}
 
 	/** Offer the two useful actions: send the message, or mark it handled. */

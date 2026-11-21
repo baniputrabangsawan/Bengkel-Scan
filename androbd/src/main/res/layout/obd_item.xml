@@ -4,13 +4,13 @@
     android:layout_height="wrap_content"
     android:background="@drawable/result_row_surface"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/ui_card_padding">
 
     <TextView
         android:id="@+id/obd_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:textAppearance="@style/UiText.Meta"
         android:textColor="@color/workshop_secondary_text"
         android:lineSpacingMultiplier="1.15" />
 
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:textSize="24sp"
+        android:textAppearance="@style/UiText.Title"
         android:textColor="@color/workshop_on_surface"
         android:fontFamily="sans-serif-medium"
         android:fontFeatureSettings="tnum"
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:textSize="14sp"
+        android:textAppearance="@style/UiText.Meta"
         android:textColor="@color/workshop_secondary_text"
         android:lineSpacingMultiplier="1.15" />
 
@@ -48,7 +48,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/ui_space_3"
         android:visibility="gone"
         android:max="100" />
 

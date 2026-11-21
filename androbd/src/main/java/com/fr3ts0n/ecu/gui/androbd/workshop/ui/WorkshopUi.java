@@ -101,4 +101,19 @@ public final class WorkshopUi
 				return R.string.workshop_status_waiting;
 		}
 	}
+
+	/** Chip family for a workflow status. The label is always shown as well. */
+	public static RowTone statusTone(ServiceStatus status)
+	{
+		switch (status)
+		{
+			case IN_PROGRESS:
+				return RowTone.INFO;
+			case DONE:
+				return RowTone.SUCCESS;
+			case WAITING:
+			default:
+				return RowTone.NEUTRAL;
+		}
+	}
 }

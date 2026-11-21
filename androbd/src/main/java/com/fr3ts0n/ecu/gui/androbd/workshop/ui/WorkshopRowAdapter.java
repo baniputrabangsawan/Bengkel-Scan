@@ -65,19 +65,81 @@ final class WorkshopRowAdapter extends BaseAdapter
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View view = convertView;
+		Holder holder;
 		if (view == null)
 		{
 			view = inflater.inflate(R.layout.workshop_list_item, parent, false);
+			holder = new Holder(view);
+			view.setTag(holder);
+		}
+		else
+		{
+			holder = (Holder) view.getTag();
 		}
 		WorkshopRow row = rows.get(position);
-		((TextView) view.findViewById(R.id.workshop_row_title)).setText(row.title);
-		TextView subtitle = view.findViewById(R.id.workshop_row_subtitle);
-		subtitle.setText(row.subtitle);
-		subtitle.setVisibility(row.subtitle == null || row.subtitle.isEmpty()
+		holder.title.setText(row.title);
+		holder.subtitle.setText(row.subtitle);
+		holder.subtitle.setVisibility(row.subtitle == null || row.subtitle.isEmpty()
 				? View.GONE : View.VISIBLE);
-		TextView trailing = view.findViewById(R.id.workshop_row_trailing);
-		trailing.setText(row.trailing);
-		trailing.setVisibility(row.trailing == null ? View.GONE : View.VISIBLE);
+		holder.trailing.setText(row.trailing);
+		holder.trailing.setVisibility(row.trailing == null ? View.GONE : View.VISIBLE);
+		holder.chip.setText(row.chip);
+		holder.chip.setVisibility(row.chip == null ? View.GONE : View.VISIBLE);
+		holder.chip.setBackgroundResource(chipBackground(row.tone));
+		holder.chip.setTextColor(holder.chip.getContext().getColor(chipTextColor(row.tone)));
 		return view;
+	}
+
+	/** Cached child lookups: a recycled row must not search the hierarchy again. */
+	private static final class Holder
+	{
+		final TextView title;
+		final TextView subtitle;
+		final TextView trailing;
+		final TextView chip;
+
+		Holder(View view)
+		{
+			title = view.findViewById(R.id.workshop_row_title);
+			subtitle = view.findViewById(R.id.workshop_row_subtitle);
+			trailing = view.findViewById(R.id.workshop_row_trailing);
+			chip = view.findViewById(R.id.workshop_row_chip);
+		}
+	}
+
+	private static int chipBackground(RowTone tone)
+	{
+		switch (tone)
+		{
+			case INFO:
+				return R.drawable.ui_chip_info;
+			case SUCCESS:
+				return R.drawable.ui_chip_success;
+			case WARNING:
+				return R.drawable.ui_chip_warning;
+			case DANGER:
+				return R.drawable.ui_chip_danger;
+			case NEUTRAL:
+			default:
+				return R.drawable.ui_chip_neutral;
+		}
+	}
+
+	private static int chipTextColor(RowTone tone)
+	{
+		switch (tone)
+		{
+			case INFO:
+				return R.color.workshop_status_info_text;
+			case SUCCESS:
+				return R.color.workshop_status_success_text;
+			case WARNING:
+				return R.color.workshop_status_warning_text;
+			case DANGER:
+				return R.color.workshop_status_danger_text;
+			case NEUTRAL:
+			default:
+				return R.color.workshop_status_neutral_text;
+		}
 	}
 }

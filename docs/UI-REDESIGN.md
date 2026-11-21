@@ -362,3 +362,38 @@ Previous borders measured **1.20:1** (light) and **1.71:1** (night) — invisibl
 
 No layout was re-typed to the new styles yet; the tokens and components exist and the theme proves they reach the
 widgets. Screens are migrated group by group starting with the shared components.
+
+## Step 3.2 — Shared components (done)
+
+### What changed
+
+| Change | File |
+| --- | --- |
+| Row gained a status chip (5 tones) and a cached holder, so a recycled row never keeps the previous row's chip or trailing text | `workshop_list_item.xml`, `WorkshopRow.java`, `WorkshopRowAdapter.java`, new `RowTone.java` |
+| Status chip used where the state is a workflow or safety decision: jobs list, vehicle service history, due reminders | `WorkshopJobsActivity.java`, `WorkshopVehicleActivity.java`, `WorkshopDueActivity.java`, `WorkshopUi.statusTone` |
+| **Defect fixed:** the active jobs filter is now a filled button, not a disabled one; the choice is also announced (`setSelected`) | `WorkshopJobsActivity.java:132-161`, `workshop_jobs.xml` |
+| **Defect fixed:** the dead `soon` ternary that returned the same string twice | `WorkshopDueActivity.java:114-132` |
+| 221 literal dp values replaced with tokens across 29 layouts | `res/layout/*.xml` |
+| Literal `textSize` replaced by `UiText.*` appearances in 15 layouts | `res/layout/*.xml` |
+| The repeated background+padding scaffold collapsed into `style="@style/UiScreen"` in 7 layouts | `res/layout/workshop_*.xml` |
+
+### Verification
+
+- `assembleDebug` + `assembleDebugAndroidTest`: BUILD SUCCESSFUL.
+- JVM: 178 tests, 0 failures.
+- On the phone: `WorkshopRowAdapterInstrumentedTest` (new, 3 tests) **OK**; `PaymentInstrumentedTest`,
+  `CannedJobInstrumentedTest`, `InspectionInstrumentedTest` (existing, 12 tests) **OK** — 15 total.
+- Rendered proof on the virtual display: customers list shows page `#F4F6F8`, surface `#FFFFFF`, border
+  `#5A6B75`, primary `#0B4A63`; jobs list shows the neutral chip surface `#E5E9EC` (44,588 px) and the active
+  filter filled `#0B4A63` as a 309 px band — the previous build drew it disabled instead.
+- Lint: **0 errors** (143 warnings, mostly `UnusedResources` for tokens whose consumers arrive in later steps).
+
+### Captures
+
+`docs/design/after/components-jobs.png`, plus `/tmp` working captures not kept.
+
+### Known gap
+
+Tapping the second filter from adb missed by a few pixels; the behaviour is instead locked by the new
+instrumented test, which asserts the chip label/tone contract and recycling. A visual after-capture of every
+filter state will be taken in the dark/large-font pass.

@@ -118,7 +118,8 @@ public class WorkshopVehicleActivity extends AppCompatActivity
 		{
 			rows.add(new WorkshopRow(service.id, service.complaint,
 					WorkshopUi.dateTime(service.createdAt),
-					getString(WorkshopUi.statusLabel(service.status))));
+					getString(WorkshopUi.statusLabel(service.status)),
+					WorkshopUi.statusTone(service.status)));
 		}
 		adapter.submit(rows);
 		empty.setVisibility(rows.isEmpty() ? View.VISIBLE : View.GONE);

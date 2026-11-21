@@ -30,8 +30,8 @@
         android:layout_height="wrap_content"
         android:background="@color/workshop_surface_variant"
         android:textColor="@color/workshop_secondary_text"
-        android:textSize="14sp"
-        android:padding="16dp"
+        android:textAppearance="@style/UiText.Meta"
+        android:padding="@dimen/ui_card_padding"
         />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -61,8 +61,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="18sp"
-            android:padding="16dp"
+            android:textAppearance="@style/UiText.Section"
+            android:padding="@dimen/ui_card_padding"
             android:textColor="@color/workshop_secondary_text"
             android:gravity="center"
             android:visibility="gone"

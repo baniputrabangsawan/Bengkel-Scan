@@ -14,12 +14,18 @@
 package com.fr3ts0n.ecu.gui.androbd.workshop.ui;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.button.MaterialButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -121,7 +127,8 @@ public class WorkshopJobsActivity extends AppCompatActivity
 			rows.add(new WorkshopRow(service.id, plate.isEmpty()
 					? service.complaint : plate + " · " + service.complaint,
 					WorkshopUi.dateTime(service.createdAt),
-					getString(WorkshopUi.statusLabel(service.status))));
+					getString(WorkshopUi.statusLabel(service.status)),
+					WorkshopUi.statusTone(service.status)));
 		}
 		adapter.submit(rows);
 		empty.setVisibility(rows.isEmpty() ? View.VISIBLE : View.GONE);
@@ -130,10 +137,33 @@ public class WorkshopJobsActivity extends AppCompatActivity
 
 	private void highlight()
 	{
-		all.setEnabled(filter != Filter.ALL);
-		open.setEnabled(filter != Filter.OPEN);
-		today.setEnabled(filter != Filter.TODAY);
-		unpaid.setEnabled(filter != Filter.UNPAID);
+		paint(all, filter == Filter.ALL);
+		paint(open, filter == Filter.OPEN);
+		paint(today, filter == Filter.TODAY);
+		paint(unpaid, filter == Filter.UNPAID);
+	}
+
+	/**
+	 * The chosen filter is filled, the others outlined; a button is never disabled to show
+	 * "selected", which used to read as "unavailable" and hid the choice from TalkBack.
+	 */
+	private void paint(android.widget.Button button, boolean selected)
+	{
+		button.setSelected(selected);
+		if (!(button instanceof MaterialButton)) return;
+		MaterialButton material = (MaterialButton) button;
+		if (selected)
+		{
+			material.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.workshop_primary)));
+			material.setTextColor(getColor(R.color.workshop_on_primary));
+			material.setStrokeWidth(0);
+		}
+		else
+		{
+			material.setBackgroundTintList(ColorStateList.valueOf(Color.TRANSPARENT));
+			material.setTextColor(getColor(R.color.workshop_primary));
+			material.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.ui_card_stroke));
+		}
 	}
 
 	/** Midnight of the current local day. */
