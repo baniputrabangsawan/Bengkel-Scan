@@ -526,3 +526,34 @@ builds remain possible but tight — worth clearing space on your side too.
   has in a tappable state. The layout and its two field ids are exercised only by compilation.
 - `uiautomator dump` on this phone always reads display 0 (the owner's screen), so all element verification above used
   my own virtual-display screenshots and pixel probes, not dumps.
+
+## Step 3.7 — Dialogs, pickers, startup and hidden screens (done)
+
+### What changed
+
+| Change | File |
+| --- | --- |
+| Every dialog form field uses the shared `UiField` (outlined, 12 dp corner, 2 dp focus stroke) — five dialog layouts plus profile, scan and the diagnostic editor, so 0 raw `Widget.Material3.TextInputLayout` remain | `dialog_*.xml`, `workshop_profile.xml`, `workshop_scan.xml`, `workshop_diagnostic_edit.xml` |
+| **Defect fixed:** the scan phase radios used a fixed `56dp` height, which clips long Indonesian labels at ≥1.3× font scale; now `wrap_content` + `minHeight` | `workshop_scan.xml` |
+| **Defect fixed:** two PID-customization labels pointed at `pid_color` (the colour spinner) while labelling the range and the update period; each now points at its own SeekBar | `pid_customization.xml` |
+| PID screen heading uses the type scale instead of `TextAppearance.DeviceDefault.Large`; leftover 10/12 dp paddings tokenised | `pid_customization.xml` |
+| Device and USB pickers: 12/16 dp paddings replaced by tokens | `device_list.xml`, `device_name.xml`, `usb_list.xml` |
+| Hidden dashboard/gauge screens: page background, 8 dp grid padding, gauge label on the type scale, gauge paddings tokenised. They still open only in Advanced mode | `dashboard.xml`, `obd_gauge.xml` |
+| Startup splash is the same file as the home shell, so it inherits the scaffold from step 3.3 | `startup_layout.xml` |
+
+### Verification
+
+- `assembleDebug` + `assembleDebugAndroidTest`: BUILD SUCCESSFUL. JVM 178 tests, 0 failures.
+- Device: `InspectionInstrumentedTest`, `CannedJobInstrumentedTest`, `WorkshopRowAdapterInstrumentedTest`,
+  `WorkshopScanFlowInstrumentedTest` → **OK (13 tests)**. These cover the dialogs that were restyled
+  (add/edit part, package, save-scan phase).
+- Profile screen on the phone after the field change: page `#F4F6F8`, card `#FFFFFF`, primary `#0B4A63`,
+  capture `docs/design/after/dialog-profile-light.png`.
+- Lint: 0 errors.
+
+### Honest limits
+
+- The chart and dashboard still cannot be opened without their intent extras, and Advanced mode is off by default in
+  this build; only their layouts were changed, and they were **not** visually verified. I did not add a guard that
+  changes their launch contract.
+- The PID customization screen is also behind Advanced mode; its label fix is compile-verified only.

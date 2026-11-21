@@ -90,7 +90,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/ui_space_4"
         android:text="@string/workshop_item_inspection_link"
         android:textColor="@color/workshop_secondary_text"
         android:textAppearance="@style/UiText.Meta" />

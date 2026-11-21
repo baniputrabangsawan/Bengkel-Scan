@@ -34,7 +34,7 @@
             android:layout_marginTop="16dp" android:labelFor="@id/diagnostic_scanner"
             android:text="@string/diagnostic_scanner" android:textAppearance="@style/WorkshopHomeHelper" />
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent"
+            style="@style/UiField" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="@dimen/ui_space_1">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/diagnostic_scanner"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary"
@@ -45,7 +45,7 @@
             android:layout_marginTop="16dp" android:labelFor="@id/diagnostic_codes"
             android:text="@string/diagnostic_codes" android:textAppearance="@style/WorkshopHomeHelper" />
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent"
+            style="@style/UiField" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="@dimen/ui_space_1">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/diagnostic_codes"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary"
@@ -56,7 +56,7 @@
             android:layout_marginTop="16dp" android:labelFor="@id/diagnostic_symptoms"
             android:text="@string/diagnostic_symptoms" android:textAppearance="@style/WorkshopHomeHelper" />
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent"
+            style="@style/UiField" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="@dimen/ui_space_1">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/diagnostic_symptoms"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary"
@@ -67,7 +67,7 @@
             android:layout_marginTop="16dp" android:labelFor="@id/diagnostic_observations"
             android:text="@string/diagnostic_observations" android:textAppearance="@style/WorkshopHomeHelper" />
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent"
+            style="@style/UiField" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="@dimen/ui_space_1">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/diagnostic_observations"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary"
@@ -78,7 +78,7 @@
             android:layout_marginTop="16dp" android:labelFor="@id/diagnostic_procedure"
             android:text="@string/diagnostic_procedure" android:textAppearance="@style/WorkshopHomeHelper" />
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent"
+            style="@style/UiField" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="@dimen/ui_space_1">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/diagnostic_procedure"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary"
@@ -89,7 +89,7 @@
             android:layout_marginTop="16dp" android:labelFor="@id/diagnostic_result"
             android:text="@string/diagnostic_result" android:textAppearance="@style/WorkshopHomeHelper" />
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent"
+            style="@style/UiField" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="@dimen/ui_space_1">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/diagnostic_result"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary"
@@ -100,7 +100,7 @@
             android:layout_marginTop="16dp" android:labelFor="@id/diagnostic_reference"
             android:text="@string/diagnostic_reference" android:textAppearance="@style/WorkshopHomeHelper" />
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent"
+            style="@style/UiField" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="@dimen/ui_space_1">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/diagnostic_reference"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary"
@@ -111,7 +111,7 @@
             android:layout_marginTop="16dp" android:labelFor="@id/diagnostic_diagnosis"
             android:text="@string/diagnostic_diagnosis" android:textAppearance="@style/WorkshopHomeHelper" />
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent"
+            style="@style/UiField" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="@dimen/ui_space_1">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/diagnostic_diagnosis"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary"
@@ -122,7 +122,7 @@
             android:layout_marginTop="16dp" android:labelFor="@id/diagnostic_repair"
             android:text="@string/diagnostic_repair" android:textAppearance="@style/WorkshopHomeHelper" />
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent"
+            style="@style/UiField" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="@dimen/ui_space_1">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/diagnostic_repair"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary"
@@ -133,7 +133,7 @@
             android:layout_marginTop="16dp" android:labelFor="@id/diagnostic_verification"
             android:text="@string/diagnostic_verification" android:textAppearance="@style/WorkshopHomeHelper" />
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox" android:layout_width="match_parent"
+            style="@style/UiField" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_marginTop="@dimen/ui_space_1">
             <com.google.android.material.textfield.TextInputEditText android:id="@+id/diagnostic_verification"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary"

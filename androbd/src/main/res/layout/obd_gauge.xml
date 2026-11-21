@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="top"
     android:orientation="vertical"
-    android:paddingVertical="2dp"
-    android:paddingHorizontal="10dp">
+    android:paddingVertical="@dimen/ui_space_1"
+    android:paddingHorizontal="@dimen/ui_space_3">
 
     <com.github.anastr.speedviewlib.AwesomeSpeedometer
         android:id="@+id/chart"
@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="center_horizontal"
-        android:text="@string/obd_data" />
+        android:text="@string/obd_data"
+        android:textAppearance="@style/UiText.Item" />
 
 </LinearLayout>
