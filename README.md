@@ -11,10 +11,24 @@ Fork ini menyederhanakan antarmuka agar mekanik mudah membaca kode, data pemerik
 - **Tanpa kendaraan:** tersedia Mode Latihan dengan data simulasi.
 - **Lisensi:** [GNU GPL-3.0](LICENSE); atribusi upstream tetap dipertahankan.
 
-> **Status saat ini:** aplikasi diagnostik OBD dengan data pelanggan, kendaraan, servis, biaya, catatan diagnosis lintas scanner, panduan pemeriksaan offline, serta diagnosis terpandu untuk kendaraan tanpa ECU. Semua saran diagnosis adalah **draf yang belum ditinjau mekanik senior**. Hasil OBD belum tersimpan otomatis ke servis; PDF/invoice belum tersedia.
+> **Status saat ini:** aplikasi diagnostik OBD plus alur bengkel harian di satu ponsel — data pelanggan/kendaraan/servis, pemeriksaan dengan foto dan catatan suara, estimasi dengan persetujuan per baris, pembayaran sebagian, laporan PDF dan nota yang bisa dikirim lewat WhatsApp, pengingat jatuh tempo, cadangan ZIP, dan diagnosis terpandu untuk kendaraan tanpa ECU. Isi panduan diagnosis dan paket pekerjaan contoh masih **draf yang belum ditinjau mekanik senior**; baca `docs/PROGRESS.md` untuk bukti per fitur dan daftar yang belum diuji.
+
+## Dokumen mana yang dibaca
+
+| Dokumen | Isi |
+| --- | --- |
+| `README.md` (ini) | Gambaran proyek, instalasi, penggunaan, arsitektur, pengujian, troubleshooting |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Skema database, paket kode, alur data, keputusan arsitektur |
+| [docs/PROGRESS.md](docs/PROGRESS.md) | Status tiap fitur, commit, bukti pengujian, dan daftar yang belum diuji |
+| [docs/panduan-pengguna.md](docs/panduan-pengguna.md) | Panduan bernomor untuk mekanik (Bahasa Indonesia) |
+| [docs/diagnosis-knowledge-base.md](docs/diagnosis-knowledge-base.md) | Skema JSON panduan diagnosis, batas keselamatan, checklist tinjauan mekanik senior |
+| [docs/workshop-glossary.md](docs/workshop-glossary.md) | Istilah Indonesia yang dipakai UI dan dokumen |
+| [docs/rilis-bertanda-tangan.md](docs/rilis-bertanda-tangan.md) | Membuat keystore dan APK rilis bertanda tangan |
+| [AGENTS.md](AGENTS.md) | Aturan kerja untuk asisten AI yang menyunting repository ini |
 
 ## Daftar isi
 
+0. [Dokumen mana yang dibaca](#dokumen-mana-yang-dibaca)
 1. [Fitur dan batasan](#fitur-dan-batasan)
 2. [Perangkat dan keselamatan](#perangkat-dan-keselamatan)
 3. [Instalasi dan build dari source](#instalasi-dan-build-dari-source)
@@ -170,8 +184,7 @@ androbd/build/outputs/apk/debug/androbd-debug.apk
 Build pertama memerlukan internet untuk Gradle dan dependensi dari Google Maven, Maven Central, serta JitPack. Diagnostik lokal tidak memerlukan internet setelah aplikasi terpasang. `./gradlew --offline :androbd:assembleDebug` hanya bekerja bila seluruh dependensi sudah ada di cache.
 
 Jika SDK tidak terdeteksi, pastikan `ANDROID_HOME` menunjuk folder yang benar. Alternatifnya buat `local.properties` lokal dengan baris `sdk.dir=/lokasi/absolut/Android/Sdk`; jangan commit file lingkungan pribadi tersebut.
-
-APK debug cocok untuk pengembangan, bukan distribusi produksi. Build release memerlukan penandatanganan dan pengelolaan keystore tersendiri; repository ini tidak menyediakan kunci produksi.
+APK debug cocok untuk pengembangan, bukan distribusi produksi. Build rilis memakai R8 + resource shrinking (**3,32 MB** pada pengukuran terakhir) dan memerlukan keystore sendiri: [docs/rilis-bertanda-tangan.md](docs/rilis-bertanda-tangan.md) memuat langkah `keytool`, blok `signingConfigs`, dan verifikasi `apksigner`. Jangan menaruh keystore atau kata sandinya di repository.
 
 ### 5. Hubungkan ponsel untuk instalasi
 
@@ -400,23 +413,34 @@ Tidak semua ECU menyediakan freeze frame untuk semua kode. Mode Latihan tidak me
 
 ```text
 AndrOBD/
-├── androbd/                 Android application: UI, settings, transport
+├── androbd/                 Aplikasi Android: UI, pengaturan, transport, fitur bengkel
 │   ├── src/main/java/com/fr3ts0n/ecu/gui/androbd/
-│   ├── src/main/res/        Native XML layouts, strings, themes, icons
-│   ├── src/test/            Android module JVM tests
-│   ├── src/androidTest/     Tests run on an Android device
-│   └── libs/               Existing AChartEngine JAR
-├── library/                 Plain Java: ELM/OBD protocols and data models
+│   │   ├── *.java           Beranda, CommService, adapter, pengaturan (lapisan OBD)
+│   │   ├── workshop/        Data bengkel: database, repositori, model, PDF
+│   │   │   ├── inti        WorkshopDatabase, WorkshopRepository, DiagnosticRepository
+│   │   │   ├── *Repository  Inspection, Photo, ScanSnapshot, CannedJob, Reminder, Settings
+│   │   │   ├── pdf/         PdfPageWriter, WorkshopPdf (laporan + nota)
+│   │   │   └── ui/          Semua layar bengkel, WorkshopUi/DiagnosticUi, VoiceNoteRecorder
+│   │   └── diagnosis/       Diagnosis tanpa alat scan
+│   │       ├── core/        DiagnosisKnowledge, Validator, Scorer, CaseHistory, CheckStatus
+│   │       ├── data/        KnowledgeLoader, Repository, MediaStore, ServiceLink
+│   │       └── ui/          Start → Questions → Results → Case, SoundGuide, AudioPlayer
+│   ├── src/main/res/        Layout XML, string, tema, ikon
+│   ├── src/main/assets/     knowledge-base.json (panduan diagnosis bawaan)
+│   ├── src/test/            Tes JVM modul Android (JUnit 4)
+│   ├── src/androidTest/     Tes di ponsel (AndroidJUnitRunner)
+│   └── libs/               AChartEngine JAR
+├── library/                 Java murni: protokol ELM/OBD dan model data
 │   └── src/main/java/com/fr3ts0n/
-│       ├── ecu/prot/obd/    ElmProt, ObdProt, protocol resources
-│       ├── ecu/            PID and fault-code models, conversions
-│       ├── prot/           Stream and telegram handling
-│       └── pvs/            Observable process-variable structures
-├── plugin/                  Android plugin framework, Git submodule
-├── docs/                    Workshop terminology and implementation notes
-├── gradle/wrapper/          Pinned Gradle distribution
-├── settings.gradle          Includes :androbd, :library, :plugin
-└── LICENSE                  Original GPL license
+│       ├── ecu/prot/obd/    ElmProt, ObdProt, resource protokol
+│       ├── ecu/             Model PID dan kode kerusakan, konversi
+│       ├── prot/            Penanganan stream dan telegram
+│       └── pvs/             Struktur process variable yang dapat diamati
+├── plugin/                  Framework plugin upstream, submodule Git
+├── docs/                    Arsitektur, progres, panduan pengguna, glosarium
+├── gradle/wrapper/          Distribusi Gradle yang dipin
+├── settings.gradle          Mencakup :androbd, :library, :plugin
+└── LICENSE                  Lisensi GPL asli
 ```
 
 `androbd` adalah modul aplikasi, bukan folder bernama `app`. Modul ini bergantung pada `library` dan `plugin`. `library` tetap bebas dependensi Android; build mengecualikan paket GUI desktop lama. `plugin` adalah framework ekstensi upstream, **bukan modul database bengkel**.
@@ -462,6 +486,40 @@ Semua nama Java aplikasi pada tabel berikut berada di `androbd/src/main/java/com
 | `library/.../ecu/ObdCodeList.java`, `EcuCodeList.java` | Pemuatan kamus dan representasi kode |
 | `library/.../ecu/prot/obd/res/` | `pids.csv`, `conversions.csv`, `messages*.properties`, `codes*.properties` |
 
+
+### Alur data bengkel
+
+```mermaid
+flowchart TD
+    UI["Layar servis: tombol bengkel"] --> REPO["WorkshopRepository / *Repository"]
+    REPO --> DB["WorkshopDatabase (SQLiteOpenHelper, skema v5)"]
+    UI --> SNAP["ScanSnapshotWriter: salin kode + data langsung"]
+    SNAP --> DB
+    REPO --> PDF["PdfPageWriter / WorkshopPdf"]
+    PDF --> FILES["Android/data/<pkg>/files/exports/*.pdf"]
+    FILES --> SHARE["Chooser: WhatsApp atau aplikasi lain"]
+    DB --> ZIP["WorkshopArchive: database + foto + audio"]
+```
+
+Salinan pindai dibuat **sebelum** pergantian layanan bisa membersihkan daftar protokol, dan asal data (pindai
+nyata / data contoh / berkas) selalu ditulis di layar dan di PDF. Repositori sinkron: setiap layar memindahkan
+SQL dari UI thread dan menutup executor saat berhenti.
+
+### Alur diagnosis tanpa alat scan
+
+```mermaid
+flowchart TD
+    ASSET["assets/diagnosis/knowledge-base.json"] --> LOAD["DiagnosisKnowledgeLoader + Validator"]
+    LOAD --> ANSWER["Jawaban + CheckStatus"]
+    ANSWER --> SCORE["DiagnosisScorer: bobot dan alasan"]
+    SCORE --> RESULT["Results: kemungkinan penyebab + tingkat bahaya"]
+    RESULT --> CASE["Penilaian akhir oleh mekanik + bukti"]
+    CASE --> DREPO["DiagnosisRepository + DiagnosisMediaStore"]
+    DREPO --> STORE["workshop.db + files/diagnosis/"]
+```
+
+Skor hanya menentukan urutan; penilaian akhir selalu diisi mekanik, dan konfirmasi ditolak tanpa bukti.
+
 Kelas bernama `CommService` beserta turunannya **bukan subclass Android `Service`**. Jangan mengasumsikan sudah ada foreground service perekam yang bertahan di luar lifecycle layar. Daftar hasil menggunakan struktur data observable di memori; pergantian layanan dapat membersihkan/mengganti daftar.
 
 ### Navigasi dan resource
@@ -491,9 +549,19 @@ Versi acuan ada di file Gradle masing-masing modul, bukan pada instruksi instala
 | SpeedView | 1.6.1 | Gauge upstream, disembunyikan pada UI bengkel |
 | AChartEngine | JAR 1.2.0 | Grafik upstream |
 
-Lapisan data bengkel ada di `androbd/src/main/java/com/fr3ts0n/ecu/gui/androbd/workshop/` memakai `SQLiteOpenHelper` bawaan Android (tanpa Room/server/login). `WorkshopDatabase` versi 2 menambah tabel `diagnostics` tanpa menghapus data versi 1. `WorkshopRepository` mengelola pelanggan/kendaraan/servis/estimasi; `DiagnosticRepository` mengelola bukti per pasangan servis/modul; `WorkshopBackup` mencadangkan dan memulihkan seluruh data. Paket `guidance` menyimpan katalog panduan berbasis resource; `workshop.ui` menampilkan catatan dan panduan.
+Lapisan data bengkel ada di `androbd/src/main/java/com/fr3ts0n/ecu/gui/androbd/workshop/` memakai `SQLiteOpenHelper` bawaan Android (tanpa Room/server/login). Skema `workshop.db` kini **versi 5** dan setiap migrasinya aditif: v2 menambah `diagnostics`, v3 menambah `diagnosis_cases/checks/photos`, v4 menambah `inspection_items`, `photos`, `scan_snapshots`, `estimate_approvals`, `canned_jobs(+items)`, `reminders`, `audit_log`, `workshop_profile`, `settings` serta memperluas baris yang sudah ada, v5 menambah `paid_amount`. Tidak ada migrasi yang menghapus data pengguna.
 
-Uang memakai Rupiah bilangan bulat; status disimpan sebagai nama enum. Foreign key aktif dan penghapusan pelanggan berantai ke kendaraan, servis, estimasi, serta diagnosis. Restore memvalidasi salinan kandidat, seluruh kolom yang dipakai, integritas, foreign key, dan syarat bukti; cadangan versi 1 dimigrasikan ke versi 2 sebelum mengganti database aktif. Versi yang lebih baru ditolak. Salinan `.before-restore` dipertahankan dan data lama dipulihkan jika penggantian gagal. Ekspor tetap memerlukan tidak adanya penulisan bersamaan. Berkas `.obd` upstream bukan cadangan database bengkel.
+| Repositori | Tanggung jawab |
+| --- | --- |
+| `WorkshopRepository` | Pelanggan, kendaraan, servis, baris estimasi, persetujuan, pembayaran |
+| `DiagnosticRepository` | Bukti per pasangan servis/modul dan gerbang konfirmasi |
+| `InspectionRepository` | Bagian yang diperiksa (hapus lunak) dan catatan suara |
+| `PhotoRepository` | Rujukan foto; menolak path absolut dan traversal |
+| `ScanSnapshotRepository` | Salinan pindai sebelum/sesudah beserta asal datanya |
+| `CannedJobRepository` | Paket pekerjaan dan penyalinannya ke estimasi |
+| `ReminderRepository`, `WorkshopSettingsRepository` | Jatuh tempo, profil bengkel, pengaturan, audit log |
+
+Uang memakai Rupiah bilangan bulat; status disimpan sebagai nama enum. Foreign key aktif dan penghapusan pelanggan berantai ke kendaraan, servis, estimasi, serta diagnosis. Restore memvalidasi salinan kandidat, seluruh kolom, integritas, foreign key, dan syarat bukti (`DiagnosisRepository.validateDatabase`); cadangan versi lama dimigrasikan ke versi aktif sebelum mengganti database. Versi lebih baru ditolak. Salinan `.before-restore` dipertahankan dan data lama dipulihkan bila penggantian gagal. Ekspor tetap memerlukan tidak adanya penulisan bersamaan. Berkas `.obd` upstream bukan cadangan database bengkel.
 
 ## Panduan pengembangan
 
@@ -516,11 +584,16 @@ SHOW_CLEAR_FAULT_CODES = false;
 
 Ini flag kode saat build, **bukan pilihan mekanik di pengaturan**. Menampilkan grafik/fitur lanjutan tidak boleh sekaligus membuka kontrol aktuator atau penghapusan kode.
 
-### Batas integrasi bengkel berikutnya
+### Integrasi bengkel dan diagnosis
 
-Rencana integrasi berisiko paling kecil adalah menempatkan database dan layar bengkel di package Android tersendiri dalam `androbd`. Layar bengkel nantinya membawa ID servis ke alur diagnostik yang ada; pencatat di lapisan aplikasi harus membuat snapshot hasil sebelum daftar protokol berubah.
+Integrasinya sudah ada: database, repositori, dan seluruh layar bengkel berada di paket Android `workshop/`, dan
+alur diagnosis berada di paket `diagnosis/`. Keduanya tidak memanggil `ElmProt`, `ObdProt`, atau `CommService`;
+hasil OBD masuk ke catatan servis hanya lewat **Simpan pindai**, yang menyalin kode dan data langsung **sebelum**
+daftar protokol bisa berubah. Jangan memakai `plugin` sebagai pengganti modul domain bengkel dan jangan
+menganggap daftar statis `ObdProt` sebagai penyimpanan permanen.
 
-Rancangan tersebut **belum diimplementasikan**. Jangan memakai `plugin` sebagai pengganti modul domain bengkel atau menganggap daftar statis `ObdProt` sebagai penyimpanan permanen.
+Skema database, migrasi, dan keputusan arsitektur: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Status tiap
+fitur beserta bukti pengujian dan daftar yang belum diuji: [docs/PROGRESS.md](docs/PROGRESS.md).
 
 Detail istilah dan keputusan UI: [docs/workshop-glossary.md](docs/workshop-glossary.md). [CONTRIBUTING.md](CONTRIBUTING.md) memuat pedoman upstream; bila angka SDK atau petunjuk demo lamanya berbeda, gunakan konfigurasi Gradle dan alur eksplisit pada README ini.
 
@@ -574,6 +647,27 @@ adb shell am instrument -w \
 ```
 
 Tes mikrofon memakai data kasus dan rekaman sementara lalu membersihkannya; tes itu bukan bukti kebenaran diagnosis kendaraan.
+
+Grup tes bengkel yang dipakai saat mengerjakan F1–F20. Jalankan satu grup per perintah: menggabungkan terlalu
+banyak kelas dalam satu `am instrument` membuat proses tes kehabisan waktu pada ponsel bersama, walaupun tiap
+kelas lulus sendiri-sendiri.
+
+```bash
+RUNNER=com.fr3ts0n.ecu.gui.androbd.test/androidx.test.runner.AndroidJUnitRunner
+
+# Skema, repositori, pemeriksaan, paket, pembayaran, CSV (30 + 14 tes)
+adb shell am instrument -w -e class \
+  com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopSchemaV4InstrumentedTest,com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopRepositoryInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.workshop.InspectionInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.workshop.CannedJobInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.workshop.PaymentInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.workshop.CsvExporterInstrumentedTest \
+  $RUNNER
+adb shell am instrument -w -e class \
+  com.fr3ts0n.ecu.gui.androbd.workshop.ScanSnapshotInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.workshop.ScanComparisonInstrumentedTest,com.fr3ts0n.ecu.gui.androbd.workshop.pdf.WorkshopPdfInstrumentedTest \
+  $RUNNER
+
+# Alur pengguna: simpan pindai, buka kembali, bandingkan
+adb shell am instrument -w -e class \
+  com.fr3ts0n.ecu.gui.androbd.workshop.WorkshopScanFlowInstrumentedTest $RUNNER
+```
+
 
 
 
@@ -650,9 +744,9 @@ Roadmap adalah arah pengembangan, **bukan daftar fitur yang sudah tersedia**.
 | --- | --- | --- |
 | 0–1 | Build dasar dan pemetaan codebase | Selesai pada lingkungan pengembangan |
 | 2 | Bahasa Indonesia, branding Bengkel Scan, menu sederhana, dan perapian UI | Selesai, termasuk terjemahan 3.584 uraian kode OBD |
-| 3 | Database offline pelanggan, kendaraan, servis, item estimasi; ekspor/backup | Selesai; cadangan ZIP kini membawa database, foto, dan audio diagnosis |
-| 4 | Tautan hasil OBD ke servis dan penyimpanan snapshot otomatis | Catatan manual lintas scanner dan tautan kasus gejala tersedia; snapshot OBD otomatis belum tersedia |
-| 5 | Laporan/invoice PDF dan berbagi melalui share sheet, termasuk WhatsApp | Belum tersedia |
+| 3 | Database offline pelanggan, kendaraan, servis, item estimasi; ekspor/backup | Selesai; cadangan ZIP membawa database, foto, audio, dan panduan tambahan |
+| 4 | Tautan hasil OBD ke servis dan penyimpanan snapshot otomatis | Selesai secara manual: **Simpan pindai** menyalin kode dan data langsung sebelum daftar bisa berubah, menandai pindai nyata/data contoh/berkas, dan menyediakan bandingkan sebelum-sesudah. Tidak ada perekaman otomatis di latar belakang |
+| 5 | Laporan/nota PDF dan berbagi melalui share sheet, termasuk WhatsApp | Selesai: laporan A4 berhalaman dan nota berisi baris disetujui, dibagikan sebagai `application/pdf` atau teks pesan |
 | 6 | Checklist gejala diesel dengan knowledge base yang dapat diedit | Selesai sebagai draf: 16 keluhan, pertanyaan, peringkat, bukti, bunyi, impor JSON, dan kasus serupa; belum ditinjau mekanik senior |
 | 7 | Alur bengkel harian: pekerjaan, pemeriksaan, estimasi, persetujuan, PDF, pembayaran | Selesai; lihat `docs/PROGRESS.md` untuk bukti per fitur |
 | 8 | Pengingat, ekspor CSV, profil bengkel, mode lanjutan | Selesai; notifikasi latar belakang sengaja tidak ditambahkan |
