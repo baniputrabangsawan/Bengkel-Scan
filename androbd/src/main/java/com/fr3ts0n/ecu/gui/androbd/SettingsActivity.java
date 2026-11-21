@@ -251,6 +251,18 @@ public class SettingsActivity extends AppCompatActivity
 		{
 			super.onViewCreated(view, savedInstanceState);
 			requireActivity().setTitle(getPreferenceScreen().getTitle());
+			// One padding rule and a visible divider, so a long settings list keeps its rhythm.
+			if (view instanceof android.view.ViewGroup)
+			{
+				androidx.recyclerview.widget.RecyclerView list =
+						((android.view.ViewGroup) view).findViewById(androidx.preference.R.id.recycler_view);
+				if (list != null)
+				{
+					int pad = getResources().getDimensionPixelSize(R.dimen.ui_screen_padding_horizontal);
+					list.setPadding(pad, pad, pad, pad);
+					list.setClipToPadding(false);
+				}
+			}
 		}
 
 

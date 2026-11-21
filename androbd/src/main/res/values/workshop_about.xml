@@ -4,4 +4,5 @@
     <string name="upstream_project_name" translatable="false">AndrOBD</string>
     <string name="about_based_on">Based on AndrOBD by fr3ts0n. Licensed under GNU GPL-3.0. Tap to open the original project.</string>
     <string name="about_license_notice">Free software under GNU GPL-3.0. You may use, study, modify, and share it under the license terms.</string>
+    <string name="about_credits_heading">Credits</string>
 </resources>

@@ -341,48 +341,44 @@
         android:title="@string/about_title"
         >
         <Preference
+            android:key="about_version"
             android:icon="@drawable/ic_info"
-            android:title="@string/app_name"
-            android:summary="@string/about_based_on">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/url_app_mainpage"/>
-        </Preference>
+            android:selectable="false"
+            android:summary="@string/about_based_on"
+            android:title="@string/app_version" />
         <Preference
             android:icon="@drawable/ic_info"
             android:title="@string/upstream_project_name"
-            android:summary="@string/copyright_fr3ts0n"
-            >
+            android:summary="@string/copyright_fr3ts0n">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/url_app_mainpage"/>
         </Preference>
-        <Preference
-            android:icon="@drawable/ic_info"
-            android:summary="@string/app_version"
-            android:title="@string/release_history"
-            >
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/url_app_releases"/>
-        </Preference>
-        <Preference
-            android:icon="@drawable/ic_info"
-            android:title="@string/graphic_design"
-            android:summary="@string/design_credits"
-            >
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="https://github.com/anaufalm"/>
-        </Preference>
-        <Preference
-            android:icon="@drawable/ic_info"
-            android:title="@string/translation_credits"
-            >
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/url_app_translation"/>
-        </Preference>
+        <PreferenceCategory android:title="@string/about_credits_heading">
+            <Preference
+                android:icon="@drawable/ic_info"
+                android:summary="@string/app_version"
+                android:title="@string/release_history">
+                <intent
+                    android:action="android.intent.action.VIEW"
+                    android:data="@string/url_app_releases"/>
+            </Preference>
+            <Preference
+                android:icon="@drawable/ic_info"
+                android:title="@string/graphic_design"
+                android:summary="@string/design_credits">
+                <intent
+                    android:action="android.intent.action.VIEW"
+                    android:data="https://github.com/anaufalm"/>
+            </Preference>
+            <Preference
+                android:icon="@drawable/ic_info"
+                android:title="@string/translation_credits">
+                <intent
+                    android:action="android.intent.action.VIEW"
+                    android:data="@string/url_app_translation"/>
+            </Preference>
+        </PreferenceCategory>
         <PreferenceScreen
             android:key="screen_license"
             android:icon="@drawable/ic_scale"

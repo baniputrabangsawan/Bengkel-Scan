@@ -46,6 +46,7 @@
         <item name="android:listPreferredItemHeightSmall">@dimen/ui_touch_primary</item>
         <item name="actionBarStyle">@style/WorkshopActionBar</item>
         <item name="materialAlertDialogTheme">@style/UiDialogTheme</item>
+        <item name="preferenceTheme">@style/UiPreferenceTheme</item>
     </style>
 
     <style name="AppTheme" parent="AppTheme.Base" />
@@ -59,5 +60,17 @@
         <item name="android:textColor">@color/workshop_on_surface</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <!--
+      Settings reuse the AndroidX Preference framework; this overlay only re-points its colours
+      and its row height at the workshop tokens so the settings list matches every other screen.
+    -->
+    <style name="UiPreferenceTheme" parent="PreferenceThemeOverlay">
+        <item name="preferenceCategoryTitleTextColor">@color/workshop_primary</item>
+        <item name="android:textColorPrimary">@color/workshop_on_surface</item>
+        <item name="android:textColorSecondary">@color/workshop_secondary_text</item>
+        <item name="colorAccent">@color/workshop_primary</item>
+        <item name="android:colorBackground">@color/workshop_page_background</item>
     </style>
 </resources>

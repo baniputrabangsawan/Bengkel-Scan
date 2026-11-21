@@ -4,4 +4,5 @@
     <string name="design_credits">2018 oleh @anaufalm</string>
     <string name="about_based_on">Dikembangkan dari AndrOBD karya fr3ts0n. Berlisensi GNU GPL-3.0. Ketuk untuk membuka proyek asli.</string>
     <string name="about_license_notice">Perangkat lunak bebas berlisensi GNU GPL-3.0. Anda dapat menggunakan, mempelajari, mengubah, dan membagikannya sesuai ketentuan lisensi.</string>
+    <string name="about_credits_heading">Kredit</string>
 </resources>

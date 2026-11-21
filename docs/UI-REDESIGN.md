@@ -464,3 +464,31 @@ The chart/dashboard/HUD screens are behind Advanced mode and are handled in step
 Pending and permanent chips were not exercised on the device: the demo data has stored codes only, and forcing a
 pending code would mean editing demo data. The mapping is covered by code review and by the existing presentation
 test asserting the *labels*; the colour families for pending/permanent remain visually unverified.
+
+## Step 3.5 — Settings and About (done)
+
+### What changed
+
+| Change | File |
+| --- | --- |
+| Settings list gets a `UiPreferenceTheme` overlay: category titles in the accent colour, body/secondary text, background and accent from the tokens | `styles.xml` |
+| Settings list padding driven by the screen token instead of the platform default | `SettingsActivity.onViewCreated` |
+| About de-duplicated: the first two rows both opened the same upstream URL; now one row is a non-tappable version/fork statement and one is the upstream project link | `xml/settings.xml` |
+| Credits grouped under a "Kredit" heading instead of five flat rows | `xml/settings.xml`, `workshop_about.xml` (both locales) |
+
+Nothing was removed: every previous link is still present, GPL text and attribution are untouched.
+
+### Verification
+
+- `assembleDebug`: BUILD SUCCESSFUL; JVM 178 tests, 0 failures; lint 0 errors (144 warnings).
+- Settings on the phone: page `#F4F6F8`, rows on `#FFFFFF`, body `#10151A`, secondary `#3F4B54`.
+- About on the phone: heading "Kredit" present, version row present, page `#F4F6F8`, surface `#FFFFFF`.
+  Capture: `docs/design/after/settings-light.png`, `docs/design/after/about-light.png`.
+- `SettingsActivity` still applies the locale first and keeps the `screen_app_info` deep link working.
+
+### Incident: truncated file from a full disk
+
+`/` filled to 925 MB free during this step and a write to `xml/settings.xml` left the file **empty**. It was
+restored from the last commit (`git checkout --`) and the change re-applied; the file parses and builds. My own
+capture recordings in `/tmp` (421 MB of `.mkv`) were deleted to recover space. Disk is still at 1.4 GB free, so
+builds remain possible but tight — worth clearing space on your side too.
