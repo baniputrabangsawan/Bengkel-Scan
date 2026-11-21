@@ -633,3 +633,59 @@ Restore already ran on its own thread; unchanged.
 | Fixed heights that clip text | the scan phase radios were the only ones; now `minHeight` |
 
 Captures: `docs/design/after/dark-home.png`, `dark-jobs.png`, `font200-home.png`, `font200-home-lower.png`.
+
+## Step 4.6 — Dependencies, resources and shrinking audit
+
+### Dependencies (all declared ones are used)
+
+| Library | Importing files | Verdict |
+| --- | --- | --- |
+| `usb-serial-for-android` | 2 | keep — USB transport |
+| `speedviewlib` | 2 (`DashBoardActivity`, `ObdGaugeAdapter`) | keep — hidden dashboard only |
+| `achartengine-1.2.0.jar` (local) | 3 (`ChartActivity`, `ExportTask`, `ObdItemAdapter`) | keep — chart + CSV export, unmaintained but load-bearing |
+| `androidx.annotation` / `core` / `appcompat` | 6 / 11 / 33 | keep |
+| `material` | 15 | keep — every component style now derives from it |
+| `preference` | 3 | keep — settings |
+| `recyclerview` | 4 | keep — dashboard grid + the settings list |
+
+No unused dependency found, so none removed. Nothing new added.
+
+### R8 / shrinkResources
+
+Release build succeeds: **3,500,753 B** (vs 3,482,565 B baseline; +18 KB from the new dialogs and drawables).
+Both keep rules in `proguard-rules.pro` are load-bearing and were left untouched:
+`ProcessVar` (Java serialization of saved `.obd` files) and `-keeppackagenames` (relative
+`getResource("prot/obd/res/pids.csv")` lookups). Removing either would break feature paths I am not allowed to
+break, so this audit changed neither.
+
+Dex string presence, debug vs release, shows R8 is working rather than just re-packing:
+
+| Package marker | debug | release |
+| --- | --- | --- |
+| `achartengine` | 92 | 26 |
+| `speedview` | 144 | 23 |
+| `usbserial` | 60 | 37 |
+
+### Dead resources actually removed
+
+Nine tokens I had introduced or inherited had **zero** references (checked against both XML and Java by name):
+
+- `dimen`: `ui_space_8`, `activity_horizontal_margin`, `workshop_row_height`, `workshop_label_size`, `workshop_value_size`
+- `color`: `workshop_border`, `workshop_text_disabled` (both themes)
+- `drawable`: `ui_field_background.xml` (superseded by Material's own outlined box with `boxStrokeWidthFocused`)
+
+Kept deliberately: `ui_section_gap` (used by the `UiSection` style), `workshop_touch_target` (used by the device row).
+
+Size effect after the removal: debug 11,050,260 B (was 11,051,274 B), release 3,500,753 B (was 3,501,089 B).
+
+### Not done, with the reason
+
+- **55 unused strings** remain. Most are upstream locale strings and workshop copy used only from tests; deleting
+  string resources is the kind of change that silently breaks a screen through a `getString` in a path lint cannot
+  see. Left for a dedicated pass with an instrumented run over every screen.
+- **`mil_off.png` / `mil_on.png` / `ic_*` drawables** flagged unused are upstream artwork; `logo.png` is still
+  referenced from the launcher/asset story and is shipped intentionally. Removing upstream assets is out of scope for
+  a UI redesign and would touch attribution.
+- **Library-owned `codes_*.properties`** (~3–4 MB of Java resources) cannot be stripped by `shrinkResources` because
+  they live in `:library`, which this task must not change.
+- **RecyclerView migration** of the workshop lists: measured 0.35 % jank, so there is no win; not done.

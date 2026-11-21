@@ -13,7 +13,6 @@
     <!-- Text -->
     <color name="workshop_on_surface">#E8EEF2</color>
     <color name="workshop_secondary_text">#B7C4CD</color>
-    <color name="workshop_text_disabled">#8A97A0</color>
 
     <!-- Action -->
     <color name="workshop_primary">#CFEAF3</color>
@@ -21,7 +20,6 @@
 
     <!-- Lines -->
     <color name="workshop_outline">#6B7C85</color>
-    <color name="workshop_border">#6B7C85</color>
     <color name="workshop_divider">#33424B</color>
 
     <!-- Interaction -->

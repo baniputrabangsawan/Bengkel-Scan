@@ -14,7 +14,6 @@
     <!-- Text -->
     <color name="workshop_on_surface">#10151A</color>
     <color name="workshop_secondary_text">#3F4B54</color>
-    <color name="workshop_text_disabled">#59636B</color>
 
     <!-- Action -->
     <color name="workshop_primary">#0B4A63</color>
@@ -22,7 +21,6 @@
 
     <!-- Lines: 3:1 against both page and surface, so a boundary is visible in sunlight -->
     <color name="workshop_outline">#5A6B75</color>
-    <color name="workshop_border">#5A6B75</color>
     <color name="workshop_divider">#C7D0D6</color>
 
     <!-- Interaction -->
