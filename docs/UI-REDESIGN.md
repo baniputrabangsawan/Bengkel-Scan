@@ -621,3 +621,15 @@ Restore already ran on its own thread; unchanged.
   `DiskReadViolation` — it is not proof there is no main-thread I/O left. The static audit still lists per-row
   queries in the workshop lists (N+1) as unfixed, because fixing them needs an adapter redesign, not a patch.
 - RecyclerView migration was **not** done: the measured list shows 0.35 % jank, so there is nothing to win.
+
+## Step 3.8 — Dark theme and large fonts (verified)
+
+| Check | Evidence |
+| --- | --- |
+| Night palette reaches the widgets | `systemui night yes`; home page `#0B1114`, card `#121A1F`, border `#6B7C85`, on-primary `#CFEAF3`; jobs list neutral chip `#243037` (44,588 px), filled filter `#CFEAF3` (52,456 px) |
+| Light palette | home page `#F4F6F8`, card `#FFFFFF`, border `#5A6B75`, primary `#0B4A63` |
+| 200 % font | `font_scale 2.0`, home re-launched: content reflows on both the top and the lower half (`font200-home.png`, `font200-home-lower.png`); no clipped row or cut label observed in the captures. Restored to the phone's own 0.85 afterwards |
+| Hard-coded colours in layouts | none (`grep` for `textColor="#"`, `@android:color/white/black`) |
+| Fixed heights that clip text | the scan phase radios were the only ones; now `minHeight` |
+
+Captures: `docs/design/after/dark-home.png`, `dark-jobs.png`, `font200-home.png`, `font200-home-lower.png`.
