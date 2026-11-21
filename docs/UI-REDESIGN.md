@@ -431,3 +431,36 @@ minutes. Cause: `adb install -r` brings a running app forward on its previous di
 re-assert the target display afterwards. The app was force-stopped the moment it was spotted, and every later launch
 was verified to be on the virtual display before any tap. No other app was touched, no data was cleared, and this
 workspace's own package is the only one that was installed or stopped.
+
+## Step 3.4 — OBD screens (done)
+
+### What changed
+
+| Change | File |
+| --- | --- |
+| Live-data values use a new `UiText.Readout` style: 26 sp bold, tabular figures, so digits do not shift sideways as values change | `type.xml`, `obd_item.xml` |
+| Fault-code badge became the shared status chip: stored = neutral, pending = warning, permanent = danger — each still carries its Indonesian word | `dtc_item.xml`, `DfcItemAdapter.applyStatusTone` |
+| OBD list scaffold uses `@style/UiScreen`; five repeated 16 dp margins, 4 dp bar, 8 dp divider and hard-coded text size replaced by tokens | `obd_list.xml` |
+| Zero-value margins removed rather than left as `0dp` noise | `obd_list.xml` |
+| Every remaining raw `Widget.Material3.Button*` replaced by `UiButton` / `.Secondary` / `.Text` (device pickers, PID screen, PDF, profile, scan, service) — 0 raw button styles left | 10 layouts |
+
+The chart/dashboard/HUD screens are behind Advanced mode and are handled in step 3.7 with the other hidden surfaces.
+
+### Verification
+
+- `assembleDebug` and `assembleDebugAndroidTest`: BUILD SUCCESSFUL. JVM: 178 tests, 0 failures.
+- Device: `DiagnosticPresentationInstrumentedTest` **OK (6 tests)** — recycled rows, freeze-frame dropdown, status
+  tones and Indonesian descriptions still behave.
+- Fault list on the phone: neutral chip `#E5E9EC` rendered (33,666 px), the check-engine banner `#FEE2E2`
+  (107,844 px), page `#F4F6F8`, surface `#FFFFFF`. Scroll after restyle: 216 frames, 2 janky (0.93%), p50 11 ms.
+- Live data: page `#F4F6F8`, card surface `#FFFFFF`, border `#5A6B75` (51,552 px) — the old 1.2:1 border is gone.
+
+### Captures
+
+`docs/design/after/obd-dtc.png`, `docs/design/after/obd-live.png`.
+
+### Honest limit
+
+Pending and permanent chips were not exercised on the device: the demo data has stored codes only, and forcing a
+pending code would mean editing demo data. The mapping is covered by code review and by the existing presentation
+test asserting the *labels*; the colour families for pending/permanent remain visually unverified.

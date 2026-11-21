@@ -35,22 +35,16 @@
 
     <TextView
         android:id="@+id/result_status"
+        style="@style/UiChip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ui_space_2"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="@drawable/result_status_badge"
-        android:textColor="@color/workshop_on_surface"
-        android:textAppearance="@style/UiText.Meta" />
+        android:layout_marginTop="@dimen/ui_space_2" />
 
     <TextView
         android:id="@+id/obd_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/ui_space_2"
         android:textColor="@color/workshop_on_surface"
         android:textAppearance="@style/UiText.Body"
         android:lineSpacingMultiplier="1.2" />

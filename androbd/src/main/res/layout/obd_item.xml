@@ -18,8 +18,8 @@
         android:id="@+id/obd_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:textAppearance="@style/UiText.Title"
+        android:layout_marginTop="@dimen/ui_space_1"
+        android:textAppearance="@style/UiText.Readout"
         android:textColor="@color/workshop_on_surface"
         android:fontFamily="sans-serif-medium"
         android:fontFeatureSettings="tnum"
@@ -30,7 +30,7 @@
         android:id="@+id/obd_units"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="@dimen/ui_space_1"
         android:textAppearance="@style/UiText.Meta"
         android:textColor="@color/workshop_secondary_text"
         android:lineSpacingMultiplier="1.15" />
@@ -47,7 +47,7 @@
         android:id="@+id/bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="4dp"
+        android:layout_height="@dimen/ui_space_1"
         android:layout_marginTop="@dimen/ui_space_3"
         android:visibility="gone"
         android:max="100" />

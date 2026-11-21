@@ -59,4 +59,16 @@
         <item name="android:maxLines">3</item>
         <item name="android:ellipsize">end</item>
     </style>
+
+    <!--
+      A readout inside a list: bigger than body text, smaller than the single hero number.
+      Tabular figures keep a live value from shifting sideways as digits change.
+    -->
+    <style name="UiText.Readout" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">@color/workshop_on_surface</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
 </resources>

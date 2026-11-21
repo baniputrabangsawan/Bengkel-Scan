@@ -87,7 +87,7 @@
 
         <Button
             android:id="@+id/workshop_profile_logo"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/UiButton.Secondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -104,7 +104,7 @@
 
         <Button
             android:id="@+id/workshop_profile_save"
-            style="@style/Widget.Material3.Button"
+            style="@style/UiButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ui_space_6"

@@ -5,19 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/workshop_page_background">
+    style="@style/UiScreen">
 
     <TextView
         android:id="@+id/mil_warning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="@dimen/ui_space_3"
-        android:padding="12dp"
+        android:layout_marginTop="0dp"
+        android:padding="@dimen/ui_space_3"
         android:background="@color/workshop_warning_surface"
         android:textColor="@color/workshop_warning_text"
-        android:textSize="@dimen/workshop_label_size"
+        android:textAppearance="@style/UiText.Body"
         android:text="@string/mil_warning"
         android:accessibilityLiveRegion="polite"
         android:visibility="gone" />
@@ -26,8 +24,6 @@
         android:id="@+id/diagnosis_help"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="@dimen/ui_space_3"
         android:layout_marginBottom="@dimen/ui_space_1"
         android:textColor="@color/workshop_secondary_text"
@@ -39,31 +35,27 @@
         android:id="@+id/ff_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="@dimen/ui_space_2"
         android:layout_marginBottom="@dimen/ui_space_1"
         android:prompt="@string/select_fault_code"
         android:spinnerMode="dialog"
         android:visibility="visible"
         android:contentDescription="@string/select_fault_code"
-        android:minHeight="48dp" />
+        android:minHeight="@dimen/ui_touch_min" />
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_gravity="center_horizontal"
         android:choiceMode="multipleChoice"
         android:divider="@android:color/transparent"
-        android:dividerHeight="8dp"
+        android:dividerHeight="@dimen/ui_space_2"
         android:fastScrollEnabled="true"
         android:scrollbarStyle="outsideOverlay"
         android:clipToPadding="false"
-        android:paddingTop="12dp"
-        android:paddingBottom="16dp" />
+        android:paddingTop="@dimen/ui_space_3"
+        android:paddingBottom="@dimen/ui_space_4" />
 
 </LinearLayout>

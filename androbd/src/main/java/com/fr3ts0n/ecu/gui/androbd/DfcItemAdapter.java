@@ -143,11 +143,41 @@ public class DfcItemAdapter extends ObdItemAdapter
 		holder.icon.setVisibility(noCodes ? View.GONE : View.VISIBLE);
 		holder.status.setText(statusLabel == 0 ? "" : getContext().getString(statusLabel));
 		holder.status.setVisibility(!noCodes && statusLabel != 0 ? View.VISIBLE : View.GONE);
+		applyStatusTone(holder.status, service);
 		holder.description.setText(codeDescription(code, String.valueOf(currPv.get(EcuCodeItem.FID_DESCRIPT))));
 		// Keep the selected value compact; the dialog retains the complete description.
 		holder.description.setVisibility(!compact || dropDown || noCodes ? View.VISIBLE : View.GONE);
 		holder.context.setVisibility(noCodes ? View.VISIBLE : View.GONE);
 		return view;
+	}
+
+	/**
+	 * Stored, pending and permanent are different claims about a fault, so each gets its own
+	 * chip family. The label is always present, so colour is never the only signal.
+	 */
+	private void applyStatusTone(TextView status, int service)
+	{
+		int background;
+		int text;
+		switch (service)
+		{
+			case ObdProt.OBD_SVC_PENDINGCODES:
+				background = R.drawable.ui_chip_warning;
+				text = R.color.workshop_status_warning_text;
+				break;
+			case ObdProt.OBD_SVC_PERMACODES:
+				background = R.drawable.ui_chip_danger;
+				text = R.color.workshop_status_danger_text;
+				break;
+			case ObdProt.OBD_SVC_READ_CODES:
+				background = R.drawable.ui_chip_neutral;
+				text = R.color.workshop_status_neutral_text;
+				break;
+			default:
+				return;
+		}
+		status.setBackgroundResource(background);
+		status.setTextColor(getContext().getColor(text));
 	}
 
 	/* (non-Javadoc)
