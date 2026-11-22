@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="long_press_dfc_hint">Prema longo DFC para a busca en liña …</string>
-    <string name="graphic_design">Deseño gráfico</string>
-    <string name="release_history">Historial de versións…</string>
-    <string name="libraries_sum">Bibliotecas utilizadas no proxecto …</string>
-    <string name="libraries">Bibliotecas …</string>
-    <string name="donation">Apoiar ao proxecto…</string>
     <string name="license">Licenzas …</string>
     <string name="toolbar_overlay_sum">Amosa a barra de ferramentas solapando a pantalla principal</string>
     <string name="toolbar_overlay">Amosa como superposición</string>
@@ -156,7 +151,6 @@
     <string name="title_connected_to">Conectado a %s</string>
     <string name="title_connecting">Conectando …</string>
     <string name="app_description">Aplicación de diagnóstico de vehículos Android OBD para adaptador Bluetooth ELM327</string>
-    <string name="translation_credits">Tradución por aluaces, n1cklim</string>
     <string name="display_range">Rango de visualización</string>
     <string name="comm_baudrate">Velocidade do ELM</string>
     <string name="copied_to_clipboard">Copiado ao portapapeis</string>

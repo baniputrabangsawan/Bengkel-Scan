@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">تمت الترجمة للغة العربية من قبل محمود المومني و منار بشناق</string>
     <string name="app_description">تطبيق Android OBD لفحص السيارات بإستخدام ELM327</string>
     <string name="title_connecting">جار الإتصال …</string>
     <string name="title_connected_to">تم الإتصال %s</string>
@@ -106,11 +105,6 @@
     <string name="autohide_delay">إخفاء شريط أدوات تأخير [s]</string>
     <string name="csv_export_options">خيارات تصدير CSV</string>
     <string name="license">الترخيص…</string>
-    <string name="donation">دعم المشروع…</string>
-    <string name="libraries">المكتبات…</string>
-    <string name="libraries_sum">المكتبات المستخدمة في المشروع…</string>
-    <string name="release_history">تاريخ الإصدار …</string>
-    <string name="graphic_design">تصميم الرسوم البيانية</string>
     <string name="demo_stopped">نمط العرض التوضيحي مُتَوَقِّفٌ</string>
     <string name="demo_started">بدأ تشغيل نمط العرض التوضيحي</string>
     <string name="hud">شاشة العرض على الزجاج الأمامي</string>

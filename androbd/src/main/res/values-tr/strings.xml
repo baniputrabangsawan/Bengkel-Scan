@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Weblate katkıcıları tarafından çevrilmiştir</string>
     <string name="app_description">"Android OBD ELM 327 Bluetooth cihazı üzerinden araç teşhis  uygulaması"</string>
     <string name="title_connecting">Bağlanıyor…</string>
     <string name="title_connected_to">"%s ye bağlandı "</string>
@@ -153,11 +152,6 @@
     <string name="toolbar_overlay">Tam ekranda göster</string>
     <string name="toolbar_overlay_sum">Ana ekranda araç çubuğunu kapla</string>
     <string name="license">Lisans …</string>
-    <string name="donation">Projeyi destekle…</string>
-    <string name="libraries">Eklentiler …</string>
-    <string name="libraries_sum">Projede kullanılan eklentiler …</string>
-    <string name="release_history">Versiyon geçmişi …</string>
-    <string name="graphic_design">Grafik tasarım</string>
     <string name="long_press_dfc_hint">Çevrimiçi arama için DFC tuşuna uzun basın …</string>
     <string name="comm_baudrate_description">USB seri haberleşme hızı</string>
     <string name="comm_baudrate">ELM baud oranı</string>

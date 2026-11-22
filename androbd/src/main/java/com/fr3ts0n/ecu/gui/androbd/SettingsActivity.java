@@ -192,7 +192,6 @@ public class SettingsActivity extends AppCompatActivity
 		};
 
 		static final String ELM_TIMING_SELECT = "adaptive_timing_mode";
-		private static final String KEY_BITCOIN = "bitcoin";
 		private static final String KEY_OPEN_LOG_DIR = "open_log_dir";
 
 		Vector<EcuDataItem> items;
@@ -225,7 +224,6 @@ public class SettingsActivity extends AppCompatActivity
 			setupPidSelection();
 			// update network selection fields
 			updateNetworkSelections();
-			setPrefClickListener(KEY_BITCOIN);
 			setPrefClickListener(KEY_OPEN_LOG_DIR);
 			confirmAdvancedMode();
 
@@ -582,12 +580,7 @@ public class SettingsActivity extends AppCompatActivity
 			Intent intent = preference.getIntent();
 			try
 			{
-				if(KEY_BITCOIN.equals(preference.getKey()))
-				{
-					// special handling for bitcoin VIEW intent
-					startActivity(intent);
-				}
-				else if(KEY_OPEN_LOG_DIR.equals(preference.getKey()))
+				if(KEY_OPEN_LOG_DIR.equals(preference.getKey()))
 				{
 					openLogDirectory();
 					return true;

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Tradus de Cristian</string>
     <string name="app_description">Aplicație de diagnosticare a vehiculelor Android OBD pentru adaptorul ELM327 Bluetooth</string>
     <string name="title_connecting">Conectare…</string>
     <string name="title_connected_to">Conectat la %s</string>

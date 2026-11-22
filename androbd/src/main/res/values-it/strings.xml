@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Tradotto da fr3ts0n</string>
     <string name="app_description">Applicazione Android di diagnostica veicoli OBD con adattatori Bluetooth ELM327</string>
     <string name="title_connecting">Connessione…</string>
     <string name="title_connected_to">Connesso: %s</string>
@@ -153,11 +152,6 @@
     <string name="toolbar_overlay">Mostra in sovraimpressione</string>
     <string name="toolbar_overlay_sum">Mostra la barra degli oggetti sopra lo schermo principale</string>
     <string name="license">Verifica…</string>
-    <string name="donation">Sostieni il progetto …</string>
-    <string name="libraries">Librerie…</string>
-    <string name="libraries_sum">Librerie usate nel progetto…</string>
-    <string name="release_history">Cronologia delle versioni …</string>
-    <string name="graphic_design">design grafico</string>
     <string name="long_press_dfc_hint">Premi a lungo DFC per cercare online…</string>
     <string name="comm_baudrate_description">Velocità di comunicazione seriale USB</string>
     <string name="comm_baudrate">Tasso di baud ELM</string>

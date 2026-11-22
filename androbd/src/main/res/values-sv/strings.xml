@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Översättning av fr3ts0n</string>
     <string name="title_connecting">Ansluter…</string>
     <string name="title_connected_to">Anslöt %s</string>
     <string name="logo">Logotyp</string>
@@ -153,11 +152,6 @@
     <string name="toolbar_overlay">Visa som överlagring</string>
     <string name="toolbar_overlay_sum">Visa verktygsfält ovan på huvudskärm</string>
     <string name="license">Licensiering…</string>
-    <string name="donation">Stöd projekt …</string>
-    <string name="libraries">Bibliotek…</string>
-    <string name="libraries_sum">Bibliotek som använts i projektet…</string>
-    <string name="release_history">Historik för utgåvan …</string>
-    <string name="graphic_design">Grafisk design</string>
     <string name="long_press_dfc_hint">Klicka och håll in DFC för att söka online …</string>
     <string name="copied_to_clipboard">Kopierades till klippbordet</string>
     <string name="service_testcontrol">Testkontroll för OBD</string>

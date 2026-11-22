@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Μετάφραση από τον fr3ts0n</string>
     <string name="title_connecting">Σύνδεση…</string>
     <string name="title_connected_to">Συνδεδεμένο %s</string>
     <string name="logo">Λογότυπο</string>

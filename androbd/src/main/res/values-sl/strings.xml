@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Prevedel Aha999</string>
     <string name="app_description">Android aplikacija za OBD diagnostiko z adapterji ELM327</string>
     <string name="title_connecting">Povezovanje…</string>
     <string name="title_connected_to">Povezano %s</string>
@@ -83,11 +82,6 @@
     <string name="autohide_toolbar_description">Samodejno skrij orodno vrstico v času brez dejavnosti</string>
     <string name="csv_export_options">Možnosti izvoza CSV</string>
     <string name="license">Licence …</string>
-    <string name="donation">Podpri projekt …</string>
-    <string name="libraries">Knjižnice …</string>
-    <string name="libraries_sum">Knjižnice uporabljene v projektu …</string>
-    <string name="release_history">Zgodovina različic …</string>
-    <string name="graphic_design">Grafični dizajn</string>
     <string name="long_press_dfc_hint">Dolgi pritisk na DFC za spletno iskanje …</string>
     <string name="back_again_to_exit">Znova pritisni gumb Nazaj, da zapreš aplikacijo</string>
     <string name="filter">Filter izbran</string>

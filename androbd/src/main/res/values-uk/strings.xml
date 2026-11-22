@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Перекладено добровольцями Weblate</string>
     <string name="app_description">Додаток Android для OBD діагностики з використанням Bluetooth адаптера ELM327</string>
     <string name="title_connecting">З’єдання…</string>
     <string name="title_connected_to">З’єднано з %s</string>
@@ -133,15 +132,10 @@
     <string name="plugin_manager">Менеджер плагінів</string>
     <string name="configure">Сконфігурувати</string>
     <string name="license">Ліцензування…</string>
-    <string name="libraries">Бібліотеки…</string>
-    <string name="release_history">Історія випусків …</string>
     <string name="toolbar_overlay">Показати як накладку</string>
     <string name="toolbar_overlay_sum">Показувати панель накладання основного екрана</string>
-    <string name="libraries_sum">Бібліотеки, використані в проєкті …</string>
     <string name="data_disable_max_description">Кількість недійсних послідовних відповідей перед вимкненням елемента</string>
-    <string name="donation">Підтримка проєкту …</string>
     <string name="data_disable_max">Ліміт вимкнення показників</string>
-    <string name="graphic_design">Графічний дизайн</string>
     <string name="long_press_dfc_hint">Затисніть DFC, щоб шукати онлайн …</string>
     <string name="comm_baudrate_description">Швидкість послідовної комунікації через USB</string>
     <string name="comm_baudrate">Швидкість передавання даних ELM</string>

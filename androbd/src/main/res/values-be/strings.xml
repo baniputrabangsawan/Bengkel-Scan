@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Пераклад victorenator</string>
     <string name="app_description">Андроід-праграма для OBD-дыагностыкі для Bluetooth-адаптара ELM327</string>
     <string name="title_connecting">Злучэнне…</string>
     <string name="title_connected_to">Злучана з %s</string>
@@ -153,11 +152,6 @@
     <string name="toolbar_overlay">Паказць накладаннем</string>
     <string name="toolbar_overlay_sum">Паказаць панэль накладаннем на асноўны экран</string>
     <string name="license">Ліцэнзаванне …</string>
-    <string name="donation">Падтрымка …</string>
-    <string name="libraries">Бібліятэкі …</string>
-    <string name="libraries_sum">Выкарыстаныя ў праекце бібліятэкі …</string>
-    <string name="release_history">Гісторыя выпускаў …</string>
-    <string name="graphic_design">Графічны дэзайн</string>
     <string name="long_press_dfc_hint">Зацісніце DFC для анлайн-пошуку…</string>
     <string name="comm_baudrate_description">Хуткасць паслядоўнага парта USB</string>
 </resources>

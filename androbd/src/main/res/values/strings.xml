@@ -3,7 +3,6 @@
     <!--  AndrOBD -->
     <string name="app_name" translatable="false">Bengkel Scan</string>
     <string name="copyright_fr3ts0n" translatable="false">© 2015-2026 fr3ts0n</string>
-    <string name="translation_credits">Translation by fr3ts0n</string>
     <string name="app_description">A vehicle inspection tool for the workshop</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="title_connecting">Connecting…</string>
@@ -297,10 +296,6 @@ period of time while the ECU recalibrates itself.
     <string name="toolbar_overlay">Show as overlay</string>
     <string name="toolbar_overlay_sum">Show toolbar overlapping main screen</string>
     <string name="license">Licensing …</string>
-    <string name="donation">Support project …</string>
-    <string name="libraries">Libraries …</string>
-    <string name="libraries_sum">Libraries used in project …</string>
-    <string name="release_history">Release history …</string>
     <string name="app_license_sum">
         Connect to your car\'s OBD system\n
         * GNU General Public License v3.0
@@ -309,29 +304,6 @@ period of time while the ECU recalibrates itself.
     <string name="url_app_mainpage" translatable="false">https://github.com/fr3ts0n/AndrOBD/</string>
     <string name="url_app_releases" translatable="false">https://github.com/fr3ts0n/AndrOBD/releases/</string>
     <string name="url_app_translation" translatable="false">https://hosted.weblate.org/projects/androbd/strings/</string>
-    <string name="lib_usb_serial" translatable="false">usb-serial-for-android</string>
-    <string name="lib_usb_serial_sum">
-        Library for USB serial connections\n
-        * GNU Lesser General Public License v2.1
-    </string>
-    <string name="lib_achart" translatable="false">AChartEngine</string>
-    <string name="lib_achart_sum">
-        Charting library for Android\n
-        * Apache 2.0 license
-    </string>
-    <string name="lib_speedview" translatable="false">SpeedView</string>
-    <string name="lib_speedview_sum">
-        Beautiful gauges for Android\n
-        * Apache 2.0 license
-    </string>
-    <string name="donation_paypal_title" translatable="false">PayPal.me</string>
-    <string name="donation_bitcoin_title" translatable="false">Bitcoin</string>
-    <string name="donation_liberapay_title" translatable="false">LiberaPay</string>
-    <string name="url_donation_paypal" translatable="false">https://PayPal.me/fr3ts0n</string>
-    <string name="url_donation_bitcoin" translatable="false">bitcoin://19UApzsc5eDJ5VNDNYCA1bpszPnkcpWeFP</string>
-    <string name="url_donation_liberapay" translatable="false">https://liberapay.com/AndrOBD/donate</string>
-    <string name="graphic_design">Graphic design</string>
-    <string name="design_credits">2018 by @anaufalm</string>
     <string name="long_press_dfc_hint">Long press DFC for online search …</string>
     <string-array name="csv_field_delim_options" translatable="false">
         <item>@string/tab</item>

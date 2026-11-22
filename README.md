@@ -69,7 +69,7 @@ Tiga modul Gradle:
 | --- | --- |
 | `:androbd` | Aplikasi Android: antarmuka, transport, paket `workshop/` (data bengkel) dan `diagnosis/` (diagnosis tanpa ECU) |
 | `:library` | Java murni: protokol ELM/OBD, model PID dan kode kerusakan, konversi, process variable |
-| `:plugin` | Framework ekstensi AndrOBD, submodule Git, bukan penyimpanan bengkel |
+| `:plugin` | Framework ekstensi (submodule Git), bukan penyimpanan bengkel |
 
 ```mermaid
 flowchart LR
@@ -112,8 +112,8 @@ adb install -r androbd/build/outputs/apk/debug/androbd-debug.apk
 adb shell am start -W -n com.fr3ts0n.ecu.gui.androbd/.MainActivity
 ```
 
-Nama di launcher adalah **Bengkel Scan**; package ID tetap `com.fr3ts0n.ecu.gui.androbd`. Bila AndrOBD dari
-sumber lain sudah terpasang dengan tanda tangan berbeda, `adb install -r` akan gagal — **cadangkan data lebih
+Nama di launcher adalah **Bengkel Scan**; package ID tetap `com.fr3ts0n.ecu.gui.androbd`. Bila versi lain
+sudah terpasang dengan tanda tangan berbeda, `adb install -r` akan gagal — **cadangkan data lebih
 dulu**, dan jangan langsung `uninstall` atau `pm clear`.
 
 Build rilis memakai R8 dan resource shrinking (±3,3 MB) serta memerlukan keystore sendiri; jangan pernah
@@ -149,5 +149,3 @@ gradle/      wrapper Gradle yang dipin
 Aplikasi ini adalah perangkat lunak bebas di bawah **GNU General Public License v3.0** (lihat `LICENSE`).
 Hak cipta serta pemberitahuan lisensi pada berkas source dipertahankan. Bila Anda mendistribusikan build turunan,
 penuhi kewajiban GPL, termasuk menyediakan corresponding source.
-
-Atribusi proyek induk dapat dibaca di dalam aplikasi melalui **Pengaturan → Tentang Aplikasi**.

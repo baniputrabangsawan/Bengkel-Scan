@@ -32,7 +32,6 @@
     <string name="send_to">ላክ ለ</string>
     <string name="NODATA">ዳታ የለም</string>
     <string name="semicolon">SEMICOLON</string>
-    <string name="translation_credits">በ እዮብ ሽፈራው</string>
     <string name="extension_loading">ማስተካከያዎች በመጫን ላይ</string>
     <string name="saved">ተቀምጥዋል</string>
     <string name="connected_to">"ተገናኝትዋል ከ "</string>
@@ -81,7 +80,6 @@
     <string name="keep_screen_on">ዋናው ስክሪን ይቆይ</string>
     <string name="logo">መለያ</string>
     <string name="items_for_display_descr">ሁሉንም ዳታ አይተሞች ዘርዝር…</string>
-    <string name="release_history">ታሪኮችን ልቀቅ …</string>
     <string name="ERROR">ችግር ተፈጥርዋል</string>
     <string name="elm_adaptive_timing_descr">Allow adaptive timing handling in ELM drivers\?</string>
     <string name="obd_error">OBD ፕሮትኮል ችግር ተፈጥርዋል</string>
@@ -104,7 +102,6 @@
     <string name="elm_custom_init_descr">ELM custom initialisation commands</string>
     <string name="items_for_display">ምን ምን ዳታዎች ይዘርዘሩ</string>
     <string name="device_address_description">የ ELM መሳሪያ የነትወርክ አድራሻ</string>
-    <string name="graphic_design">ግራፊክስ ዲዛይን</string>
     <string name="select_device">አዳብተር ምረጥ</string>
     <string name="last_view_mode">የበፊት ዳታ ማሳያ ሞድ</string>
     <string name="last_service">የባለፈው ሰርቪስ</string>
@@ -112,15 +109,12 @@
     <string name="elm_custom_init">ELM custom init</string>
     <string name="obd_options">አማራጮች</string>
     <string name="csv_rec_delimiter_description">CSV ዳታ ሪከርድ የፊደላት መለያ ካራክተር</string>
-    <string name="libraries_sum">ለ ፐሮጀክቱ የተጠቀምንባቸው ላይብረሪዎች…</string>
     <string name="ECU_DETECT">በማግኘት ላይ…</string>
     <string name="secure_connect_description">Use encrypted Bluetooth connection</string>
     <string name="settings">መቸት</string>
-    <string name="libraries">ላይብረሪዎች …</string>
     <string name="last_elm">በፊት ከነበረው አዳብተር ጋር አጣምር</string>
     <string name="elm_timeout_descr">Minimum timeout in [ms] to wait for ELM responses</string>
     <string name="select_medium">አዳብተር ዓይነት …</string>
-    <string name="donation">ፕሮጀክቱን ይርዱ …</string>
     <string name="min_elm_timeout">Min. ELM timeout [ms]</string>
     <string name="RXERROR">RX ችግር ተፈጥርዋል</string>
     <string name="device_address">IP አድራሻ</string>

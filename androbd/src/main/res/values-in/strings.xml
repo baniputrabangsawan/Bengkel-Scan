@@ -117,10 +117,6 @@
     <string name="toolbar_overlay">Tampilkan bilah alat di atas data</string>
     <string name="toolbar_overlay_sum">Tampilkan bilah alat menutupi sebagian layar utama</string>
     <string name="license">Lisensi …</string>
-    <string name="donation">Dukung proyek…</string>
-    <string name="libraries">Pustaka …</string>
-    <string name="release_history">Riwayat rilis …</string>
-    <string name="graphic_design">Desain Grafis</string>
     <string name="comm_baudrate">Kecepatan baud ELM</string>
     <string name="comm_baudrate_description">Kecepatan komunikasi serial USB</string>
     <string name="full_screen_display">Tampilan layar penuh</string>
@@ -130,7 +126,6 @@
     <string name="display_range">Rentang tampilan</string>
     <string name="reset_default">Bawaan</string>
     <string name="update_period_s">Interval pembaruan [s]</string>
-    <string name="translation_credits">Diterjemahkan oleh Jalalkun</string>
     <string name="app_description">Alat bantu pemeriksaan kendaraan untuk bengkel</string>
     <string name="obd_data">Data Langsung</string>
     <string name="obd_clearcodes">Hapus Kode Kerusakan</string>
@@ -173,7 +168,6 @@ Lakukan uji ini hanya di tempat pengujian yang aman. Dengan melanjutkan, Anda me
     <string name="data_disable_max">Batas respons tidak valid</string>
     <string name="autohide_delay_description">Lama tanpa aktivitas, dalam detik, sebelum bilah alat disembunyikan</string>
     <string name="csv_text_quoted_description">Apit kolom teks CSV dengan tanda kutip</string>
-    <string name="libraries_sum">Pustaka yang digunakan dalam proyek…</string>
     <string name="long_press_dfc_hint">Tekan lama Kode Kerusakan untuk mencari di web…</string>
     <string name="configure">Atur</string>
     <string name="select_ble_device">Pilih Alat Scan BLE</string>
@@ -209,12 +203,6 @@ Lakukan uji ini hanya di tempat pengujian yang aman. Dengan melanjutkan, Anda me
     <!-- Keep legal license names unchanged. -->
     <string name="app_license_sum">Hubungkan ke sistem OBD kendaraan Anda\n
         * GNU General Public License v3.0</string>
-    <string name="lib_usb_serial_sum">Pustaka untuk sambungan serial USB\n
-        * GNU Lesser General Public License v2.1</string>
-    <string name="lib_achart_sum">Pustaka grafik untuk Android\n
-        * Apache 2.0 license</string>
-    <string name="lib_speedview_sum">Tampilan meter untuk Android\n
-        * Apache 2.0 license</string>
     <!-- Workshop guidance and formatted messages -->
     <string name="select_all">Pilih Semua</string>
     <string name="search_hint">Cari…</string>

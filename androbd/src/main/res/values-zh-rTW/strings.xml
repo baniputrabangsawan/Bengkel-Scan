@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">翻譯人 fr3ts0n</string>
     <string name="app_description">Android OBD係用在機車上帶有ELM327蓝牙配件嘅诊断App軟體</string>
     <string name="title_connecting">連綫中…</string>
     <string name="title_connected_to">已連綫 %s</string>

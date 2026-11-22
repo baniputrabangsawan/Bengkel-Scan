@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--  AndrOBD -->
-    <string name="translation_credits">Traduction par fr3ts0n</string>
     <string name="app_description">Application Android de diagnostic des véhicules OBD pour adaptateurs ELM327</string>
     <string name="title_connecting">Connexion en cours…</string>
     <string name="title_connected_to">Connecté à %s</string>
@@ -154,11 +153,6 @@
     <string name="toolbar_overlay">Afficher en superposition</string>
     <string name="toolbar_overlay_sum">Afficher la barre de menus par dessus l’écran principal</string>
     <string name="license">Licences…</string>
-    <string name="donation">Projets supports …</string>
-    <string name="libraries">Bibliothèques…</string>
-    <string name="libraries_sum">Bibliothèques utilisées…</string>
-    <string name="release_history">Historique des versions …</string>
-    <string name="graphic_design">Design graphique</string>
     <string name="long_press_dfc_hint">Pressez longuement DFC pour la recherche en ligne…</string>
     <string name="comm_baudrate">Taux de baud ELM</string>
     <string name="comm_baudrate_description">Vitesse de communication en série USB</string>

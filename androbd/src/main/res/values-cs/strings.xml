@@ -35,19 +35,16 @@
     <string name="STOPPED">Zastaveno</string>
     <string name="DISCONNECTED">Odpojeno</string>
     <string name="ERROR">Chyba</string>
-    <string name="translation_credits">Přeložil cewbdex</string>
     <string name="app_description">Android OBD autodiagnostika pro Bluetooth adaptér ELM327</string>
     <string name="obd_veh_info">Informace o autě z OBD</string>
     <string name="obd_data">Data OBD</string>
     <string name="obd_codes">Chybové kódy OBD</string>
     <string name="obd_permanentcodes">Chybové kódy OBD (permanentní)</string>
     <string name="obd_clearcodes">Vyčistit chybové kódy</string>
-    <string name="release_history">Historie vydání…</string>
     <string name="time">Čas [s]</string>
     <string name="check_cust_settings">Zkontrolujte vaše nastavení přizpůsobení
 \n</string>
     <string name="NODATA">Žádná data</string>
-    <string name="graphic_design">Grafický design</string>
     <string name="last_service">poslední služba OBD</string>
     <string name="obd_opt_description">Možnosti OBD protokolu a komunikace s vozidlem</string>
     <string name="obd_pendingcodes">Chybové kódy OBD (čekající)</string>
@@ -83,9 +80,6 @@
     <string name="long_press_dfc_hint">Dlouze podržte DTC pro online vyhledávání…</string>
     <string name="comm_baudrate_description">Sériová komunikační rychlost USB</string>
     <string name="comm_baudrate">Přenosová rychlost ELM</string>
-    <string name="libraries_sum">Knihovny použité v projektu…</string>
-    <string name="libraries">Knihovny…</string>
-    <string name="donation">Podpořit projekt…</string>
     <string name="license">Licencování…</string>
     <string name="toolbar_overlay_sum">Zobrazit stavový řádek překrytím hlavního zobrazení</string>
     <string name="toolbar_overlay">Zobrazit jako překrytí</string>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Traducido por Adolfo, RamLinux, eltiobarbas, isalgueiro, cinnamon17 y cpynosa</string>
     <string name="app_description">Aplicación de Android de diagnósticos vehiculares para el adaptador Bluetooth ELM327</string>
     <string name="title_connecting">Conectando…</string>
     <string name="title_connected_to">Conectado con %s</string>
@@ -153,11 +152,6 @@
     <string name="toolbar_overlay">Mostrar como capa sobrepuesta</string>
     <string name="toolbar_overlay_sum">Mostrar barra de herramientas superpuesta en la pantalla principal</string>
     <string name="license">Licencias…</string>
-    <string name="donation">Soportar el proyecto..</string>
-    <string name="libraries">Bibliotecas…</string>
-    <string name="libraries_sum">Bibliotecas utilizadas en el proyecto…</string>
-    <string name="release_history">Historial de versiones…</string>
-    <string name="graphic_design">Diseño gráfico</string>
     <string name="long_press_dfc_hint">Pulsación prolongada en DFC para buscar en línea…</string>
     <string name="comm_baudrate_description">Velocidad de comunicación en serie del USB</string>
     <string name="comm_baudrate">Tasa de baudios ELM</string>

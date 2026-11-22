@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Перевод Anna Malinovskaia</string>
     <string name="app_description">Android приложение OBD диагностики для Bluetooth адаптера ELM327</string>
     <string name="title_connecting">Соединение…</string>
     <string name="title_connected_to">Подключено к %s</string>
@@ -133,10 +132,6 @@
     <string name="send_after_export">Отправить после экспорта</string>
     <string name="toolbar_overlay">Показать как наложение</string>
     <string name="license">Лицензирование …</string>
-    <string name="donation">Проект поддержки …</string>
-    <string name="libraries">Библиотеки …</string>
-    <string name="libraries_sum">Библиотеки, используемые в проекте …</string>
-    <string name="release_history">История выпуска …</string>
     <string name="data_items">Показатели</string>
     <string name="extension_loading">Загрузка персонализации</string>
     <string name="reset_preselections">Сбросить выбор</string>
@@ -155,7 +150,6 @@
     <string name="csv_text_quoted_description">Текстовые поля CSV, заключённые в кавычки</string>
     <string name="tab">TAB</string>
     <string name="toolbar_overlay_sum">Показать панель инструментов, перекрывающую главный экран</string>
-    <string name="graphic_design">Графический дизайн</string>
     <string name="long_press_dfc_hint">Зажмите DFC для поиска в интернете…</string>
     <string name="send_after_export_descr">Запрос на отправку CSV-файла сразу после экспорта\?</string>
     <string name="comm_baudrate_description">Скорость последовательного порта USB</string>

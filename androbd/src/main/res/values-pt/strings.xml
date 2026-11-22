@@ -3,11 +3,6 @@
     <string name="comm_baudrate_description">Velocidade da comunicação serial por USB</string>
     <string name="comm_baudrate">Taxa de transmissão do ELM</string>
     <string name="long_press_dfc_hint">Pressione e segure DFC para pesquisa on-line …</string>
-    <string name="graphic_design">Design gráfico</string>
-    <string name="release_history">Histórico de lançamentos</string>
-    <string name="libraries_sum">Bibliotecas usadas no projeto…</string>
-    <string name="libraries">Bibliotecas…</string>
-    <string name="donation">Apoiar projeto…</string>
     <string name="license">Licenciamento…</string>
     <string name="toolbar_overlay_sum">Mostrar barra de ferramentas de sobreposição ao ecrã principal</string>
     <string name="toolbar_overlay">Mostrar como sobreposição</string>
@@ -160,7 +155,6 @@
     <string name="title_connected_to">Ligado a %s</string>
     <string name="title_connecting">A ligar…</string>
     <string name="app_description">App de diagnóstico de veículo OBD para Android para o adaptador Bluetooth ELM327</string>
-    <string name="translation_credits">Tradução por Manuela Silva e Silvério Santos</string>
     <string name="full_screen_display">Exibição no ecrã inteiro</string>
     <string name="obd_test_progress">Controle de teste OBD em progresso.
 \nPor favor, verifique a reação do veículo.</string>

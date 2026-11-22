@@ -32,13 +32,9 @@
 \n Praradus duomenis, transporto priemonė gali kurį laiką prastai,
 \nkol ECU persikalibruoja.</string>
     <string name="service_freezeframes">OBD sustabdyti kadrai</string>
-    <string name="translation_credits">Išvertė - Gediminas Murauskas</string>
     <string name="comm_baudrate_description">USB nuosekliojo ryšio greitis</string>
     <string name="comm_baudrate">ELM perdavimo sparta</string>
     <string name="long_press_dfc_hint">Ilgai nuspauskite DFC, kad galėtumėte atlikti paiešką internete …</string>
-    <string name="graphic_design">Grafinis dizainas</string>
-    <string name="libraries_sum">Bibliotekos, naudojamos šiame projekte …</string>
-    <string name="libraries">Bibliotekos …</string>
     <string name="license">Licencijavimas …</string>
     <string name="toolbar_overlay_sum">Rodyti įrankių juostą, dengiančią pagrindinį ekraną</string>
     <string name="toolbar_overlay">Rodyti kaip uždangą</string>
@@ -71,8 +67,6 @@
     <string name="CONNECTING">Prisijungiama…</string>
     <string name="ECU_DETECTED">ECU aptiktas</string>
     <string name="ECU_DETECT">ECU aptikimas…</string>
-    <string name="donation">Paremkite projektą …</string>
-    <string name="release_history">Leidimų istorija …</string>
     <string name="INITIALIZED">Inicijuota</string>
     <string name="INITIALIZING">Inicijuojama…</string>
     <string name="UNDEFINED">Neapibrėžta</string>

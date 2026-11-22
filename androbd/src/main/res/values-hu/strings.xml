@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Fordította: gidano, summoner</string>
     <string name="app_description">Android OBD járműdiagnosztika alkalmazás ELM327 Bluetooth adapterhez</string>
     <string name="title_connecting">Kapcsolódás…</string>
     <string name="title_connected_to">Kapcsolódva: %s</string>
@@ -153,11 +152,6 @@
     <string name="toolbar_overlay">Megjelenítés legfelül</string>
     <string name="toolbar_overlay_sum">Eszköztár megjelenítése a főképernyő felett</string>
     <string name="license">Licenc…</string>
-    <string name="donation">A projekt támogatása …</string>
-    <string name="libraries">Könyvtárak…</string>
-    <string name="libraries_sum">A projektben használt könyvtárak…</string>
-    <string name="release_history">Kiadási előzmények…</string>
-    <string name="graphic_design">Grafikus terv</string>
     <string name="long_press_dfc_hint">Hibakód hosszú nyomva tartása online kereséshez …</string>
     <string name="copied_to_clipboard">Másolva a vágólapra</string>
     <string name="service_testcontrol">OBD-vezérlésteszt</string>

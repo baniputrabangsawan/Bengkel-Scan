@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_title">Tentang Aplikasi</string>
-    <string name="design_credits">2018 oleh @anaufalm</string>
-    <string name="about_based_on">Dikembangkan dari AndrOBD karya fr3ts0n. Berlisensi GNU GPL-3.0. Ketuk untuk membuka proyek asli.</string>
+    <string name="about_based_on">Bengkel Scan. Perangkat lunak bebas berlisensi GNU GPL-3.0. Lihat lisensi untuk ketentuannya.</string>
     <string name="about_license_notice">Perangkat lunak bebas berlisensi GNU GPL-3.0. Anda dapat menggunakan, mempelajari, mengubah, dan membagikannya sesuai ketentuan lisensi.</string>
-    <string name="about_credits_heading">Kredit</string>
 </resources>

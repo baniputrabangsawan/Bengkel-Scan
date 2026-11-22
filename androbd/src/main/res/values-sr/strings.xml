@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">Prevod by Nenad163 &amp; Aezrath</string>
     <string name="app_description">Android OBD aplikacija za dijagnostiku automobila putem ELM327 Blutut adaptera</string>
     <string name="title_connecting">Povezivanje…</string>
     <string name="title_connected_to">Povezan %s</string>
@@ -148,11 +147,6 @@
     <string name="comm_baudrate_description">Brzina USB serijske komunikacije</string>
     <string name="comm_baudrate">ELM brzina prenosa</string>
     <string name="long_press_dfc_hint">Dugo pritisnite DFC za onlajn pretragu…</string>
-    <string name="graphic_design">Grafički dizajn</string>
-    <string name="release_history">Istorija izdanja…</string>
-    <string name="libraries_sum">Biblioteke korišćene u projektu…</string>
-    <string name="libraries">Biblioteke…</string>
-    <string name="donation">Podrži projekat…</string>
     <string name="license">Licenciranje…</string>
     <string name="toolbar_overlay_sum">Prikaži traku sa alatkama koja se preklapa sa glavnim ekranom</string>
     <string name="toolbar_overlay">Prikaži kao preklapanje</string>

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="configure">Aseta</string>
-    <string name="release_history">Julkaisuhistoria…</string>
-    <string name="donation">Tue projektia…</string>
     <string name="copied_to_clipboard">Kopioitu leikepöydälle</string>
     <string name="title_connecting">Yhdistetään…</string>
     <string name="title_connected_to">Yhdistetty %s</string>
@@ -140,9 +138,6 @@
     <string name="toolbar_overlay">Näytä peittokuvana</string>
     <string name="toolbar_overlay_sum">Näytä työkalupalkki päänäytön päällä</string>
     <string name="license">Lisensoidaan…</string>
-    <string name="libraries">Kirjastot…</string>
-    <string name="libraries_sum">Projektissa käytetyt kirjastot…</string>
-    <string name="graphic_design">Graafinen suunnittelu</string>
     <string name="long_press_dfc_hint">Tee verkkohaku painamalla DFC:tä pitkään…</string>
     <string name="comm_baudrate">ELM:n siirtonopeus</string>
     <string name="comm_baudrate_description">USB-sarjatietoliikenteen nopeus</string>
@@ -154,7 +149,6 @@
     <string name="reset_default">Oletus</string>
     <string name="update_period_s">Päivitysväli [s]</string>
     <string name="obd_none">EI palvelua</string>
-    <string name="translation_credits">Kääntänyt MK</string>
     <string name="obd_clear_info">Tämä nollaa vikailmoitusvalon ja poistaa kaikki päästöihin liittyvät vianmääritystiedot,\n kuten seuraavat:\n - Vikakoodit\n - Vikatilannetiedot\n - Happianturin testaustiedot\n - Järjestelmän valvontatestien tila\n - Ajoneuvon sisäisten valvontatestien tulokset\n - Vikailmoitusvalo aktivoituneena ajettu matka\n - Vikakoodien poistamisen jälkeiset lämmityskerrat\n - Vikakoodien poistamisen jälkeen ajettu matka\n - Moottorin käyntiaika vikailmoitusvalo aktivoituneena\n - Vikakoodien poistamisesta kulunut aika\n\n Myös muita, valmistajakohtauksia nollauksia tai poistoja saatetaan tehdä.\n Tietojen häviäminen voi saada ajoneuvon käymään heikosti\n jonkin aikaa, kun ohjausyksikkö kalibroi itsensä uudelleen.</string>
     <string name="select_ble_device">Valitse BLE-sovitin</string>
     <string name="no_obd_files_found">OBD-tiedostoja ei löytynyt</string>

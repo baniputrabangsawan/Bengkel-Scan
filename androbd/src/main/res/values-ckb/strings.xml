@@ -97,7 +97,6 @@
     <string name="autohide_toolbar_description"/>
     <string name="autohide_delay"/>
     <string name="autohide_delay_description"/>
-    <string name="translation_credits">وەرگێڕدراوە لەلایەن هەڤاڵ عبدالکریم</string>
     <string name="title_connecting">لە پەیوەندیدایە…</string>
     <string name="title_connected_to">پەیوەستکراو %s</string>
 </resources>

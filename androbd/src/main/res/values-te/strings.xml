@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">fr3ts0n తొ అనువాదము</string>
     <string name="logo">చిహ్నం</string>
     <string name="obd_none">సేవ లేదు</string>
     <string name="obd_services">OBD సేవలు</string>
@@ -41,7 +40,6 @@
     <string name="RXERROR">RX తప్పు</string>
     <string name="ERROR">తప్పు</string>
     <string name="device_address">ELM IP చిరునామ</string>
-    <string name="release_history">పురాణం ని వదిలివేయిట …</string>
     <string name="app_description">ELM327 బ్లూటూత్ అడాప్టర్ కోసం Android OBD వెహికల్ డయాగ్నోస్టిక్స్ యాప్</string>
     <string name="service_freezeframes">OBD ఫ్రీజ్ ఫ్రేమ్‌లు</string>
     <string name="title_connecting">కనెక్ట్ చేస్తోంది…</string>

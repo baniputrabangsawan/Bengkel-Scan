@@ -346,39 +346,6 @@
             android:selectable="false"
             android:summary="@string/about_based_on"
             android:title="@string/app_version" />
-        <Preference
-            android:icon="@drawable/ic_info"
-            android:title="@string/upstream_project_name"
-            android:summary="@string/copyright_fr3ts0n">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/url_app_mainpage"/>
-        </Preference>
-        <PreferenceCategory android:title="@string/about_credits_heading">
-            <Preference
-                android:icon="@drawable/ic_info"
-                android:summary="@string/app_version"
-                android:title="@string/release_history">
-                <intent
-                    android:action="android.intent.action.VIEW"
-                    android:data="@string/url_app_releases"/>
-            </Preference>
-            <Preference
-                android:icon="@drawable/ic_info"
-                android:title="@string/graphic_design"
-                android:summary="@string/design_credits">
-                <intent
-                    android:action="android.intent.action.VIEW"
-                    android:data="https://github.com/anaufalm"/>
-            </Preference>
-            <Preference
-                android:icon="@drawable/ic_info"
-                android:title="@string/translation_credits">
-                <intent
-                    android:action="android.intent.action.VIEW"
-                    android:data="@string/url_app_translation"/>
-            </Preference>
-        </PreferenceCategory>
         <PreferenceScreen
             android:key="screen_license"
             android:icon="@drawable/ic_scale"
@@ -393,69 +360,7 @@
                     android:action="android.intent.action.VIEW"
                     android:data="@string/url_app_license"/>
             </Preference>
-            <PreferenceCategory
-                android:icon="@drawable/ic_scale"
-                android:summary="@string/libraries_sum"
-                android:title="@string/libraries">
-                <Preference
-                    android:icon="@drawable/ic_scale"
-                    android:summary="@string/lib_usb_serial_sum"
-                    android:title="@string/lib_usb_serial">
-                    <intent
-                        android:action="android.intent.action.VIEW"
-                        android:data="https://github.com/mik3y/usb-serial-for-android"/>
-                </Preference>
-                <Preference
-                    android:icon="@drawable/ic_scale"
-                    android:summary="@string/lib_achart_sum"
-                    android:title="@string/lib_achart">
-                    <intent
-                        android:action="android.intent.action.VIEW"
-                        android:data="http://achartengine.org"/>>
-                </Preference>
-                <Preference
-                    android:icon="@drawable/ic_scale"
-                    android:summary="@string/lib_speedview_sum"
-                    android:title="@string/lib_speedview">
-                    <intent
-                        android:action="android.intent.action.VIEW"
-                        android:data="https://github.com/anastr/SpeedView"/>>
-                </Preference>
-            </PreferenceCategory>
         </PreferenceScreen>
-        <PreferenceCategory
-            android:title="@string/donation">
-            <Preference
-                android:icon="@drawable/ic_coin"
-                android:key="paypal"
-                android:title="@string/donation_paypal_title"
-                android:summary="@string/url_donation_paypal"
-                >
-                <intent
-                    android:action="android.intent.action.VIEW"
-                    android:data="@string/url_donation_paypal"/>
-            </Preference>
-            <Preference
-                android:icon="@drawable/ic_coin"
-                android:key="bitcoin"
-                android:title="@string/donation_bitcoin_title"
-                android:summary="@string/url_donation_bitcoin"
-                >
-                <intent
-                    android:action="android.intent.action.VIEW"
-                    android:data="@string/url_donation_bitcoin"/>
-            </Preference>
-            <Preference
-                android:icon="@drawable/ic_coin"
-                android:key="liberapay"
-                android:title="@string/donation_liberapay_title"
-                android:summary="@string/url_donation_liberapay"
-                >
-                <intent
-                    android:action="android.intent.action.VIEW"
-                    android:data="@string/url_donation_liberapay"/>
-            </Preference>
-        </PreferenceCategory>
     </PreferenceScreen>
 
 </PreferenceScreen>

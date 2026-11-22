@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="translation_credits">תורגם ע״י ירון</string>
     <string name="app_description">יישומון Android לפענוח OBD לרכב עבור מתאם בלוטות׳ ELM327</string>
     <string name="title_connecting">מתבצעת התחברות…</string>
     <string name="title_connected_to">יש חיבור אל %s</string>
@@ -152,12 +151,7 @@
     <string name="configure">הגדרה</string>
     <string name="toolbar_overlay_sum">הצגת סרגל כלים כשכבה על המסך הראשי</string>
     <string name="license">רישוי…</string>
-    <string name="donation">תמיכה במיזם…</string>
-    <string name="libraries">ספריות…</string>
-    <string name="libraries_sum">ספריות בהן נעשה שימוש במיזם…</string>
-    <string name="release_history">היסטוריית מהדורות…</string>
     <string name="toolbar_overlay">הצגה כשכבת על</string>
-    <string name="graphic_design">עיצוב גרפי</string>
     <string name="long_press_dfc_hint">לחיצה ארוכה לחיפוש השגיאה באינטרנט…</string>
     <string name="comm_baudrate_description">מהירות תקשורת טורית ב־USB</string>
     <string name="comm_baudrate">קצב העברה של ELM</string>
