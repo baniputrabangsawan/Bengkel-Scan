@@ -68,9 +68,11 @@ public class DiagnosisStartActivity extends AppCompatActivity
                     try
                     {
                         DiagnosisRepository.CaseRecord saved = repository.create(knowledge, complaint, null);
-                        startActivity(new Intent(this, DiagnosisResultsActivity.class)
-                                .putExtra(DiagnosisUi.CASE, saved.id)
-                                .putExtra("diagnosis.cause_id", causeId));
+                        // The linked case has no answers yet, so the questions screen is the only
+                        // place it can be completed. The cause the mechanic tapped is already the
+                        // first row of the ranked list once the answers are in.
+                        startActivity(new Intent(this, DiagnosisQuestionsActivity.class)
+                                .putExtra(DiagnosisUi.CASE, saved.id));
                         finish();
                     }
                     catch (RuntimeException e)
@@ -162,8 +164,10 @@ public class DiagnosisStartActivity extends AppCompatActivity
 
     private void resume(DiagnosisRepository.CaseRecord saved)
     {
-        Class<?> screen = saved.answers.size() == saved.complaint.questions.size()
-                ? DiagnosisResultsActivity.class : DiagnosisQuestionsActivity.class;
+        // Unanswered questions come first. Sending an incomplete case to the results screen
+        // showed the "invalid case" notice and offered no way to finish it.
+        Class<?> screen = saved.answers.size() < saved.complaint.questions.size()
+                ? DiagnosisQuestionsActivity.class : DiagnosisResultsActivity.class;
         Intent intent = new Intent(this, screen).putExtra(DiagnosisUi.CASE, saved.id);
         if (saved.serviceId != null) intent.putExtra(WorkshopUi.EXTRA_SERVICE_ID, saved.serviceId.longValue());
         startActivity(intent);

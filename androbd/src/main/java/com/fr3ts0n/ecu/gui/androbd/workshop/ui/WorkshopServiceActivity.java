@@ -462,6 +462,10 @@ public class WorkshopServiceActivity extends AppCompatActivity
 							.record("estimate.approval", "estimate_item", itemId, state.name());
 					dialog.dismiss();
 					loadItems();
+					// An approval changes the payable total: a settled job may owe money again.
+					repository.reconcilePayment(service.id);
+					service = repository.findService(service.id);
+					bind();
 					Toast.makeText(this, R.string.workshop_approval_saved, Toast.LENGTH_SHORT).show();
 				}));
 		dialog.show();
@@ -623,6 +627,11 @@ public class WorkshopServiceActivity extends AppCompatActivity
 					WorkshopUi.hideKeyboard(this);
 					dialog.dismiss();
 					loadItems();
+					// Re-pricing an approved line changes what is owed, so the payment block
+					// (status, received, balance) has to be recomputed, not just the list.
+					repository.reconcilePayment(service.id);
+					service = repository.findService(service.id);
+					bind();
 					Toast.makeText(this, R.string.workshop_item_saved, Toast.LENGTH_SHORT).show();
 				}));
 		dialog.show();

@@ -65,19 +65,32 @@ public final class WorkshopBackup
 		if (target.getName().endsWith(".zip")) return WorkshopArchive.export(database, target);
 		SQLiteDatabase db = database.getWritableDatabase();
 		checkpoint(db);
-		File source = new File(db.getPath());
-		if (!source.isFile())
+		// The backup runs on a worker thread while the screen is still live. Without a writer
+		// lock, a save that lands between the checkpoint and the copy can put pages from two
+		// different states into the snapshot (or copy an uncommitted page) and the backup is
+		// then not restorable. SQLite's exclusive transaction is the barrier that closes that.
+		db.beginTransactionNonExclusive();
+		try
 		{
-			throw new IOException("Database file missing: " + source);
+			File source = new File(db.getPath());
+			if (!source.isFile())
+			{
+				throw new IOException("Database file missing: " + source);
+			}
+			File parent = target.getParentFile();
+			if (parent != null && !parent.exists() && !parent.mkdirs())
+			{
+				throw new IOException("Cannot create directory " + parent);
+			}
+			copy(source, target);
 		}
-		File parent = target.getParentFile();
-		if (parent != null && !parent.exists() && !parent.mkdirs())
+		finally
 		{
-			throw new IOException("Cannot create directory " + parent);
+			db.endTransaction();
 		}
-		copy(source, target);
 		return target;
 	}
+
 
 	/**
 	 * Replace the current database with a previously exported file.
@@ -209,7 +222,21 @@ public final class WorkshopBackup
 				"SELECT id,customer_id,plate,plate_key,model,year,engine_type,vin,odometer_km,created_at FROM vehicles LIMIT 0",
 				"SELECT id,vehicle_id,complaint,status,payment_status,notes,created_at,updated_at,completed_at FROM services LIMIT 0",
 				"SELECT id,service_id,kind,description,quantity,unit_price,position FROM estimate_items LIMIT 0",
-				"SELECT s.id FROM services s JOIN vehicles v ON v.id=s.vehicle_id JOIN customers c ON c.id=v.customer_id LEFT JOIN estimate_items i ON i.service_id=s.id LIMIT 0"
+				"SELECT s.id FROM services s JOIN vehicles v ON v.id=s.vehicle_id JOIN customers c ON c.id=v.customer_id LEFT JOIN estimate_items i ON i.service_id=s.id LIMIT 0",
+				// Columns added after v1 would otherwise pass validation and only fail when a
+				// screen reads them: a restore must not install a database it cannot serve.
+				"SELECT id,vehicle_id,complaint,status,payment_status,notes,odometer_km,payment_method,paid_at,paid_amount,created_at,updated_at,completed_at FROM services LIMIT 0",
+				"SELECT id,service_id,kind,description,quantity,unit_price,discount,approval,inspection_item_id,position FROM estimate_items LIMIT 0",
+				"SELECT id,service_id,name,state,note,voice_path,position,created_at,updated_at,deleted_at FROM inspection_items LIMIT 0",
+				"SELECT id,owner_kind,owner_id,relative_path,caption,created_at FROM photos LIMIT 0",
+				"SELECT id,service_id,phase,source,adapter,codes_json,readings_json,freeze_json,note,created_at FROM scan_snapshots LIMIT 0",
+				"SELECT id,name,note,created_at,updated_at FROM canned_jobs LIMIT 0",
+				"SELECT id,job_id,kind,description,quantity,unit_price,position FROM canned_job_items LIMIT 0",
+				"SELECT id,vehicle_id,due_date,due_odometer_km,note,dismissed_at,created_at FROM reminders LIMIT 0",
+				"SELECT id,action,target_kind,target_id,detail,created_at FROM audit_log LIMIT 0",
+				"SELECT id,name,address,phone,footer,logo_path,updated_at FROM workshop_profile LIMIT 0",
+				"SELECT key,value,updated_at FROM settings LIMIT 0",
+				"SELECT id,estimate_item_id,state,note,changed_at FROM estimate_approvals LIMIT 0"
 		};
 		for (String query : queries)
 		{

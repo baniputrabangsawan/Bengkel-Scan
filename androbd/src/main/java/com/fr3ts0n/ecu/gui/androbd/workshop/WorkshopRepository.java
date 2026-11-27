@@ -249,7 +249,8 @@ public final class WorkshopRepository
 		Long effectiveAmount = amount;
 		if (status == PaymentStatus.PAID && effectiveAmount == null)
 		{
-			effectiveAmount = approvedTotal(id);
+			// Settle against the same payable total the screen reports as outstanding.
+			effectiveAmount = payableTotal(id);
 		}
 
 		PaymentStatus effectiveStatus = status;
@@ -259,7 +260,7 @@ public final class WorkshopRepository
 			// Zero received never settles a job that still owes money. A job whose agreed
 			// total is zero owes nothing, so one tap is a complete settlement there (a free
 			// check, or a job whose lines are all still pending).
-			if (status == PaymentStatus.PAID && effectiveAmount <= 0 && approvedTotal(id) > 0)
+			if (status == PaymentStatus.PAID && effectiveAmount <= 0 && payableTotal(id) > 0)
 			{
 				effectiveStatus = PaymentStatus.UNPAID;
 			}
@@ -484,16 +485,54 @@ public final class WorkshopRepository
 		return total;
 	}
 
-	/** Sum of approved lines only; what the customer agreed to pay. */
 	/**
-	 * What the customer still owes. Uses the approved total when anything was approved, and
-	 * falls back to the whole estimate otherwise: an unbilled job is not a settled job.
+	 * The amount this job is payable against: every line the customer answered.
+	 *
+	 * <p>Approved and declined lines are both decided, so both count: a declined line is work
+	 * the shop will not bill, and dropping it would make the payable total fall below what was
+	 * actually quoted. A job where nothing has been answered yet is still quoted at the whole
+	 * estimate, because an unbilled job is not a settled job.</p>
+	 *
+	 * <p>Every place that settles or reports money uses this one number, so "Lunas" and
+	 * "Sisa tagihan" can never disagree.</p>
 	 */
+	public long payableTotal(long serviceId)
+	{
+		long decided = 0;
+		int answered = 0;
+		for (EstimateItem item : estimateItems(serviceId))
+		{
+			if (item.approval == ApprovalState.PENDING) continue;
+			answered++;
+			// A declined line is not billed; a free approved line still counts as answered.
+			if (item.approval == ApprovalState.APPROVED) decided += item.lineTotal();
+		}
+		return answered > 0 ? decided : estimateTotal(serviceId);
+	}
+
+	/**
+	 * Keep the stored payment status honest after the payable total moves.
+	 *
+	 * <p>Pricing a line up, or approving one, can leave a job that was fully settled with a
+	 * real balance again. Left alone, that debt disappears from the unpaid list and the CSV
+	 * because the status still says PAID.</p>
+	 */
+	public void reconcilePayment(long serviceId)
+	{
+		ServiceRecord service = findService(serviceId);
+		if (service == null || service.paymentStatus != PaymentStatus.PAID) return;
+		long due = payableTotal(serviceId);
+		if (due > service.paidAmount)
+		{
+			setPayment(serviceId, PaymentStatus.UNPAID, service.paymentMethod, null,
+					service.paidAmount);
+		}
+	}
+
+	/** What the customer still owes, against the same total that settlement uses. */
 	public long balanceDue(long serviceId)
 	{
-		long agreed = approvedTotal(serviceId);
-		if (agreed == 0) agreed = estimateTotal(serviceId);
-		return Math.max(0, agreed - findService(serviceId).paidAmount);
+		return Math.max(0, payableTotal(serviceId) - findService(serviceId).paidAmount);
 	}
 
 	public long approvedTotal(long serviceId)

@@ -43,6 +43,10 @@ public final class ScanSnapshotWriter
 			for (IndexedProcessVar code : codes)
 			{
 				if (code == null) continue;
+				// The protocol inserts a "no trouble codes set" placeholder whose code reads
+				// P0000. Storing it would report one fault on a healthy vehicle, and the
+				// before/after comparison would count it as a change.
+				if ("P0000".equals(String.valueOf(code.get(EcuCodeItem.FID_CODE)))) continue;
 				JSONObject item = new JSONObject();
 				try
 				{

@@ -91,14 +91,20 @@ final class WorkshopDataActions
 					else if (which == 1) CsvExporter.writeServices(repository, out);
 					else CsvExporter.writeUnpaid(repository, out);
 				}
-				activity.runOnUiThread(() -> Toast.makeText(activity,
-						activity.getString(R.string.workshop_export_done, target.getName()),
-						Toast.LENGTH_LONG).show());
+				activity.runOnUiThread(() ->
+				{
+					if (!alive(activity)) return;
+					Toast.makeText(activity,
+							activity.getString(R.string.workshop_export_done, target.getName()),
+							Toast.LENGTH_LONG).show();
+				});
 			}
 			catch (IOException | RuntimeException error)
 			{
 				activity.runOnUiThread(() ->
-						showError(activity, R.string.workshop_export_failed, error));
+				{
+					if (alive(activity)) showError(activity, R.string.workshop_export_failed, error);
+				});
 			}
 		}, "workshop-export").start();
 	}
@@ -115,19 +121,25 @@ final class WorkshopDataActions
 				WorkshopBackup.export(repository.database(), target);
 				new WorkshopSettingsRepository(repository.database())
 						.put(KEY_LAST_BACKUP, String.valueOf(System.currentTimeMillis()));
-				activity.runOnUiThread(() -> new AlertDialog.Builder(activity)
+				activity.runOnUiThread(() ->
+				{
+					if (!alive(activity)) return;
+					new AlertDialog.Builder(activity)
 						.setTitle(R.string.workshop_backup_title)
 						.setMessage(activity.getString(R.string.workshop_backup_done,
 								target.getAbsolutePath()))
 						.setPositiveButton(android.R.string.ok, null)
 						.setNeutralButton(R.string.workshop_backup_share,
 								(dialog, which) -> shareBackup(activity, target))
-						.show());
+						.show();
+				});
 			}
 			catch (IOException | RuntimeException error)
 			{
 				activity.runOnUiThread(() ->
-						showError(activity, R.string.workshop_backup_failed, error));
+				{
+					if (alive(activity)) showError(activity, R.string.workshop_backup_failed, error);
+				});
 			}
 		}, "workshop-backup").start();
 	}
@@ -192,6 +204,7 @@ final class WorkshopDataActions
 			String result = failure;
 			activity.runOnUiThread(() ->
 			{
+				if (!alive(activity)) return;
 				if (result == null)
 				{
 					Toast.makeText(activity, R.string.workshop_restore_done, Toast.LENGTH_LONG).show();
@@ -237,6 +250,12 @@ final class WorkshopDataActions
 				.setNegativeButton(R.string.workshop_backup_nudge_later, null)
 				.setPositiveButton(R.string.workshop_backup_now, (dialog, which) -> onBackup.run())
 				.show();
+	}
+
+	/** Show a dialog only while the screen can still own a window. */
+	private static boolean alive(AppCompatActivity activity)
+	{
+		return activity != null && !activity.isFinishing() && !activity.isDestroyed();
 	}
 
 	private static void showError(AppCompatActivity activity, int format, Exception error)

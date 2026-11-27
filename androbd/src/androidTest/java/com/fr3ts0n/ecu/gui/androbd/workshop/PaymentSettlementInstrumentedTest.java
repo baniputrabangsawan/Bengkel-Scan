@@ -70,4 +70,22 @@ public class PaymentSettlementInstrumentedTest
 		assertEquals(PaymentStatus.UNPAID, record.paymentStatus);
 		assertNull("an unpaid job must not carry a settlement time", record.paidAt);
 	}
+
+	@Test
+	public void repricingAPaidLineBringsTheDebtBack()
+	{
+		// Settle at 500000, then the line is re-priced to 600000: 100000 is owed again.
+		workshop.setPaymentStatus(serviceId, PaymentStatus.PAID);
+		assertEquals(0L, workshop.balanceDue(serviceId));
+
+		EstimateItem line = workshop.estimateItems(serviceId).get(0);
+		workshop.updateEstimateItem(line.id, line.kind, line.description, line.quantity,
+				600000, 0);
+		workshop.reconcilePayment(serviceId);
+
+		ServiceRecord record = workshop.findService(serviceId);
+		assertEquals("a partially covered job must not stay marked paid",
+				PaymentStatus.UNPAID, record.paymentStatus);
+		assertEquals(100000L, workshop.balanceDue(serviceId));
+	}
 }

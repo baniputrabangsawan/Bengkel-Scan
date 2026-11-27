@@ -149,6 +149,26 @@ final class WorkshopArchive
                     if (!photo.isFile()) throw new IOException("Archive is missing an attached photo");
                 }
             }
+            // Workshop entries keep their own references: a restored job whose photo or voice
+            // note is missing would look complete while showing an empty attachment.
+            try (Cursor rows = db.rawQuery(
+                    "SELECT relative_path FROM photos WHERE owner_kind = 'INSPECTION'", null))
+            {
+                while (rows.moveToNext())
+                {
+                    File photo = confined(media, rows.getString(0));
+                    if (!photo.isFile()) throw new IOException("Archive is missing an inspected part photo");
+                }
+            }
+            try (Cursor rows = db.rawQuery(
+                    "SELECT voice_path FROM inspection_items WHERE voice_path <> ''", null))
+            {
+                while (rows.moveToNext())
+                {
+                    File note = confined(media, rows.getString(0));
+                    if (!note.isFile()) throw new IOException("Archive is missing an inspected part voice note");
+                }
+            }
         }
         File audio = new File(media, "audio");
         File[] files = audio.listFiles();

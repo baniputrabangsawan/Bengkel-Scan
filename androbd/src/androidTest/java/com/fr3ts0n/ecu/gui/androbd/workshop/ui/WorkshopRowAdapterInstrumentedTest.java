@@ -93,27 +93,49 @@ public class WorkshopRowAdapterInstrumentedTest
 		});
 	}
 
+	/**
+	 * Every tone must resolve to a real colour and a real surface. The palette deliberately
+	 * reuses the two original status looks, so tones may share a colour; the chip always keeps
+	 * its text label, which is what actually carries the meaning.
+	 */
 	@Test
-	public void everyToneMapsToItsOwnSurface()
+	public void everyToneResolvesToAColourAndASurface()
 	{
 		InstrumentationRegistry.getInstrumentation().runOnMainSync(() ->
 		{
 			Context context = context();
 			WorkshopRowAdapter adapter = new WorkshopRowAdapter(context);
-			int neutral = 0;
-			int previous = -1;
 			for (RowTone tone : RowTone.values())
 			{
 				adapter.submit(java.util.List.of(new WorkshopRow(1L, "title", null, "label", tone)));
 				View view = row(adapter, null);
-				int current = context.getColor(chipTextColorOf(tone));
-				assertTrue(tone + " must have a readable label colour", current != 0);
-				assertNotEquals("Two tones must not share a label colour", previous, current);
-				previous = current;
-				if (tone == RowTone.NEUTRAL) neutral = current;
+				assertNotEquals(tone + " must map to a label colour", 0,
+						context.getColor(chipTextColorOf(tone)));
+				assertNotEquals(tone + " must map to a chip surface", 0,
+						context.getColor(chipSurfaceColorOf(tone)));
+				TextView chip = view.findViewById(R.id.workshop_row_chip);
+				assertEquals("The chip must still carry its word", "label",
+						chip.getText().toString());
 			}
-			assertNotEquals(0, neutral);
 		});
+	}
+
+	private static int chipSurfaceColorOf(RowTone tone)
+	{
+		switch (tone)
+		{
+			case INFO:
+				return R.color.workshop_status_info_surface;
+			case SUCCESS:
+				return R.color.workshop_status_success_surface;
+			case WARNING:
+				return R.color.workshop_status_warning_surface;
+			case DANGER:
+				return R.color.workshop_status_danger_surface;
+			case NEUTRAL:
+			default:
+				return R.color.workshop_status_neutral_surface;
+		}
 	}
 
 	/** Mirrors the adapter's own mapping so the test fails if the mapping stops being total. */

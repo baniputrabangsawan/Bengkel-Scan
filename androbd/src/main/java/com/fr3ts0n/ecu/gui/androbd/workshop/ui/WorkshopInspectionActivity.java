@@ -65,6 +65,9 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 	private WorkshopRowAdapter adapter;
 	private TextView empty;
 	private long serviceId;
+	private static final String KEY_PENDING_ITEM = "pending_photo_item";
+	private static final String KEY_PENDING_PATH = "pending_photo_path";
+
 	/** Item whose photo button was pressed, restored after the camera returns. */
 	private long pendingPhotoItem = -1;
 	private String pendingPhotoPath;
@@ -78,7 +81,9 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 			registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts
 					.TakePicture(), saved ->
 			{
-				if (saved) attachPendingPhoto(Uri.fromFile(new File(pendingPhotoPath)));
+				// Android may have killed this process while the camera was open; the fields then
+				// came back from savedInstanceState instead of the old instances.
+				if (saved && pendingPhotoPath != null) attachPendingPhoto(Uri.fromFile(new File(pendingPhotoPath)));
 				else clearPendingPhoto();
 			});
 
@@ -95,6 +100,13 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 		SettingsActivity.applyLocale(this);
 		super.onCreate(savedInstanceState);
 		serviceId = getIntent().getLongExtra(EXTRA_SERVICE, -1);
+		if (savedInstanceState != null)
+		{
+			// The camera/gallery result arrives after a possible process death; without these
+			// two values the photo is silently thrown away (or the path is null and crashes).
+			pendingPhotoItem = savedInstanceState.getLong(KEY_PENDING_ITEM, -1);
+			pendingPhotoPath = savedInstanceState.getString(KEY_PENDING_PATH);
+		}
 		repository = WorkshopUi.repository(this);
 		if (repository.findService(serviceId) == null)
 		{
@@ -141,6 +153,14 @@ public class WorkshopInspectionActivity extends AppCompatActivity
 			return true;
 		});
 		findViewById(R.id.workshop_add).setOnClickListener(view -> addItem());
+	}
+
+	@Override
+	protected void onSaveInstanceState(android.os.Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		outState.putLong(KEY_PENDING_ITEM, pendingPhotoItem);
+		outState.putString(KEY_PENDING_PATH, pendingPhotoPath);
 	}
 
 	@Override

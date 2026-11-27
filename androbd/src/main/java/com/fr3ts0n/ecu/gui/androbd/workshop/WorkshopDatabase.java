@@ -142,7 +142,22 @@ public class WorkshopDatabase extends SQLiteOpenHelper
 		if (oldVersion < 5 && newVersion >= 5)
 		{
 			// Version 5 records how much was received, so a partial payment is a fact.
-			addColumn(db, "services", "paid_amount", "INTEGER NOT NULL DEFAULT 0");
+			boolean added = addColumn(db, "services", "paid_amount",
+					"INTEGER NOT NULL DEFAULT 0");
+			if (added)
+			{
+				// Older rows only recorded "paid", never how much arrived, so their received
+				// amount becomes the bill that was settled. A declined line was never billed;
+				// a database old enough to lack "approval" predates declines entirely.
+				String billed = hasColumn(db, "estimate_items", "approval")
+						? "SELECT SUM(CAST(ROUND(quantity * unit_price) AS INTEGER))"
+						+ " FROM estimate_items WHERE service_id = services.id"
+						+ " AND approval <> 'DECLINED'"
+						: "SELECT SUM(CAST(ROUND(quantity * unit_price) AS INTEGER))"
+						+ " FROM estimate_items WHERE service_id = services.id";
+				db.execSQL("UPDATE services SET paid_amount = COALESCE((" + billed + "), 0)"
+						+ " WHERE payment_status = 'PAID'");
+			}
 		}
 	}
 
@@ -167,15 +182,25 @@ public class WorkshopDatabase extends SQLiteOpenHelper
 	 * Add a column only when it is missing, so a database whose version number
 	 * was rewound (a restored backup, a test fixture) upgrades instead of failing.
 	 */
-	private static void addColumn(SQLiteDatabase db, String table, String column, String type)
+	/** Whether a table already has a column, using syntax every supported SQLite understands. */
+	private static boolean hasColumn(SQLiteDatabase db, String table, String column)
 	{
-		try (android.database.Cursor cursor = db.rawQuery(
-				"SELECT COUNT(*) FROM pragma_table_info(?) WHERE name = ?",
-				new String[]{table, column}))
+		try (android.database.Cursor cursor = db.rawQuery("PRAGMA table_info(" + table + ")", null))
 		{
-			if (cursor.moveToFirst() && cursor.getInt(0) > 0) return;
+			int nameIndex = cursor.getColumnIndexOrThrow("name");
+			while (cursor.moveToNext())
+			{
+				if (column.equalsIgnoreCase(cursor.getString(nameIndex))) return true;
+			}
 		}
+		return false;
+	}
+
+	private static boolean addColumn(SQLiteDatabase db, String table, String column, String type)
+	{
+		if (hasColumn(db, table, column)) return false;
 		db.execSQL("ALTER TABLE " + table + " ADD COLUMN " + column + " " + type);
+		return true;
 	}
 
 	private static void createWorkshopTables(SQLiteDatabase db)

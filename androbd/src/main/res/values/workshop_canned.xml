@@ -23,4 +23,5 @@
         <item>Fuel filter change</item>
         <item>Turbo hose leak check</item>
     </string-array>
+    <string name="workshop_canned_error_duplicate">That package name is already used. Choose another.</string>
 </resources>

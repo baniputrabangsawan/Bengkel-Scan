@@ -23,4 +23,5 @@
         <item>Ganti filter bahan bakar</item>
         <item>Periksa kebocoran selang turbo</item>
     </string-array>
+    <string name="workshop_canned_error_duplicate">Nama paket sudah dipakai. Pilih nama lain.</string>
 </resources>

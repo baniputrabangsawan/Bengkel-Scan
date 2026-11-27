@@ -13,6 +13,7 @@
  */
 package com.fr3ts0n.ecu.gui.androbd.workshop.ui;
 
+import android.util.Log;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +46,7 @@ import java.util.List;
  */
 public class WorkshopCannedJobsActivity extends AppCompatActivity
 {
+	private static final String TAG = "WorkshopCannedJobs";
 	private CannedJobRepository jobs;
 	private WorkshopRepository repository;
 	private WorkshopRowAdapter adapter;
@@ -147,15 +149,26 @@ public class WorkshopCannedJobsActivity extends AppCompatActivity
 						return;
 					}
 					long jobId;
-					if (existing == null)
+					try
 					{
-						jobId = jobs.create(packageName, textOf(note));
-						seedStarters(jobId);
+						if (existing == null)
+						{
+							jobId = jobs.create(packageName, textOf(note));
+							seedStarters(jobId);
+						}
+						else
+						{
+							jobs.rename(existing.id, packageName, textOf(note));
+							jobId = existing.id;
+						}
 					}
-					else
+					catch (RuntimeException duplicate)
 					{
-						jobs.rename(existing.id, packageName, textOf(note));
-						jobId = existing.id;
+						// canned_jobs.name is UNIQUE: an identical name is a user mistake, not a crash.
+						Log.e(TAG, "Package save failed", duplicate);
+						name.setError(getString(R.string.workshop_canned_error_duplicate));
+						name.requestFocus();
+						return;
 					}
 					WorkshopUi.hideKeyboard(this);
 					dialog.dismiss();
