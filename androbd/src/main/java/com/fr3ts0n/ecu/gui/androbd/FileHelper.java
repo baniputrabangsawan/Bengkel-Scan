@@ -210,6 +210,61 @@ class FileHelper
 		});
 	}
 
+	/** Largest saved measurement this app accepts; a real .obd file is far smaller. */
+	private static final long MAX_LOAD_BYTES = 64L * 1024 * 1024;
+
+	/**
+	 * A byte-counted reader for a saved measurement.
+	 *
+	 * <p>The file arrives from any app that sends a VIEW intent, so the stream is untrusted and
+	 * must not be able to exhaust memory or spin forever: past {@link #MAX_LOAD_BYTES} the read
+	 * fails instead of growing. A per-class allow-list is deliberately <em>not</em> installed
+	 * here: Android's deserialization shim ignores {@code resolveClass}, so such a filter would
+	 * look like protection while doing nothing (verified on device, 2026-11-28). Serialized
+	 * shapes are therefore kept small and under our control on the write side.</p>
+	 */
+	private ObjectInputStream guardedStream(InputStream raw) throws java.io.IOException
+	{
+		if (raw == null) throw new java.io.IOException("No stream for the selected file");
+		return new ObjectInputStream(limit(raw, MAX_LOAD_BYTES));
+	}
+
+	/** Package-private hooks so the bound is testable without an Activity or a file picker. */
+	static ObjectInputStream guardedStreamForTest(InputStream raw) throws java.io.IOException
+	{
+		return new ObjectInputStream(limit(raw, MAX_LOAD_BYTES));
+	}
+
+	static InputStream limitForTest(InputStream raw, long max)
+	{
+		return limit(raw, max);
+	}
+
+	private static InputStream limit(InputStream raw, final long max)
+	{
+		return new java.io.FilterInputStream(raw)
+		{
+			private long read;
+
+			@Override
+			public int read() throws java.io.IOException
+			{
+				int value = super.read();
+				if (value >= 0 && ++read > max) throw new java.io.IOException("File too large");
+				return value;
+			}
+
+			@Override
+			public int read(byte[] buffer, int offset, int length) throws java.io.IOException
+			{
+				int count = super.read(buffer, offset, length);
+				if (count > 0 && (read += count) > max)
+					throw new java.io.IOException("File too large");
+				return count;
+			}
+		};
+	}
+
 	/**
 	 * Load data from file into data structures
 	 *
@@ -233,7 +288,9 @@ class FileHelper
 			inStr = context.getContentResolver().openInputStream(uri);
 			numBytesLoaded = inStr != null ? inStr.available() : 0;
 			msg = context.getString(R.string.loaded_file_message, numBytesLoaded);
-			ObjectInputStream oIn = new ObjectInputStream(inStr);
+			// Any app can hand this activity a .obd URI, so the stream is untrusted: bound how
+			// much can be read, and let the caller confirm before this happens at all.
+			ObjectInputStream oIn = guardedStream(inStr);
 			/* ensure that measurement page is activated
 			   to avoid deletion of loaded data afterwards */
 			int currService = oIn.readInt();
@@ -249,8 +306,10 @@ class FileHelper
 
 			log.log(Level.INFO, msg);
 			Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-		} catch (Exception ex)
+		} catch (Exception | OutOfMemoryError | StackOverflowError ex)
 		{
+			// A stream that passes the size and class checks can still be malformed; report it
+			// instead of letting the worker thread die with the process.
 			Toast.makeText(context, ex.toString(), Toast.LENGTH_SHORT).show();
 			log.log(Level.SEVERE, uri.toString(), ex);
 		}

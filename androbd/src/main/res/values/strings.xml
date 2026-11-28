@@ -386,4 +386,9 @@ period of time while the ECU recalibrates itself.
         <item>fr</item>
         <item>es</item>
     </string-array>
+    <string name="load_confirm_external">Load the measurement from another app?
+
+%1$s
+
+This replaces the current readings. Only load files you trust.</string>
 </resources>

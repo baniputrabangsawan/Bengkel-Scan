@@ -611,9 +611,23 @@ public class MainActivity extends PluginManager
 
         // handle VIEW file intent
         if("android.intent.action.VIEW".equals(getIntent().getAction())) {
-            setMode(MODE.FILE);
-            Uri uri = getIntent().getData();
-            loadDataFromUri(uri);
+            // Any app can send this intent. Loading replaces the live measurement lists with
+            // deserialized content from an untrusted stream, so the mechanic confirms first.
+            Uri viewed = getIntent().getData();
+            if (viewed == null)
+            {
+                return;
+            }
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.load)
+                .setMessage(getString(R.string.load_confirm_external, viewed.toString()))
+                .setNegativeButton(R.string.button_cancel, null)
+                .setPositiveButton(R.string.load, (dialog, which) ->
+                {
+                    setMode(MODE.FILE);
+                    loadDataFromUri(viewed);
+                })
+                .show();
             return;
         }
 
