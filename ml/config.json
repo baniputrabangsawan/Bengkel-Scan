@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "seed": 42817,
+  "manifest": "manifest.jsonl",
+  "audio_root": "data",
+  "output": "runs/phase4",
+  "classes": ["normal_idle", "belt_squeal", "valvetrain_tick", "brake_grinding", "wheel_bearing_hum", "power_steering_whine", "background_noise", "unknown"],
+  "datasets": [{
+    "id": "workshop_owned",
+    "source_url": "local://guided-recordings",
+    "license": "Owner permission required; not yet granted for training",
+    "license_review_status": "needs_verification",
+    "training_allowed": false,
+    "commercial_allowed": false,
+    "requires_bundle_metadata": true,
+    "youtube_derived_audio": false,
+    "attribution": "Recording owner and mechanic consent evidence required"
+  }],
+  "encoder": {
+    "format": "tensorflow_saved_model",
+    "path": "artifacts/encoders/yamnet-1",
+    "archive_url": "https://tfhub.dev/google/yamnet/1?tf-hub-format=compressed",
+    "archive_sha256": "b80da2a1a56926fb0767205051a200dd7b3beaf3ea1ea126c42a53943996e5e0",
+    "max_archive_bytes": 104857600,
+    "signature": null,
+    "input_key": null,
+    "output_key": null,
+    "output_index": 1,
+    "sample_rate": 16000,
+    "window_samples": 15600,
+    "research_only": true,
+    "provenance": {
+      "name": "Google YAMNet / TensorFlow2 / yamnet / 1",
+      "source_url": "https://www.kaggle.com/models/google/yamnet/tensorFlow2/yamnet/1",
+      "pretraining_source": "AudioSet-YouTube; weights only, no scraped audio added to our corpus",
+      "reported_license": "Apache-2.0",
+      "license_review_status": "needs_verification",
+      "attribution": "Google / TensorFlow Authors; verify weight license, notices, modifications and attribution obligations before release"
+    }
+  },
+  "preprocessing": {
+    "sample_rate": 16000,
+    "max_audio_seconds": 60,
+    "max_channels": 8,
+    "trim_frame_samples": 320,
+    "trim_hop_samples": 160,
+    "trim_threshold_dbfs": -60,
+    "trim_margin_samples": 160,
+    "normalize_peak": 0.9,
+    "window_samples": 15600,
+    "hop_samples": 7800
+  },
+  "augmentation": {
+    "sample_rate": 16000,
+    "copies": 1,
+    "pitch_semitones": [-0.5, 0.5],
+    "stretch_rate": [0.95, 1.05],
+    "gain_db": [-3, 3],
+    "snr_db": [10, 25],
+    "phone_low_hz": [60, 180],
+    "phone_high_hz": [4500, 7500],
+    "phone_tilt_db": [-3, 3]
+  },
+  "split": {"fractions": [0.7, 0.15, 0.15], "search_attempts": 300},
+  "training": {"l2": 0.01, "max_iterations": 200, "tolerance": 1e-8},
+  "calibration": {"temperature_bounds": [0.05, 20], "temperature_tolerance": 1e-6, "known_coverage": 0.95},
+  "evaluation": {"ece_bins": 15, "minimum_clips_per_class": 100, "minimum_test_vehicles": 5},
+  "deployment": {"fusion_audio_weight_multiplier": 1.0}
+}

@@ -14,3 +14,19 @@ local.properties
 *.jks
 *.keystore
 keystore.properties
+
+# Private recordings and reproducible Python research outputs are never source assets.
+/ml/.venv/
+/ml/data/
+/ml/artifacts/
+/ml/runs/
+**/__pycache__/
+**/.pytest_cache/
+
+# Generated technical-only assets. Never put these in main/release source sets.
+/androbd/src/debug/assets/diagnosis/synthetic_test_model*
+/androbd/src/androidTest/assets/audio-parity/
+
+# Markdown documentation stays local; only the top-level README is published.
+*.md
+!README.md
