@@ -42,20 +42,25 @@ import java.util.ResourceBundle;
  */
 public class DfcItemAdapter extends ObdItemAdapter
 {
-	private ResourceBundle indonesianCodes;
+	private static ResourceBundle indonesianCodes;
 
 	/** Re-label saved or cached readings without changing the original evidence. */
 	private String codeDescription(String code, String original)
 	{
 		String language = getContext().getResources().getConfiguration().locale.getLanguage();
 		if (!"id".equals(language) && !"in".equals(language)) return statusText(original);
+		return indonesianDescription(code, statusText(original));
+	}
+
+	/** Share the existing offline Indonesian catalog with the combined diagnosis screen. */
+	public static synchronized String indonesianDescription(String code, String fallback)
+	{
 		if (indonesianCodes == null)
 		{
-			// Explicit bundle: legacy "in" and modern "id" must not fall back to English.
 			indonesianCodes = ResourceBundle.getBundle(
 					"com.fr3ts0n.ecu.prot.obd.res.codes_id", Locale.ROOT, new UTF8Control());
 		}
-		return indonesianCodes.containsKey(code) ? indonesianCodes.getString(code) : statusText(original);
+		return indonesianCodes.containsKey(code) ? indonesianCodes.getString(code) : fallback;
 	}
 
 	private static final class CodeViewHolder

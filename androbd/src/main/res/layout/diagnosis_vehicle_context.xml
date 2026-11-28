@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/workshop_page_background">
+    <ScrollView android:id="@+id/context_scroll" android:layout_width="match_parent"
+        android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout style="@style/UiScreen" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/context_intro" android:textAppearance="@style/UiText.Body" />
+            <TextView android:id="@+id/context_notice" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:accessibilityLiveRegion="polite"
+                android:textAppearance="@style/UiText.Body" android:textColor="@color/workshop_warning_text" />
+            <TextView android:id="@+id/context_recalled" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:text="@string/context_recalled"
+                android:textAppearance="@style/UiText.Body" android:visibility="gone" />
+            <TextView style="@style/UiSection" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/context_vehicle" android:textAppearance="@style/UiText.Section" />
+            <com.google.android.material.textfield.TextInputLayout style="@style/UiField"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/context_make">
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView android:id="@+id/context_make"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:saveEnabled="false"
+                    android:maxLength="100" android:inputType="textCapWords|textNoSuggestions" android:importantForAutofill="no"
+                    android:minHeight="@dimen/ui_touch_primary" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout style="@style/UiField"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/context_model">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/context_model"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:saveEnabled="false"
+                    android:maxLength="100" android:inputType="textCapWords|textNoSuggestions" android:importantForAutofill="no"
+                    android:minHeight="@dimen/ui_touch_primary" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView style="@style/UiSection" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:labelFor="@id/context_fuel" android:text="@string/context_fuel" android:textAppearance="@style/UiText.FieldLabel" />
+            <Spinner android:id="@+id/context_fuel" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:minHeight="@dimen/ui_touch_primary" android:saveEnabled="false" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/context_details_toggle"
+                style="@style/UiButton.Text" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/context_details" />
+            <LinearLayout android:id="@+id/context_details" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                <com.google.android.material.textfield.TextInputLayout style="@style/UiField" android:id="@+id/context_year_field"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/context_year">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/context_year"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" android:saveEnabled="false"
+                        android:maxLength="4" android:inputType="number" android:importantForAutofill="no"
+                        android:minHeight="@dimen/ui_touch_primary" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:labelFor="@id/context_cylinders"
+                    android:text="@string/context_cylinders" android:textAppearance="@style/UiText.FieldLabel" />
+                <Spinner android:id="@+id/context_cylinders" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:minHeight="@dimen/ui_touch_primary" android:saveEnabled="false" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:labelFor="@id/context_transmission"
+                    android:text="@string/context_transmission" android:textAppearance="@style/UiText.FieldLabel" />
+                <Spinner android:id="@+id/context_transmission" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:minHeight="@dimen/ui_touch_primary" android:saveEnabled="false" />
+                <com.google.android.material.textfield.TextInputLayout style="@style/UiField" android:id="@+id/context_mileage_field"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/context_mileage">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/context_mileage"
+                        android:layout_width="match_parent" android:layout_height="wrap_content" android:saveEnabled="false"
+                        android:maxLength="10" android:inputType="number" android:importantForAutofill="no"
+                        android:minHeight="@dimen/ui_touch_primary" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:labelFor="@id/context_fuel_system"
+                    android:text="@string/context_fuel_system" android:textAppearance="@style/UiText.FieldLabel" />
+                <Spinner android:id="@+id/context_fuel_system" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:minHeight="@dimen/ui_touch_primary" android:saveEnabled="false" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:labelFor="@id/context_steering"
+                    android:text="@string/context_steering" android:textAppearance="@style/UiText.FieldLabel" />
+                <Spinner android:id="@+id/context_steering" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:minHeight="@dimen/ui_touch_primary" android:saveEnabled="false" />
+            </LinearLayout>
+            <com.google.android.material.checkbox.MaterialCheckBox android:id="@+id/context_remember"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:saveEnabled="false"
+                android:text="@string/context_remember" android:minHeight="@dimen/ui_touch_min" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/context_forget" style="@style/UiButton.Text"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/context_forget" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/context_record_audio" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/recording_entry" />
+            <TextView style="@style/UiSection" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/context_complaint" android:textAppearance="@style/UiText.Section" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:labelFor="@id/context_temperature"
+                android:text="@string/context_temperature" android:textAppearance="@style/UiText.FieldLabel" />
+            <Spinner android:id="@+id/context_temperature" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:minHeight="@dimen/ui_touch_primary" android:saveEnabled="false" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:labelFor="@id/context_triggers"
+                android:text="@string/context_conditions" android:textAppearance="@style/UiText.FieldLabel" />
+            <com.google.android.material.chip.ChipGroup android:id="@+id/context_triggers"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:saveEnabled="false" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:labelFor="@id/context_location"
+                android:text="@string/context_location" android:textAppearance="@style/UiText.FieldLabel" />
+            <Spinner android:id="@+id/context_location" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:minHeight="@dimen/ui_touch_primary" android:saveEnabled="false" />
+            <com.google.android.material.textfield.TextInputLayout style="@style/UiField.Multiline"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/context_description">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/context_description"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:saveEnabled="false"
+                    android:freezesText="false" android:importantForAutofill="no" android:inputType="textMultiLine|textCapSentences|textNoSuggestions"
+                    android:gravity="top" android:minLines="3" android:maxLength="4000" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/context_speech_privacy" android:textAppearance="@style/UiText.Meta" />
+            <TextView android:id="@+id/context_speech_status" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:accessibilityLiveRegion="polite" android:textAppearance="@style/UiText.Body" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/context_speak" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/context_speak" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/context_cancel_speech" style="@style/UiButton.Text"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"
+                android:text="@string/context_cancel_speech" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/context_review" style="@style/UiButton"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/context_review" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/context_retry" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone" android:text="@string/context_retry" />
+            <LinearLayout android:id="@+id/context_review_panel" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                <TextView style="@style/UiSection" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="@string/context_review_title" android:textAppearance="@style/UiText.Section" />
+                <TextView android:id="@+id/context_interpretation" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:accessibilityLiveRegion="polite" android:textAppearance="@style/UiText.Body" />
+                <LinearLayout android:id="@+id/context_followups" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:orientation="vertical" android:saveEnabled="false" />
+                <LinearLayout android:id="@+id/context_symptoms" android:orientation="vertical"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:saveEnabled="false" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="@string/context_flags" android:textAppearance="@style/UiText.Section" />
+                <LinearLayout android:id="@+id/context_flags" android:orientation="vertical"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:saveEnabled="false" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/context_assess" style="@style/UiButton"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/context_assess" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/context_open_obd" style="@style/UiButton.Secondary"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/obd_without_recording"
+                    android:enabled="false" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/context_results" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="@dimen/ui_space_3" android:text="@string/context_disclaimer"
+        android:textAppearance="@style/UiText.Meta" />
+</LinearLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Filled spinner: no underline, the chevron is the only affordance. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/workshop_surface_variant" />
+            <corners android:radius="@dimen/ui_card_corner" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/ic_spinner_arrow" android:gravity="end|center_vertical"
+        android:right="@dimen/ui_space_3" android:width="24dp" android:height="24dp" />
+</layer-list>

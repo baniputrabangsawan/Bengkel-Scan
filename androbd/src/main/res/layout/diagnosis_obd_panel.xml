@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/result_obd_panel" android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:layout_marginTop="@dimen/ui_section_gap">
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="@string/obd_section" android:textAppearance="@style/UiText.Section" android:accessibilityHeading="true" />
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="@string/obd_optional_help" android:textAppearance="@style/UiText.Meta" />
+    <TextView android:id="@+id/result_obd_status" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textAppearance="@style/UiText.Body" android:accessibilityLiveRegion="polite" />
+    <com.google.android.material.button.MaterialButton android:id="@+id/result_obd_scanner" style="@style/UiButton.Secondary"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/obd_open_scanner" />
+    <LinearLayout android:id="@+id/result_obd_read_actions" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:visibility="gone">
+        <com.google.android.material.button.MaterialButton android:id="@+id/result_obd_codes" style="@style/UiButton.Secondary"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/obd_read_codes" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/result_obd_pids" style="@style/UiButton.Secondary"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/obd_read_pids" />
+    </LinearLayout>
+    <com.google.android.material.checkbox.MaterialCheckBox android:id="@+id/result_obd_use" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary" android:checked="false"
+        android:saveEnabled="false" android:text="@string/obd_confirm_vehicle" />
+    <TextView android:id="@+id/result_obd_notes" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textAppearance="@style/UiText.Body" android:textIsSelectable="true" />
+    <TextView android:id="@+id/result_obd_readouts" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textAppearance="@style/UiText.Body" android:textIsSelectable="true" android:visibility="gone" />
+    <TextView android:id="@+id/result_obd_dtcs" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textAppearance="@style/UiText.Body" android:textIsSelectable="true" android:visibility="gone" />
+    <TextView android:id="@+id/result_obd_limits" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="@string/obd_misfire_limits" android:textAppearance="@style/UiText.Meta" />
+</LinearLayout>

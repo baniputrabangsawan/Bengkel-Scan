@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Card surface: flat, 12 dp corners, 1 dp border. Also the background of an interactive
+  Card surface: flat, 12 dp corners, no border. Also the background of an interactive
   row, hence the ripple and the activated state.
 -->
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
@@ -10,14 +10,12 @@
             <item android:state_activated="true" android:state_pressed="false">
                 <shape android:shape="rectangle">
                     <solid android:color="@color/workshop_selected_surface" />
-                    <stroke android:width="@dimen/ui_card_stroke" android:color="@color/workshop_border" />
                     <corners android:radius="@dimen/ui_card_corner" />
                 </shape>
             </item>
             <item>
                 <shape android:shape="rectangle">
                     <solid android:color="@color/workshop_surface" />
-                    <stroke android:width="@dimen/ui_card_stroke" android:color="@color/workshop_border" />
                     <corners android:radius="@dimen/ui_card_corner" />
                 </shape>
             </item>

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "revision": "engineering-draft-1",
+  "sampleRate": 16000,
+  "channels": 1,
+  "encoding": "PCM_16BIT",
+  "countdownSeconds": 3,
+  "recordingSeconds": 15,
+  "referenceSeconds": 2,
+  "referenceMaxAgeSeconds": 120,
+  "minDurationSeconds": 14,
+  "maxDurationSeconds": 15,
+  "minRmsDbfs": -45,
+  "maxRmsDbfs": -3,
+  "clippingAmplitude": 0.99,
+  "maxClippingRatio": 0.001,
+  "minSnrDb": 10,
+  "maxReferenceRmsDbfs": -20
+}

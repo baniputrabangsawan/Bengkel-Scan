@@ -1,0 +1,27 @@
+{
+  "review_status": "DRAFT",
+  "mechanical_review_status": "needs_mechanic_verification",
+  "reviewer_qualification": "user_not_mechanic",
+  "examples": [
+    {"id": 1, "text": "Tek-tek-tek pas mesin dingin.", "symptomIds": ["valvetrain_tick"], "triggerConditions": ["cold"], "engineTempState": "cold", "location": null, "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": false},
+    {"id": 2, "text": "Mesin ngelitik saat digas.", "symptomIds": ["detonation_pinging"], "triggerConditions": ["throttle"], "engineTempState": null, "location": null, "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": false},
+    {"id": 3, "text": "Cit-cit dari sabuk mesin.", "symptomIds": ["belt_squeal"], "triggerConditions": [], "engineTempState": null, "location": null, "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": false},
+    {"id": 4, "text": "Rem cit-cit saat ngerem.", "symptomIds": ["brake_squeal"], "triggerConditions": ["braking"], "engineTempState": null, "location": null, "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": false},
+    {"id": 5, "text": "Gesekan logam kasar di roda depan saat ngerem.", "symptomIds": ["brake_grinding"], "triggerConditions": ["braking"], "engineTempState": null, "location": "front", "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": false},
+    {"id": 6, "text": "Roda belakang berdengung.", "symptomIds": ["wheel_bearing_hum"], "triggerConditions": [], "engineTempState": null, "location": "rear", "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": false},
+    {"id": 7, "text": "Power steering mendengung saat belok.", "symptomIds": ["power_steering_whine"], "triggerConditions": ["turning"], "engineTempState": null, "location": null, "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": false},
+    {"id": 8, "text": "Mendesis dari ruang mesin saat langsam.", "symptomIds": ["hiss"], "triggerConditions": ["idle"], "engineTempState": null, "location": "under_hood", "flags": [], "temperaturePattern": null, "followUpQuestions": ["steam", "sweet_smell", "temperature_rising"], "needsClarification": true},
+    {"id": 9, "text": "Mesin langsam normal.", "symptomIds": ["normal_idle"], "triggerConditions": ["idle"], "engineTempState": null, "location": null, "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": false},
+    {"id": 10, "text": "Suara angin di kabin.", "symptomIds": ["background_noise"], "triggerConditions": [], "engineTempState": null, "location": "cabin", "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": false},
+    {"id": 11, "text": "Klotak.", "symptomIds": ["unknown"], "triggerConditions": [], "engineTempState": null, "location": null, "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": true},
+    {"id": 12, "text": "Gredeg.", "symptomIds": ["unknown"], "triggerConditions": [], "engineTempState": null, "location": null, "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": true},
+    {"id": 13, "text": "Bukan ngelitik tapi tek-tek saat dingin.", "symptomIds": ["valvetrain_tick"], "triggerConditions": ["cold"], "engineTempState": "cold", "location": null, "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": false},
+    {"id": 14, "text": "Tidak ada ketukan mesin keras dan tidak overheat.", "symptomIds": ["unknown"], "triggerConditions": [], "engineTempState": null, "location": null, "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": true},
+    {"id": 15, "text": "Rem tidak pakem.", "symptomIds": ["unknown"], "triggerConditions": [], "engineTempState": null, "location": null, "flags": ["brake_change"], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": true},
+    {"id": 16, "text": "Rem blong dan setir mendadak berat.", "symptomIds": ["unknown"], "triggerConditions": [], "engineTempState": null, "location": null, "flags": ["brake_change", "steering_change"], "temperaturePattern": null, "followUpQuestions": ["engine_stalled"], "needsClarification": true},
+    {"id": 17, "text": "Mesin overheat dan ketukan mesin keras.", "symptomIds": ["unknown"], "triggerConditions": [], "engineTempState": null, "location": null, "flags": ["overheating", "heavy_engine_knock"], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": true},
+    {"id": 18, "text": "Roda oblak setelah ganti ban.", "symptomIds": ["unknown"], "triggerConditions": [], "engineTempState": null, "location": "wheel", "flags": ["wheel_play", "tyre_recent_change"], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": true},
+    {"id": 19, "text": "Tek tek saat dingin lalu hilang saat panas.", "symptomIds": ["valvetrain_tick"], "triggerConditions": ["cold", "warm"], "engineTempState": null, "location": null, "flags": ["fades_when_warm"], "temperaturePattern": "fades_when_warm", "followUpQuestions": [], "needsClarification": false},
+    {"id": 20, "text": "Tek tek tidak hilang saat panas.", "symptomIds": ["valvetrain_tick"], "triggerConditions": ["warm"], "engineTempState": "warm", "location": null, "flags": [], "temperaturePattern": null, "followUpQuestions": [], "needsClarification": false}
+  ]
+}

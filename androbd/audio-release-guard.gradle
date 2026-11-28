@@ -1,0 +1,71 @@
+// A source-set mistake must fail the build, not merely hide the technical-mode UI.
+def inspectAudioReleaseApk = { File apk ->
+    new java.util.zip.ZipFile(apk).withCloseable { zip ->
+        zip.entries().each { entry ->
+            def name = entry.name.toLowerCase(java.util.Locale.ROOT)
+            if (!entry.directory && (name.startsWith('assets/') || name.startsWith('res/raw/') || name.endsWith('.tflite'))) {
+                if (name.contains('synthetic_test') || name.contains('audio-parity')) {
+                    throw new GradleException("Synthetic test audio/model is forbidden in release APK: ${entry.name}")
+                }
+                // Scan decompressed bytes too: renaming a TFLite or its sidecar cannot evade this check.
+                zip.getInputStream(entry).withCloseable { stream ->
+                    byte[] block = new byte[8192]
+                    String overlap = ''
+                    int count
+                    while ((count = stream.read(block)) != -1) {
+                        String text = overlap + new String(block, 0, count, java.nio.charset.StandardCharsets.ISO_8859_1)
+                        if (text.contains('synthetic_test_only') || text.contains('synthetic_test_model')) {
+                            throw new GradleException("Synthetic test metadata is forbidden in release APK: ${entry.name}")
+                        }
+                        overlap = text.substring(Math.max(0, text.length() - 64))
+                    }
+                }
+            }
+        }
+    }
+}
+
+def verifyReleaseAudioIsolation = tasks.register('verifyReleaseAudioIsolation') {
+    group = 'verification'
+    description = 'Fails if synthetic test model/audio/metadata reaches any packaged release APK.'
+    dependsOn 'packageRelease'
+    def apks = fileTree(layout.buildDirectory.dir('outputs/apk/release')) { include '*.apk' }
+    inputs.files(apks)
+    doLast {
+        if (apks.empty) throw new GradleException('No release APK found for audio isolation verification')
+        apks.each { inspectAudioReleaseApk(it) }
+        logger.lifecycle('RELEASE_AUDIO_ISOLATION_OK: no synthetic model, audio or metadata in release APK')
+    }
+}
+tasks.matching { it.name == 'assembleRelease' }.configureEach { dependsOn verifyReleaseAudioIsolation }
+
+tasks.register('testReleaseAudioIsolation') {
+    group = 'verification'
+    description = 'Proves the release gate rejects named and renamed synthetic assets, including across read boundaries.'
+    doLast {
+        File directory = new File(temporaryDir, 'audio-guard')
+        directory.mkdirs()
+        def archive = { String name, String entryName, byte[] content ->
+            File file = new File(directory, name)
+            new java.util.zip.ZipOutputStream(new FileOutputStream(file)).withCloseable { zip ->
+                zip.putNextEntry(new java.util.zip.ZipEntry(entryName)); zip.write(content); zip.closeEntry()
+            }
+            file
+        }
+        try {
+            inspectAudioReleaseApk(archive('clean.apk', 'assets/diagnosis/guide.json', '{}'.bytes))
+            [
+                archive('named.apk', 'assets/diagnosis/synthetic_test_model.tflite', 'TFL3'.bytes),
+                archive('renamed.apk', 'assets/diagnosis/renamed.tflite', (('x' * 8185) + 'synthetic_test_only').bytes),
+                archive('sidecar.apk', 'assets/diagnosis/renamed.json', '{"model_id":"synthetic_test_model"}'.bytes),
+            ].each { file ->
+                boolean rejected = false
+                try { inspectAudioReleaseApk(file) } catch (GradleException expected) { rejected = true }
+                if (!rejected) throw new GradleException("Release isolation failed to reject ${file.name}")
+            }
+            logger.lifecycle('RELEASE_AUDIO_GUARD_NEGATIVE_CASES_OK: clean, named, renamed, boundary and sidecar cases')
+        } finally {
+            directory.deleteDir()
+        }
+    }
+}

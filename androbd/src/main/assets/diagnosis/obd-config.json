@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "revision": "phase7-obd-engineering-draft-1",
+  "review_notice": "Seluruh gerbang waktu, suhu, RPM, pola fuel trim, dan bobot OBD adalah draf rekayasa tanpa sumber pembobotan, bukan spesifikasi servis universal atau peluang kerusakan. Belum dikalibrasi pada kendaraan atau diverifikasi mekanik. Kode dan koreksi campuran hanya mendukung pemeriksaan, tidak memastikan komponen rusak.",
+  "pid_freshness_ms": 15000,
+  "dtc_freshness_ms": 60000,
+  "dtc_rules": [
+    {
+      "id": "misfire",
+      "codes": ["P0300", "P0301", "P0302", "P0303", "P0304", "P0305", "P0306", "P0307", "P0308", "P0309", "P0310", "P0311", "P0312"],
+      "fuel_types": ["petrol", "diesel"],
+      "description": "Kode pembakaran tidak merata mendukung pembandingan pengapian pada bensin, injektor pada injeksi, serta kompresi atau mekanisme mesin; tidak mengonfirmasi silinder rusak.",
+      "cause_weights": {"obd_misfire.ignition": 12, "obd_misfire.injector": 10, "obd_misfire.compression": 8}
+    },
+    {
+      "id": "lean_bank_1",
+      "codes": ["P0171"],
+      "fuel_types": ["petrol"],
+      "description": "Campuran terdeteksi terlalu miskin pada bank 1; periksa kemungkinan udara masuk tanpa terukur serta pasokan atau pengukuran bahan bakar sesuai manual kendaraan.",
+      "cause_weights": {"vacuum_leak.intake_leak": 8, "obd_fuel_metering.delivery": 8}
+    },
+    {
+      "id": "lean_bank_2",
+      "codes": ["P0174"],
+      "fuel_types": ["petrol"],
+      "description": "Campuran terdeteksi terlalu miskin pada bank 2; periksa kemungkinan udara masuk tanpa terukur serta pasokan atau pengukuran bahan bakar sesuai manual kendaraan.",
+      "cause_weights": {"vacuum_leak.intake_leak": 8, "obd_fuel_metering.delivery": 8}
+    },
+    {
+      "id": "rich_bank_1",
+      "codes": ["P0172"],
+      "fuel_types": ["petrol"],
+      "description": "Campuran terdeteksi terlalu kaya pada bank 1; mendukung pemeriksaan pasokan bahan bakar berlebih atau pengukuran campuran, bukan bukti kebocoran vakum.",
+      "cause_weights": {"obd_fuel_metering.excess": 8}
+    },
+    {
+      "id": "rich_bank_2",
+      "codes": ["P0175"],
+      "fuel_types": ["petrol"],
+      "description": "Campuran terdeteksi terlalu kaya pada bank 2; mendukung pemeriksaan pasokan bahan bakar berlebih atau pengukuran campuran, bukan bukti kebocoran vakum.",
+      "cause_weights": {"obd_fuel_metering.excess": 8}
+    }
+  ],
+  "fuel_trim": {
+    "minimum_observations": 3,
+    "minimum_span_ms": 1000,
+    "maximum_pair_skew_ms": 500,
+    "support_freshness_ms": 15000,
+    "minimum_rpm": 500,
+    "minimum_coolant_c": 70,
+    "positive_combined_percent": 15,
+    "negative_combined_percent": -15,
+    "closed_loop_value": 2,
+    "banks": [
+      {"bank": "1", "short_mnemonic": "fuel_trim_short_b1", "long_mnemonic": "fuel_trim_long_b1"},
+      {"bank": "2", "short_mnemonic": "fuel_trim_short_b2", "long_mnemonic": "fuel_trim_long_b2"}
+    ],
+    "positive_cause_weights": {"vacuum_leak.intake_leak": 10, "obd_fuel_metering.delivery": 8},
+    "negative_cause_weights": {"obd_fuel_metering.excess": 10}
+  }
+}

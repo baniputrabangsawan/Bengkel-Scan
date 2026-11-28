@@ -22,18 +22,31 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,112 +54,306 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * This Activity appears as a dialog. It lists any paired devices and
- * devices detected in the area after discovery. When a device is chosen
- * by the user, the MAC address of the device is sent back to the parent
- * Activity in the result Intent.
- */
+/** Lists paired and discovered adapters; classic devices are paired through the Android OS dialog. */
 public class BtDeviceListActivity extends AppCompatActivity
 {
-	// Debugging
 	static final String TAG = BtDeviceListActivity.class.getSimpleName();
 	protected static final Logger log = Logger.getLogger(TAG);
-	
-	// Return Intent extra
 	public static final String EXTRA_DEVICE_ADDRESS = "device_address";
+	private static final int PERMISSIONS_REQUEST = 1;
+	private static final int SCAN_MENU = Menu.FIRST;
+	private static final long SCAN_DURATION_MS = 15_000;
+	private static final long PAIR_DURATION_MS = 60_000;
 
-	// Member fields
 	protected BluetoothAdapter mBtAdapter;
 	protected final List<BluetoothDevice> mDevices = new ArrayList<>();
 	protected DeviceAdapter mDeviceAdapter;
 	protected TextView mEmptyStateView;
 	protected LinearProgressIndicator mScanProgress;
+	private final Handler handler = new Handler(Looper.getMainLooper());
+	private boolean started;
+	private boolean receiverRegistered;
+	private boolean permissionRequestInFlight;
+	private boolean permissionsRequested;
+	private BluetoothDevice pendingPair;
+	private long pairStartedAt;
+	private AlertDialog permissionDialog;
+	private final Runnable scanDeadline = this::stopScanning;
+	private final Runnable pairDeadline = () -> {
+		pendingPair = null;
+		scanFailed(R.string.obd_bt_pair_failed);
+	};
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	@Override protected void onCreate(Bundle savedInstanceState)
 	{
 		SettingsActivity.applyLocale(this);
 		super.onCreate(savedInstanceState);
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-			ArrayList<String> missingPermissions = new ArrayList<>();
-			if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-				missingPermissions.add(Manifest.permission.BLUETOOTH_SCAN);
-			}
-			if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-				missingPermissions.add(Manifest.permission.BLUETOOTH_CONNECT);
-			}
-			if (!missingPermissions.isEmpty()) {
-				ActivityCompat.requestPermissions(this, missingPermissions.toArray(new String[0]), 1);
-			}
-		}
-
-		// Set result CANCELED in case the user backs out
 		setResult(RESULT_CANCELED);
-		// Setup the window
 		setContentView(R.layout.device_list);
 		setTitle(this instanceof BleDeviceListActivity ? R.string.select_ble_device : R.string.select_device);
 		ModernUiUtils.applyScreenInsets(this);
-
-		// Get the local Bluetooth adapter
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-		stopDeviceScan();
-
-		// Find and set up the RecyclerView for paired devices
-		RecyclerView pairedListView = findViewById(R.id.list);
-		pairedListView.setLayoutManager(new LinearLayoutManager(this));
+		RecyclerView list = findViewById(R.id.list);
+		list.setLayoutManager(new LinearLayoutManager(this));
 		mDeviceAdapter = new DeviceAdapter();
-		pairedListView.setAdapter(mDeviceAdapter);
-
+		list.setAdapter(mDeviceAdapter);
 		mEmptyStateView = findViewById(R.id.empty_state);
-		mEmptyStateView.setText(R.string.no_paired_devices);
+		mEmptyStateView.setText(R.string.obd_bt_no_devices);
+		mEmptyStateView.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
 		mScanProgress = findViewById(R.id.scan_progress);
-
+		mScanProgress.setContentDescription(getString(R.string.obd_bt_scanning));
 		updateEmptyState();
 	}
 
-	@Override
-	protected void onStart() {
+	@Override protected void onStart()
+	{
 		super.onStart();
-		mScanProgress.setVisibility(View.VISIBLE);
-		startDeviceScan();
+		started = true;
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(BluetoothDevice.ACTION_FOUND);
+		filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+		filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+		// Bluetooth broadcasts originate from a privileged process outside the app UID.
+		ContextCompat.registerReceiver(this, receiver, filter, ContextCompat.RECEIVER_EXPORTED);
+		receiverRegistered = true;
+		if (pendingPair != null) resumePairing();
+		else beginScan(false);
 	}
 
-	@Override
-	protected void onStop() {
+	@Override protected void onStop()
+	{
+		started = false;
+		stopScanning();
+		handler.removeCallbacks(pairDeadline);
+		if (receiverRegistered) {
+			unregisterReceiver(receiver);
+			receiverRegistered = false;
+		}
 		super.onStop();
-		mScanProgress.setVisibility(View.GONE);
-		stopDeviceScan();
 	}
 
-	protected void addDevice(BluetoothDevice device) {
-		if (!mDevices.contains(device)) {
-			mDevices.add(device);
-			mDeviceAdapter.notifyItemInserted(mDevices.size() - 1);
+	@Override protected void onDestroy()
+	{
+		handler.removeCallbacksAndMessages(null);
+		if (permissionDialog != null) permissionDialog.dismiss();
+		super.onDestroy();
+	}
+
+	@Override public boolean onCreateOptionsMenu(Menu menu)
+	{
+		menu.add(Menu.NONE, SCAN_MENU, Menu.NONE, R.string.obd_bt_scan_retry)
+				.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		return true;
+	}
+
+	@Override public boolean onOptionsItemSelected(@NonNull MenuItem item)
+	{
+		if (item.getItemId() == SCAN_MENU) {
+			pendingPair = null;
+			handler.removeCallbacks(pairDeadline);
+			beginScan(true);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private ArrayList<String> missingPermissions()
+	{
+		ArrayList<String> missing = new ArrayList<>();
+		String[] required = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+				? new String[]{Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT}
+				: new String[]{Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+				? Manifest.permission.ACCESS_FINE_LOCATION : Manifest.permission.ACCESS_COARSE_LOCATION};
+		for (String permission : required) {
+			if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
+				missing.add(permission);
+		}
+		return missing;
+	}
+
+	@SuppressLint("MissingPermission")
+	private void beginScan(boolean explicitRetry)
+	{
+		if (!started || permissionRequestInFlight) return;
+		if (mBtAdapter == null) { scanFailed(R.string.obd_bt_unavailable); return; }
+		ArrayList<String> missing = missingPermissions();
+		if (!missing.isEmpty()) {
+			stopScanning();
+			if (explicitRetry || !permissionsRequested) {
+				permissionsRequested = true;
+				permissionRequestInFlight = true;
+				ActivityCompat.requestPermissions(this, missing.toArray(new String[0]), PERMISSIONS_REQUEST);
+			} else scanFailed(R.string.obd_bt_permission_required);
+			return;
+		}
+		try {
+			if (mBtAdapter == null || !mBtAdapter.isEnabled()) {
+				scanFailed(R.string.obd_bt_unavailable);
+				return;
+			}
+			stopScanning();
+			mDevices.clear();
+			mDeviceAdapter.notifyDataSetChanged();
+			mEmptyStateView.setText(R.string.obd_bt_scanning);
 			updateEmptyState();
+			mScanProgress.setVisibility(View.VISIBLE);
+			startDeviceScan();
+			if (mScanProgress.getVisibility() != View.VISIBLE) return;
+			handler.postDelayed(scanDeadline, SCAN_DURATION_MS);
+		} catch (SecurityException ex) {
+			scanFailed(R.string.obd_bt_permission_required);
+		} catch (IllegalStateException ex) {
+			scanFailed(R.string.obd_bt_unavailable);
 		}
 	}
 
-	protected void updateEmptyState() {
+	@Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+	                                                 @NonNull int[] grantResults)
+	{
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if (requestCode != PERMISSIONS_REQUEST) return;
+		permissionRequestInFlight = false;
+		if (!started) return;
+		if (missingPermissions().isEmpty()) beginScan(false);
+		else {
+			scanFailed(R.string.obd_bt_permission_required);
+			if (permissionDialog == null || !permissionDialog.isShowing()) {
+				permissionDialog = new AlertDialog.Builder(this)
+						.setMessage(R.string.obd_bt_permission_required)
+						.setPositiveButton(R.string.obd_bt_settings, (dialog, which) ->
+								startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+										Uri.parse("package:" + getPackageName()))))
+						.setNeutralButton(R.string.obd_bt_scan_retry, (dialog, which) -> beginScan(true))
+						.setNegativeButton(R.string.obd_bt_back, (dialog, which) -> finish())
+						.show();
+			}
+		}
+	}
+
+	protected void addDevice(BluetoothDevice device)
+	{
+		if (!started || device == null) return;
+		int index = mDevices.indexOf(device);
+		if (index < 0) {
+			mDevices.add(device);
+			mDeviceAdapter.notifyItemInserted(mDevices.size() - 1);
+		} else mDeviceAdapter.notifyItemChanged(index);
+		updateEmptyState();
+	}
+
+	protected void updateEmptyState()
+	{
 		mEmptyStateView.setVisibility(mDevices.isEmpty() ? View.VISIBLE : View.GONE);
 	}
 
-	/** Called when the user picks a device from the list. */
-	protected void onDeviceSelected(BluetoothDevice device) {
-		// Create the result Intent and include the MAC address
+	protected final void scanFailed(int message)
+	{
+		stopScanning();
+		pendingPair = null;
+		handler.removeCallbacks(pairDeadline);
+		mEmptyStateView.setText(message);
+		updateEmptyState();
+		if (started) Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+	}
+
+	private void stopScanning()
+	{
+		handler.removeCallbacks(scanDeadline);
+		stopDeviceScan();
+		mScanProgress.setVisibility(View.GONE);
+		if (mDevices.isEmpty()) mEmptyStateView.setText(R.string.obd_bt_no_devices);
+	}
+
+	@SuppressLint("MissingPermission")
+	protected void onDeviceSelected(BluetoothDevice device)
+	{
+		if (!missingPermissions().isEmpty()) { beginScan(true); return; }
+		handler.removeCallbacks(pairDeadline);
+		pendingPair = null;
+		stopScanning();
+		try {
+			// BLE keeps its existing GATT selection behavior; OS bonding is for classic SPP devices.
+			if (this instanceof BleDeviceListActivity || device.getBondState() == BluetoothDevice.BOND_BONDED) {
+				returnDevice(device);
+				return;
+			}
+			pendingPair = device;
+			pairStartedAt = SystemClock.elapsedRealtime();
+			if (device.getBondState() == BluetoothDevice.BOND_NONE && !device.createBond()) {
+				pendingPair = null;
+				scanFailed(R.string.obd_bt_pair_failed);
+				return;
+			}
+			Toast.makeText(this, R.string.obd_bt_pair_wait, Toast.LENGTH_LONG).show();
+			handler.postDelayed(pairDeadline, PAIR_DURATION_MS);
+		} catch (SecurityException ex) {
+			pendingPair = null;
+			scanFailed(R.string.obd_bt_permission_required);
+		}
+	}
+
+	@SuppressLint("MissingPermission")
+	private void resumePairing()
+	{
+		handler.removeCallbacks(pairDeadline);
+		try {
+			if (!missingPermissions().isEmpty()) {
+				pendingPair = null;
+				scanFailed(R.string.obd_bt_permission_required);
+			} else if (pendingPair.getBondState() == BluetoothDevice.BOND_BONDED) returnDevice(pendingPair);
+			else if (pendingPair.getBondState() == BluetoothDevice.BOND_NONE) {
+				pendingPair = null;
+				scanFailed(R.string.obd_bt_pair_failed);
+			} else handler.postDelayed(pairDeadline,
+					Math.max(0, PAIR_DURATION_MS - (SystemClock.elapsedRealtime() - pairStartedAt)));
+		} catch (SecurityException ex) {
+			pendingPair = null;
+			scanFailed(R.string.obd_bt_permission_required);
+		}
+	}
+
+	private void returnDevice(BluetoothDevice device)
+	{
 		Intent intent = new Intent();
 		intent.putExtra(EXTRA_DEVICE_ADDRESS, device.getAddress());
-
-		// Set result and finish this Activity
+		pendingPair = null;
+		handler.removeCallbacks(pairDeadline);
 		setResult(RESULT_OK, intent);
-		log.log(Level.FINE, "Sending Result...");
 		finish();
 	}
+
+	private final BroadcastReceiver receiver = new BroadcastReceiver() {
+		@Override public void onReceive(Context context, Intent intent) {
+			if (!started) return;
+			String action = intent.getAction();
+			if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+				if (!(BtDeviceListActivity.this instanceof BleDeviceListActivity)) {
+					try {
+						if (mBtAdapter == null || !mBtAdapter.isDiscovering())
+							mScanProgress.setVisibility(View.GONE);
+					} catch (SecurityException ex) {
+						scanFailed(R.string.obd_bt_permission_required);
+					}
+				}
+			} else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+				if (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
+						!= BluetoothAdapter.STATE_ON) scanFailed(R.string.obd_bt_unavailable);
+			} else {
+				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+				if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+					if (!(BtDeviceListActivity.this instanceof BleDeviceListActivity)) addDevice(device);
+				} else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action) && device != null) {
+					int index = mDevices.indexOf(device);
+					if (index >= 0) mDeviceAdapter.notifyItemChanged(index);
+					if (device.equals(pendingPair)) resumePairing();
+				}
+			}
+		}
+	};
 
 	protected static class DeviceViewHolder extends RecyclerView.ViewHolder {
 		final TextView text;
@@ -157,52 +364,47 @@ public class BtDeviceListActivity extends AppCompatActivity
 	}
 
 	protected class DeviceAdapter extends RecyclerView.Adapter<DeviceViewHolder> {
-		@NonNull
-		@Override
-		public DeviceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-			View v = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.device_name, parent, false);
-			return new DeviceViewHolder(v);
+		@NonNull @Override public DeviceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+			View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.device_name, parent, false);
+			view.setFocusable(true);
+			return new DeviceViewHolder(view);
 		}
 
-		@SuppressLint("MissingPermission") // permission is checked before
-		@Override
-		public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
-			BluetoothDevice dev = mDevices.get(position);
-			String displayName;
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-				String alias = dev.getAlias();
-				displayName = (alias != null && !alias.isEmpty()) ? alias : dev.getName();
-			} else {
-				displayName = dev.getName();
-			}
-			holder.text.setText(getString(R.string.device_list_entry, displayName, dev.getAddress()));
-			holder.itemView.setOnClickListener(v -> onDeviceSelected(dev));
-		}
-
-		@Override
-		public int getItemCount() {
-			return mDevices.size();
-		}
-	}
-
-	@SuppressLint("MissingPermission") // permission is checked before
-	protected void startDeviceScan() {
-		if(mBtAdapter != null && mBtAdapter.isEnabled())
-		{
-			// Get a set of currently paired devices
-			Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
-
-			for (BluetoothDevice device : pairedDevices)
-			{
-				addDevice(device);
+		@SuppressLint("MissingPermission")
+		@Override public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
+			BluetoothDevice device = mDevices.get(position);
+			try {
+				String name = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? device.getAlias() : null;
+				if (name == null || name.isEmpty()) name = device.getName();
+				if (name == null || name.isEmpty()) name = getString(R.string.obd_bt_unknown_device);
+				int bond = device.getBondState();
+				int status = bond == BluetoothDevice.BOND_BONDED ? R.string.obd_bt_paired
+						: bond == BluetoothDevice.BOND_BONDING ? R.string.obd_bt_pairing : R.string.obd_bt_not_paired;
+				holder.text.setText(getString(R.string.obd_bt_device_entry, name, device.getAddress(), getString(status)));
+				holder.itemView.setOnClickListener(view -> onDeviceSelected(device));
+			} catch (SecurityException ex) {
+				holder.text.setText(R.string.obd_bt_permission_required);
+				holder.itemView.setOnClickListener(view -> beginScan(true));
 			}
 		}
+
+		@Override public int getItemCount() { return mDevices.size(); }
 	}
 
-	@SuppressLint("MissingPermission") // permission is checked before
-	protected void stopDeviceScan() {
-			// Cancel discovery because it's costly and we're about to connect
-			mBtAdapter.cancelDiscovery();
+	@SuppressLint("MissingPermission")
+	protected void startDeviceScan()
+	{
+		if (mBtAdapter == null) { scanFailed(R.string.obd_bt_unavailable); return; }
+		for (BluetoothDevice device : mBtAdapter.getBondedDevices()) addDevice(device);
+		if (!mBtAdapter.startDiscovery()) scanFailed(R.string.obd_bt_scan_failed);
+	}
+
+	@SuppressLint("MissingPermission")
+	protected void stopDeviceScan()
+	{
+		if (mBtAdapter == null) return;
+		try { mBtAdapter.cancelDiscovery(); }
+		catch (SecurityException ex) { log.log(Level.FINE, "Bluetooth scan permission revoked", ex); }
+		catch (IllegalStateException ex) { log.log(Level.FINE, "Bluetooth adapter stopped", ex); }
 	}
 }

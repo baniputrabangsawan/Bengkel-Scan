@@ -111,6 +111,8 @@ public class MainActivity extends PluginManager
         SharedPreferences.OnSharedPreferenceChangeListener,
         AbsListView.MultiChoiceModeListener
 {
+    private String diagnosticReturnRecording;
+    private String diagnosticReturnContext;
     /**
      * Key names for preferences
      */
@@ -323,6 +325,8 @@ public class MainActivity extends PluginManager
                     case MESSAGE_STATE_CHANGE:
                         // log trace message for received handler notification event
                         log.log(Level.FINEST, String.format("State change: %s", msg.toString()));
+                        com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData.transportChanged(
+                                ((CommService.STATE) msg.obj).name(), CommService.medium.name());
                         switch ((CommService.STATE) msg.obj)
                         {
                             case CONNECTED:
@@ -416,6 +420,7 @@ public class MainActivity extends PluginManager
                     case MESSAGE_OBD_STATE_CHANGED:
                         evt = (PropertyChangeEvent) msg.obj;
                         ElmProt.STAT state = (ElmProt.STAT) evt.getNewValue();
+                        com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData.protocolState(state.name());
                         /* Show ELM status only in ONLINE mode */
                         if (getMode() != MODE.DEMO)
                         {
@@ -774,6 +779,8 @@ public class MainActivity extends PluginManager
 
     @Override protected void onResume()
     {
+        com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData.bind(this);
+        captureDiagnosticReturn(getIntent());
         // Apply locale on resume (in case it was changed in settings)
         SettingsActivity.applyLocale(this);
 
@@ -803,6 +810,7 @@ public class MainActivity extends PluginManager
     @Override
     protected void onDestroy()
     {
+        com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData.unbind(this);
         // Stop toolbar hider thread
         setAutoHider(false);
 
@@ -884,6 +892,10 @@ public class MainActivity extends PluginManager
     @SuppressLint("GestureBackNavigation")
     public void onBackPressed()
     {
+        if (diagnosticReturnRecording != null) {
+            returnToDiagnosticResult();
+            return;
+        }
         if (getListAdapter() == pluginHandler)
         {
             setObdService(obdService, null);
@@ -940,6 +952,8 @@ public class MainActivity extends PluginManager
         // Inflate the OBD services submenu for diagnostic functions
         getMenuInflater().inflate(R.menu.obd_services, menu.findItem(R.id.obd_services).getSubMenu());
         MainActivity.menu = menu;
+        menu.add(0, R.id.obd_return_result, 0, R.string.obd_return_result)
+                .setVisible(diagnosticReturnRecording != null);
         for (int id : new int[] {R.id.save, R.id.load, R.id.day_night_mode,
                 R.id.plugin_manager, R.id.reset_preselections, R.id.service_testcontrol,
                 R.id.service_clearcodes})
@@ -1122,6 +1136,10 @@ public class MainActivity extends PluginManager
         {
             startActivity(new Intent(this,
                     com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.SoundGuideActivity.class));
+            return true;
+        }
+        if (id == R.id.obd_return_result) {
+            returnToDiagnosticResult();
             return true;
         }
         if (id == android.R.id.home)
@@ -1808,6 +1826,7 @@ public class MainActivity extends PluginManager
      */
     private void selectEcu(final Set<Integer> ecuAdresses)
     {
+        com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData.ecuSelected(0);
         // if more than one ECUs available ...
         if (ecuAdresses.size() > 1)
         {
@@ -1817,6 +1836,7 @@ public class MainActivity extends PluginManager
                     && ecuAdresses.contains(preferredAddress))
             {
                 // set address
+                com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData.ecuSelected(preferredAddress);
                 CommService.elm.setEcuAddress(preferredAddress);
             } else
             {
@@ -1842,6 +1862,7 @@ public class MainActivity extends PluginManager
                             {
                                 int address = addrArray[which];
                                 // set address
+                                com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData.ecuSelected(address);
                                 CommService.elm.setEcuAddress(address);
                                 // set this as preference (preference change will trigger ELM command)
                                 prefs.edit().putInt(PRESELECT.LAST_ECU_ADDRESS.toString(), address)
@@ -1850,6 +1871,11 @@ public class MainActivity extends PluginManager
                         })
                         .show();
             }
+        }
+        else if (ecuAdresses.size() == 1) {
+            int address = ecuAdresses.iterator().next();
+            com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData.ecuSelected(address);
+            CommService.elm.setEcuAddress(address);
         }
     }
 
@@ -2138,6 +2164,7 @@ public class MainActivity extends PluginManager
      */
     private void setMode(MODE mode)
     {
+        com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData.modeChanged(mode.name());
         liveMode = mode;
         // if this is a mode change, or file reload ...
         if (mode != this.mode || mode == MODE.FILE)
@@ -2533,11 +2560,15 @@ public class MainActivity extends PluginManager
      */
     private void connectBtDevice(String address, boolean secure)
     {
-        // Get the BluetoothDevice object
-        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        // Attempt to connect to the device
-        mCommService = new BtCommService(this, mHandler);
-        mCommService.connect(device, secure);
+        try {
+            if (mBluetoothAdapter == null) throw new IllegalStateException("Bluetooth unavailable");
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+            if (!(mCommService instanceof BtCommService)) mCommService = new BtCommService(this, mHandler);
+            mCommService.connect(device, secure);
+        } catch (IllegalArgumentException | IllegalStateException | SecurityException error) {
+            setMode(MODE.OFFLINE);
+            Toast.makeText(this, R.string.unabletoconnect, Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -3112,4 +3143,57 @@ public class MainActivity extends PluginManager
         LAST_ITEMS,
         LAST_VIEW_MODE,
     }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        captureDiagnosticReturn(intent);
+    }
+
+    private void captureDiagnosticReturn(Intent request) {
+        String key = com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData.EXTRA_RETURN_RESULT;
+        if (request == null || !request.hasExtra(key)) return;
+        String recording = request.getStringExtra(key);
+        if (recording == null) return;
+        try {
+            if (!recording.isEmpty()) java.util.UUID.fromString(recording);
+        } catch (IllegalArgumentException invalid) {
+            return;
+        }
+        diagnosticReturnRecording = recording;
+        String context = request.getStringExtra(
+                com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.AudioResultActivity.EXTRA_CONTEXT);
+        diagnosticReturnContext = context != null && context.length() <= 8192 ? context : null;
+        request.removeExtra(key);
+        invalidateOptionsMenu();
+    }
+
+    private void returnToDiagnosticResult() {
+        Intent result = new Intent(this,
+                com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.AudioResultActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        if (diagnosticReturnRecording != null && !diagnosticReturnRecording.isEmpty())
+            result.putExtra(com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.AudioResultActivity.EXTRA_RECORDING_ID,
+                    diagnosticReturnRecording);
+        result.putExtra(com.fr3ts0n.ecu.gui.androbd.diagnosis.ui.AudioResultActivity.EXTRA_CONTEXT,
+                diagnosticReturnContext);
+        diagnosticReturnRecording = null;
+        diagnosticReturnContext = null;
+        invalidateOptionsMenu();
+        startActivity(result);
+    }
+
+    /** A read-only request on this activity's existing adapter; never opens a second socket. */
+    public void requestDiagnosticObdService(boolean codes) {
+        if (isFinishing() || isDestroyed() || getMode() != MODE.ONLINE || mCommService == null
+                || mCommService.getState() != CommService.STATE.CONNECTED) {
+            Toast.makeText(this, R.string.obd_scanner_failed, Toast.LENGTH_LONG).show();
+            return;
+        }
+        com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData.beginRead(codes);
+        // Force a genuinely new request even if the previous screen selected the same service.
+        CommService.elm.setService(ObdProt.OBD_SVC_NONE, false);
+        setObdService(codes ? ObdProt.OBD_SVC_READ_CODES : ObdProt.OBD_SVC_DATA,
+                getString(codes ? R.string.obd_read_codes : R.string.obd_read_pids));
+    }
 }
+

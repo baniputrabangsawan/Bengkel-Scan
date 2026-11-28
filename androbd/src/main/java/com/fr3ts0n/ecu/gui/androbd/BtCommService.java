@@ -19,412 +19,156 @@
 package com.fr3ts0n.ecu.gui.androbd;
 
 import android.annotation.SuppressLint;
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
-import android.os.ParcelUuid;
+import android.os.Message;
 
-import com.fr3ts0n.prot.StreamHandler;
+import androidx.core.content.ContextCompat;
+
+import com.fr3ts0n.ecu.gui.androbd.diagnosis.data.ObdLiveData;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
-import java.util.logging.Level;
 
-/**
- * This class does all the work for setting up and managing Bluetooth
- * connections with other devices. It has a thread that listens for incoming
- * connections, a thread for connecting with a device, and a thread for
- * performing data transmissions when connected.
- */
-@SuppressLint("NewApi")
+/** Classic Bluetooth SPP transport. Socket lifecycle is isolated from the ELM protocol parser. */
 public class BtCommService extends CommService
 {
-	
-	private BtConnectThread mBtConnectThread;
-	private BtWorkerThread mBtWorkerThread;
-	/** communication stream handler */
-	private final StreamHandler ser = new StreamHandler();
-	
-	
-	/**
-	 * Constructor. Prepares a new Bluetooth Communication session.
-	 *
-	 * @param context The UI Activity Context
-	 * @param handler A Handler to send messages back to the UI Activity
-	 */
+	private static final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+	private static final long CONNECT_TIMEOUT_MS = 20_000;
+	private final BtTransportSession session;
+	private final Handler uiHandler;
+	private String deviceName;
+
 	BtCommService(Context context, Handler handler)
 	{
 		super(context, handler);
-
-		// Always cancel discovery because it will slow down a connection
-		// Member fields
-		BluetoothAdapter mAdapter = BluetoothAdapter.getDefaultAdapter();
-		if (mAdapter != null)
-			mAdapter.cancelDiscovery();
-		
-		// set up protocol handlers
-		elm.addTelegramWriter(ser);
-		ser.setMessageHandler(elm);
+		uiHandler = handler;
+		session = new BtTransportSession(this, elm, new BtTransportSession.Listener() {
+			@Override public void connected() {
+				connectionEstablished(deviceName);
+			}
+			@Override public void failed(BtTransportSession.Failure failure) {
+				int text;
+				switch (failure) {
+					case PERMISSION: text = R.string.obd_bt_permission_required; break;
+					case TIMEOUT: text = R.string.obd_bt_connect_timeout; break;
+					case STREAMS: text = R.string.obd_bt_stream_failed; break;
+					default: text = R.string.obd_bt_connect_failed;
+				}
+				reportFailure(text);
+			}
+			@Override public void disconnected() {
+				reportFailure(R.string.obd_bt_connection_lost);
+			}
+		}, BtTransportSession.SCHEDULER, CONNECT_TIMEOUT_MS, 500, buffer -> {
+			int result = elm.handleTelegram(buffer);
+			ObdLiveData.onTelegram(buffer);
+			return result;
+		});
 	}
 
-	/**
-	 * Start the chat service. Specifically start AcceptThread to begin a session
-	 * in listening (server) mode. Called by the Activity onResume()
-	 */
-	@Override
-	public synchronized void start()
+	@Override public synchronized void start()
 	{
-		log.log(Level.FINE, "start");
-
-		// Cancel any thread attempting to make a connection
-		if (mBtConnectThread != null)
-		{
-			mBtConnectThread.cancel();
-			mBtConnectThread = null;
-		}
-
-		// Cancel any thread currently running a connection
-		if (mBtWorkerThread != null)
-		{
-			mBtWorkerThread.cancel();
-			mBtWorkerThread = null;
-		}
-
+		session.stop();
 		setState(STATE.LISTEN);
 	}
 
-	/**
-	 * start connection to specified device
-	 *
-	 * @param device The device to connect
-	 * @param secure Socket Security type - Secure (true) , Insecure (false)
-	 */
-	@Override
-	public synchronized void connect(Object device, boolean secure)
+	@SuppressLint("MissingPermission")
+	@Override public synchronized void connect(Object device, boolean secure)
 	{
-		log.log(Level.FINE, "connect to: " + device);
-
-		// Cancel any thread attempting to make a connection
-		if (mState == STATE.CONNECTING)
-		{
-			if (mBtConnectThread != null)
-			{
-				mBtConnectThread.cancel();
-				mBtConnectThread = null;
+		session.stop();
+		if (!(device instanceof BluetoothDevice)) {
+			reportFailure(R.string.obd_bt_connect_failed);
+			return;
+		}
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+				&& ContextCompat.checkSelfPermission(mContext, Manifest.permission.BLUETOOTH_CONNECT)
+				!= PackageManager.PERMISSION_GRANTED) {
+			reportFailure(R.string.obd_bt_permission_required);
+			return;
+		}
+		try {
+			BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+			if (adapter == null || !adapter.isEnabled()) {
+				reportFailure(R.string.obd_bt_unavailable);
+				return;
 			}
+			// Discovery is optional for an already known device; do not require scan permission here.
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+					|| ContextCompat.checkSelfPermission(mContext, Manifest.permission.BLUETOOTH_SCAN)
+					== PackageManager.PERMISSION_GRANTED) adapter.cancelDiscovery();
+			BluetoothDevice target = (BluetoothDevice) device;
+			deviceName = target.getName();
+			if (deviceName == null) deviceName = mContext.getString(R.string.obd_bt_unknown_device);
+			setState(STATE.CONNECTING);
+			session.connect(fallback -> createSocket(target, secure, fallback));
+		} catch (IllegalStateException ex) {
+			reportFailure(R.string.obd_bt_unavailable);
+		} catch (SecurityException ex) {
+			reportFailure(R.string.obd_bt_permission_required);
 		}
-
-		// Cancel any thread currently running a connection
-		if (mBtWorkerThread != null)
-		{
-			mBtWorkerThread.cancel();
-			mBtWorkerThread = null;
-		}
-
-		setState(STATE.CONNECTING);
-
-		// Start the thread to connect with the given device
-		mBtConnectThread = new BtConnectThread((BluetoothDevice)device, secure);
-		mBtConnectThread.start();
 	}
 
-	/**
-	 * Start the BtWorkerThread to begin managing a Bluetooth connection
-	 *
-	 * @param socket The BluetoothSocket on which the connection was made
-	 * @param device The BluetoothDevice that has been connected
-	 */
-	private synchronized void connected(BluetoothSocket socket, BluetoothDevice
-		                                                            device, final String socketType)
+	@Override public synchronized void stop()
 	{
-		log.log(Level.FINE, "connected, Socket Type:" + socketType);
-
-		// Cancel the thread that completed the connection
-		if (mBtConnectThread != null)
-		{
-			mBtConnectThread.cancel();
-			mBtConnectThread = null;
-		}
-
-		// Cancel any thread currently running a connection
-		if (mBtWorkerThread != null)
-		{
-			mBtWorkerThread.cancel();
-			mBtWorkerThread = null;
-		}
-
-		// Delay connection for 500ms (Fix issue AndrOBD/#233)
-		try
-		{
-			Thread.sleep(500);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-
-		// Start the thread to manage the connection and perform transmissions
-		mBtWorkerThread = new BtWorkerThread(socket, socketType);
-		mBtWorkerThread.start();
-
-        // we are connected -> signal connection established
-        connectionEstablished(device.getName());
-    }
-
-	/**
-	 * Stop all threads
-	 */
-	@Override
-	public synchronized void stop()
-	{
-		log.log(Level.FINE, "stop");
-		elm.removeTelegramWriter(ser);
-
-		if (mBtConnectThread != null)
-		{
-			mBtConnectThread.cancel();
-			mBtConnectThread = null;
-		}
-
-		if (mBtWorkerThread != null)
-		{
-			mBtWorkerThread.cancel();
-			mBtWorkerThread = null;
-		}
-
+		session.stop();
 		setState(STATE.OFFLINE);
 	}
 
-	/**
-	 * Write to the BtWorkerThread in an un-synchronized manner
-	 *
-	 * @param out The bytes to write
-	 * @see BtWorkerThread#write(byte[])
-	 */
-	@Override
-	public synchronized void write(byte[] out)
+	@Override public synchronized void write(byte[] out)
 	{
-		if (mBtWorkerThread != null)
-			mBtWorkerThread.write(out);
+		session.write(out);
 	}
 
-	/**
-	 * This thread runs while attempting to make an outgoing connection with a
-	 * device. It runs straight through; the connection either succeeds or fails.
-	 */
-	private class BtConnectThread extends Thread
+	private void reportFailure(int text)
 	{
-		private final BluetoothDevice mmDevice;
-		private BluetoothSocket mmSocket;
-		private final String mSocketType;
-
-		BtConnectThread(BluetoothDevice device, boolean secure)
-		{
-			mmDevice = device;
-			BluetoothSocket tmp = null;
-			mSocketType = secure ? "Secure" : "Insecure";
-
-			// Modified to work with SPP Devices
-			final UUID SPP_UUID = UUID
-				.fromString("00001101-0000-1000-8000-00805F9B34FB");
-			
-			// Get a BluetoothSocket for a connection with the
-			// given BluetoothDevice
-			try
-			{
-				if (secure)
-				{
-					tmp = device.createRfcommSocketToServiceRecord(SPP_UUID);
-				} else
-				{
-					tmp = device.createInsecureRfcommSocketToServiceRecord(SPP_UUID);
-				}
-			} catch (IOException e)
-			{
-				log.log(Level.SEVERE, "Socket Type: " + mSocketType + "create() failed", e);
-			}
-			mmSocket = tmp;
-
-			logSocketUuids(mmSocket, "BT socket");
-		}
-		
-		/**
-		 * Log supported UUIDs of specified BluetoothSocket
-		 * @param socket Socket to log
-		 * @param msg Message to prepend the UUIDs
-		 */
-		private void logSocketUuids(BluetoothSocket socket, String msg)
-		{
-			if(log.isLoggable(Level.INFO))
-			{
-				StringBuilder message = new StringBuilder(msg);
-				// dump supported UUID's
-				message.append(" - UUIDs:");
-				if (socket != null)
-				{
-					ParcelUuid[] uuids = socket.getRemoteDevice().getUuids();
-					if(uuids != null)
-					{
-						for (ParcelUuid uuid: uuids)
-						{
-							message.append(uuid.getUuid().toString()).append(",");
-						}
-					}
-					else
-					{
-						message.append("NONE (Invalid BT implementation)");
-					}
-				}
-				else
-				{
-					message.append("NONE (null socket)");
-				}
-				log.log(Level.INFO, message.toString());
-			}
-		}
-		
-		public void run()
-		{
-			log.log(Level.INFO, "BEGIN mBtConnectThread SocketType:" + mSocketType);
-
-			// Make a connection to the BluetoothSocket
-			try
-			{
-				log.log(Level.FINE, "Connect BT socket");
-
-				// This is a blocking call and will only return on a
-				// successful connection or an exception
-				mmSocket.connect();
-			}
-			catch (IOException e)
-			{
-				log.log(Level.FINE, e.getMessage());
-				cancel();
-				
-				log.log(Level.INFO, "Fallback attempt to create RfComm socket");
-				BluetoothSocket sockFallback;
-				Class<?> clazz = mmSocket.getRemoteDevice().getClass();
-				Class<?>[] paramTypes = new Class<?>[]{Integer.TYPE};
-				try {
-					//noinspection JavaReflectionMemberAccess
-					Method m = clazz.getMethod("createRfcommSocket", paramTypes);
-					Object[] params = new Object[]{1};
-					sockFallback = (BluetoothSocket) m.invoke(mmSocket.getRemoteDevice(), params);
-					mmSocket = sockFallback;
-					
-					logSocketUuids(mmSocket, "Fallback socket");
-					
-					// connect fallback socket
-					mmSocket.connect();
-				}
-				catch (Exception e2)
-				{
-					log.log(Level.SEVERE, e2.getMessage());
-					connectionFailed();
-					return;
-				}
-			}
-
-			// Reset the BtConnectThread because we're done
-			synchronized (BtCommService.this)
-			{
-				mBtConnectThread = null;
-			}
-
-			// Start the connected thread
-			connected(mmSocket, mmDevice, mSocketType);
-		}
-
-		synchronized void cancel()
-		{
-			try
-			{
-				log.log(Level.INFO, "Closing BT socket");
-				mmSocket.close();
-			} catch (IOException e)
-			{
-				log.log(Level.SEVERE, e.getMessage());
-			}
-		}
+		session.stop();
+		setState(STATE.OFFLINE);
+		Message message = uiHandler.obtainMessage(MainActivity.MESSAGE_TOAST);
+		Bundle bundle = new Bundle();
+		bundle.putString(MainActivity.TOAST, mContext.getString(text));
+		message.setData(bundle);
+		message.sendToTarget();
 	}
 
-	/**
-	 * This thread runs during a connection with a remote device. It handles all
-	 * incoming and outgoing transmissions.
-	 */
-	private class BtWorkerThread extends Thread
+	@SuppressLint("MissingPermission")
+	private static BtTransportSession.Socket createSocket(BluetoothDevice device, boolean secure,
+	                                                      boolean fallback) throws IOException
 	{
-		private final BluetoothSocket mmSocket;
-		private final InputStream mmInStream;
-		private final OutputStream mmOutStream;
-
-		BtWorkerThread(BluetoothSocket socket, String socketType)
-		{
-			log.log(Level.FINE, "create BtWorkerThread: " + socketType);
-			mmSocket = socket;
-			InputStream tmpIn = null;
-			OutputStream tmpOut = null;
-
-			// Get the BluetoothSocket input and output streams
-			try
-			{
-				tmpIn = socket.getInputStream();
-				tmpOut = socket.getOutputStream();
-			} catch (IOException e)
-			{
-				log.log(Level.SEVERE, "temp sockets not created", e);
-			}
-
-			mmInStream = tmpIn;
-			mmOutStream = tmpOut;
-			// set streams
-			ser.setStreams(mmInStream, mmOutStream);
-		}
-
-		/**
-		 * run the main communication loop
-		 */
-		public void run()
-		{
-			log.log(Level.INFO, "BEGIN mBtWorkerThread");
-			try
-			{
-				// run the communication thread
-				ser.run();
-			} catch (Exception ex)
-			{
-				// Intentionally ignore
-                log.log(Level.SEVERE, "Comm thread aborted", ex);
-			}
-			connectionLost();
-		}
-
-		/**
-		 * Write to the connected OutStream.
-		 *
-		 * @param buffer The bytes to write
-		 */
-		synchronized void write(byte[] buffer)
-		{
-			ser.writeTelegram(new String(buffer).toCharArray());
-		}
-		
-		synchronized void cancel()
-		{
-			try
-			{
-				log.log(Level.INFO, "Closing BT socket");
-				mmSocket.close();
-			} catch (IOException e)
-			{
-				log.log(Level.SEVERE, e.getMessage());
+		BluetoothSocket socket;
+		if (!fallback) {
+			socket = secure ? device.createRfcommSocketToServiceRecord(SPP_UUID)
+					: device.createInsecureRfcommSocketToServiceRecord(SPP_UUID);
+		} else {
+			// Retain the existing channel-1 workaround for adapters with broken SDP implementations.
+			try {
+				Method method = device.getClass().getMethod("createRfcommSocket", Integer.TYPE);
+				socket = (BluetoothSocket) method.invoke(device, 1);
+			} catch (InvocationTargetException ex) {
+				Throwable cause = ex.getCause();
+				if (cause instanceof SecurityException) throw (SecurityException) cause;
+				throw new IOException("Clone adapter RFCOMM fallback failed", cause);
+			} catch (ReflectiveOperationException | ClassCastException ex) {
+				throw new IOException("Clone adapter RFCOMM fallback unavailable", ex);
 			}
 		}
-
+		if (socket == null) throw new IOException("Bluetooth socket creation returned null");
+		return new BtTransportSession.Socket() {
+			@Override public void connect() throws IOException { socket.connect(); }
+			@Override public InputStream input() throws IOException { return socket.getInputStream(); }
+			@Override public OutputStream output() throws IOException { return socket.getOutputStream(); }
+			@Override public void close() throws IOException { socket.close(); }
+		};
 	}
 }

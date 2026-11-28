@@ -131,6 +131,33 @@ adb shell am instrument -w -e class <FQCN,...> \
 Jalankan satu kelompok tes per perintah; menggabungkan terlalu banyak kelas dalam satu `am instrument` membuat
 proses tes kehabisan waktu pada ponsel bersama walaupun tiap kelas lulus sendiri-sendiri.
 
+## Audio dataset and model research
+
+The Python pipeline is separate from the Android build; it lives under `ml/`.
+
+```sh
+uv run --project ml --locked python ml/run.py --config ml/config.json
+```
+
+The current manifest contains no eligible training recordings: this command writes an honest blocked
+report, not fabricated accuracy. YAMNet is research-only; weight provenance still needs verification.
+
+Phase 5 adds offline TFLite inference and technical validation. Its explicitly named synthetic model
+exists only in generated debug/test assets. The UI states "Mode uji teknis, bukan diagnosis"; release
+APK builds reject synthetic assets, including renamed models with synthetic metadata.
+Technical parity, latency and offline evidence are not vehicle accuracy.
+
+Phase 6 adds result states, conservative safety and local feedback. Cause percentages remain
+unavailable until calibrated; debug examples are explicitly labelled. Per-recording consent permits
+a separate manual ZIP export, never an automatic upload. Consent can be revoked for future exports;
+copies already exported cannot be recalled.
+
+Phase 7 adds optional Bluetooth OBD evidence: fresh same-session PID/DTC observations, explicit
+same-vehicle confirmation, explainable draft re-ranking and a non-OBD fallback on disconnect.
+Readiness is never presented as a misfire count.
+
+
+
 ## Struktur repository
 
 ```text

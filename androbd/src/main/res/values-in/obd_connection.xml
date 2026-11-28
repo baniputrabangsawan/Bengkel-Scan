@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="obd_bt_scan_retry">Pindai ulang</string>
+    <string name="obd_bt_scanning">Mencari adaptor Bluetooth…</string>
+    <string name="obd_bt_no_devices">Belum ada adaptor. Nyalakan adaptor ELM327 dan Bluetooth, lalu pilih Pindai ulang.</string>
+    <string name="obd_bt_scan_failed">Pemindaian gagal. Pastikan Bluetooth aktif; untuk Android 6–11, aktifkan lokasi perangkat, lalu pindai ulang. Perangkat yang sudah terpasang tetap dapat dipilih.</string>
+    <string name="obd_bt_unavailable">Bluetooth tidak tersedia atau belum aktif. Aktifkan Bluetooth, lalu coba lagi.</string>
+    <string name="obd_bt_permission_required">Izin Bluetooth diperlukan untuk memindai, memasangkan, dan menyambungkan adaptor. Di Android 6–11, izinkan lokasi saat aplikasi digunakan. Izinkan lewat Setelan aplikasi lalu coba lagi.</string>
+    <string name="obd_bt_settings">Setelan aplikasi</string>
+    <string name="obd_bt_back">Kembali</string>
+    <string name="obd_bt_unknown_device">Perangkat tanpa nama</string>
+    <string name="obd_bt_paired">Terpasang</string>
+    <string name="obd_bt_pairing">Sedang dipasangkan</string>
+    <string name="obd_bt_not_paired">Belum terpasang</string>
+    <string name="obd_bt_device_entry">%1$s\n%2$s · %3$s</string>
+    <string name="obd_bt_pair_wait">Selesaikan pemasangan pada dialog Android. Jika diminta PIN, gunakan PIN dari petunjuk adaptor.</string>
+    <string name="obd_bt_pair_failed">Pemasangan belum berhasil atau dibatalkan. Pilih adaptor untuk mencoba lagi dan ikuti dialog Android.</string>
+    <string name="obd_bt_connect_failed">Adaptor belum tersambung. Periksa daya adaptor, pemasangan Bluetooth, dan aplikasi lain yang mungkin sedang memakainya; lalu coba sambungkan lagi. Adaptor klon mungkin tidak mendukung SPP dengan benar.</string>
+    <string name="obd_bt_connect_timeout">Waktu penyambungan adaptor habis. Periksa daya adaptor dan pemasangan Bluetooth, lalu coba sambungkan lagi.</string>
+    <string name="obd_bt_stream_failed">Jalur data adaptor gagal dibuka. Tidak ada sesi OBD aktif. Coba sambungkan lagi atau gunakan adaptor lain.</string>
+    <string name="obd_bt_connection_lost">Koneksi adaptor terputus. Data OBD sesi ini tidak lagi aktif. Periksa daya dan jarak adaptor, lalu sambungkan kembali secara manual.</string>
+</resources>

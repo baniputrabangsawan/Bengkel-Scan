@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:bengkel-scan:diagnosis:expert-knowledge:1",
+  "title": "Draft expert triage knowledge",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "revision", "disclaimer", "review_notice", "scoring", "safety_rules", "entries"],
+  "properties": {
+    "schema_version": {"const": 1, "type": "integer"},
+    "revision": {"$ref": "#/$defs/nonblank"},
+    "disclaimer": {"$ref": "#/$defs/nonblank"},
+    "review_notice": {"$ref": "#/$defs/nonblank"},
+    "scoring": {"$ref": "#/$defs/scoring"},
+    "safety_rules": {"type": "array", "items": {"$ref": "#/$defs/safetyRule"}},
+    "entries": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/entry"}}
+  },
+  "$defs": {
+    "nonblank": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "identifier": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "trigger": {"enum": ["cold", "warm", "idle", "throttle", "braking", "turning"]},
+    "nonnegative": {"type": "number", "minimum": 0},
+    "scoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_results", "minimum_score", "minimum_margin", "manual_symptom_weight", "audio_weight", "audio_min_probability", "trigger_match_weight", "location_match_weight", "base_reason", "manual_reason", "audio_reason", "trigger_reason", "location_reason", "missing_context_reason", "uncertain_message", "ranked_message", "no_match_message"],
+      "properties": {
+        "max_results": {"type": "integer", "minimum": 1, "maximum": 3},
+        "minimum_score": {"$ref": "#/$defs/nonnegative"},
+        "minimum_margin": {"$ref": "#/$defs/nonnegative"},
+        "manual_symptom_weight": {"$ref": "#/$defs/nonnegative"},
+        "audio_weight": {"$ref": "#/$defs/nonnegative"},
+        "audio_min_probability": {"type": "number", "minimum": 0, "maximum": 1},
+        "trigger_match_weight": {"$ref": "#/$defs/nonnegative"},
+        "location_match_weight": {"$ref": "#/$defs/nonnegative"},
+        "base_reason": {"$ref": "#/$defs/nonblank"},
+        "manual_reason": {"$ref": "#/$defs/nonblank"},
+        "audio_reason": {"$ref": "#/$defs/nonblank"},
+        "trigger_reason": {"$ref": "#/$defs/nonblank"},
+        "location_reason": {"$ref": "#/$defs/nonblank"},
+        "missing_context_reason": {"$ref": "#/$defs/nonblank"},
+        "uncertain_message": {"$ref": "#/$defs/nonblank"},
+        "ranked_message": {"$ref": "#/$defs/nonblank"},
+        "no_match_message": {"$ref": "#/$defs/nonblank"}
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "operator", "value"],
+      "properties": {
+        "field": {"enum": ["fuel_type", "fuel_system", "cylinder_count", "mileage_km", "engine_temp_state", "temperature_pattern", "power_steering_type", "trigger_conditions", "flags", "location"]},
+        "operator": {"enum": ["eq", "gte", "lte", "contains"]},
+        "value": {"type": ["string", "number"]}
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "field": {"enum": ["fuel_type", "fuel_system", "engine_temp_state", "temperature_pattern", "power_steering_type", "location"]},
+            "operator": {"const": "eq"},
+            "value": {"$ref": "#/$defs/nonblank"}
+          }
+        },
+        {
+          "properties": {
+            "field": {"const": "cylinder_count"},
+            "operator": {"const": "eq"},
+            "value": {"type": "integer", "minimum": 1, "maximum": 2147483647}
+          }
+        },
+        {
+          "properties": {
+            "field": {"const": "mileage_km"},
+            "operator": {"const": "eq"},
+            "value": {"type": "integer", "minimum": 0, "maximum": 2147483647}
+          }
+        },
+        {
+          "properties": {
+            "field": {"enum": ["cylinder_count", "mileage_km"]},
+            "operator": {"enum": ["gte", "lte"]},
+            "value": {"type": "number", "minimum": 0, "maximum": 2147483647}
+          }
+        },
+        {
+          "properties": {
+            "field": {"enum": ["trigger_conditions", "flags"]},
+            "operator": {"const": "contains"},
+            "value": {"$ref": "#/$defs/nonblank"}
+          }
+        }
+      ]
+    },
+    "conditions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/predicate"}},
+    "modifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["when", "delta", "reason"],
+      "properties": {
+        "when": {"$ref": "#/$defs/conditions"},
+        "delta": {"type": "number"},
+        "reason": {"$ref": "#/$defs/nonblank"}
+      }
+    },
+    "cause": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "base_weight", "applicability", "context_modifiers"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*\\.[a-z][a-z0-9_]*$"},
+        "name": {"$ref": "#/$defs/nonblank"},
+        "base_weight": {"$ref": "#/$defs/nonnegative"},
+        "applicability": {"type": "array", "items": {"$ref": "#/$defs/predicate"}},
+        "context_modifiers": {"type": "array", "items": {"$ref": "#/$defs/modifier"}}
+      }
+    },
+    "safetyRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["when", "severity", "reason"],
+      "properties": {
+        "when": {"$ref": "#/$defs/conditions"},
+        "severity": {"enum": ["inspect", "stop"]},
+        "reason": {"$ref": "#/$defs/nonblank"}
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "symptom_name", "layman_sound_description", "trigger_conditions", "location", "candidate_causes", "severity", "verification_tests", "recommended_action", "cost_category", "review_status", "diagnostic"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "symptom_name": {"$ref": "#/$defs/nonblank"},
+        "layman_sound_description": {"$ref": "#/$defs/nonblank"},
+        "trigger_conditions": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/trigger"}},
+        "location": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonblank"}},
+        "candidate_causes": {"type": "array", "items": {"$ref": "#/$defs/cause"}},
+        "severity": {"enum": ["monitor", "inspect", "stop"]},
+        "verification_tests": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonblank"}},
+        "recommended_action": {"$ref": "#/$defs/nonblank"},
+        "cost_category": {"enum": ["none", "low", "medium", "high", "unknown"]},
+        "review_status": {"const": "needs_mechanic_verification"},
+        "diagnostic": {"type": "boolean"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"diagnostic": {"const": true}}, "required": ["diagnostic"]},
+          "then": {"properties": {"candidate_causes": {"minItems": 1}, "severity": {"enum": ["inspect", "stop"]}}},
+          "else": {"properties": {"candidate_causes": {"maxItems": 0}}}
+        }
+      ]
+    }
+  }
+}

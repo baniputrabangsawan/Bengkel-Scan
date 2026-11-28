@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/workshop_page_background">
+    <ScrollView android:id="@+id/recording_scroll" android:layout_width="match_parent"
+        android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout style="@style/UiScreen" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/recording_intro" android:textAppearance="@style/UiText.Body" />
+            <TextView android:id="@+id/recording_notice" style="@style/UiSection" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:accessibilityLiveRegion="polite"
+                android:textAppearance="@style/UiText.Body" />
+            <TextView style="@style/UiSection" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/recording_condition" android:labelFor="@id/recording_condition" android:textAppearance="@style/UiText.Section" />
+            <Spinner android:id="@+id/recording_condition" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:minHeight="@dimen/ui_touch_primary" android:saveEnabled="false" />
+            <TextView android:id="@+id/recording_guide" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/UiText.Body" />
+            <TextView style="@style/UiSection" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/recording_placement" android:textAppearance="@style/UiText.Body" />
+            <com.google.android.material.checkbox.MaterialCheckBox android:id="@+id/recording_safety"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_min"
+                android:saveEnabled="false" android:text="@string/recording_safety" />
+            <com.google.android.material.checkbox.MaterialCheckBox android:id="@+id/recording_observer"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_min"
+                android:saveEnabled="false" android:visibility="gone" android:text="@string/recording_observer" />
+            <com.google.android.material.checkbox.MaterialCheckBox android:id="@+id/recording_consent"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_min"
+                android:saveEnabled="false" android:text="@string/recording_consent" />
+            <TextView android:id="@+id/recording_protocol" style="@style/UiSection" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:textAppearance="@style/UiText.Meta" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/recording_reference_help" android:textAppearance="@style/UiText.Body" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/recording_reference_button" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/recording_reference_button" />
+            <TextView style="@style/UiSection" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/recording_target_help" android:textAppearance="@style/UiText.Body" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/recording_target_button" style="@style/UiButton"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/recording_record_button" />
+            <TextView android:id="@+id/recording_source" style="@style/UiSection" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:textAppearance="@style/UiText.Meta" />
+            <TextView android:id="@+id/recording_quality" style="@style/UiSection" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:textAppearance="@style/UiText.Body" android:textIsSelectable="true" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/recording_rejected_result" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"
+                android:text="@string/result_open_rejected" />
+            <com.google.android.material.textfield.TextInputLayout style="@style/UiField"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/recording_group">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/recording_group"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:saveEnabled="false"
+                    android:importantForAutofill="no" android:maxLength="64" android:inputType="textNoSuggestions"
+                    android:minHeight="@dimen/ui_touch_primary" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/recording_group_help" android:textAppearance="@style/UiText.Meta" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/recording_save" style="@style/UiButton"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/recording_save" />
+            <TextView style="@style/UiSection" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/audio_analysis_heading" android:accessibilityHeading="true" android:textAppearance="@style/UiText.Section" />
+            <TextView android:id="@+id/audio_mode" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/UiText.Body" android:accessibilityLiveRegion="polite" />
+            <TextView android:id="@+id/audio_analysis_status" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/UiText.Meta" android:accessibilityLiveRegion="polite" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/audio_technical_fixture" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"
+                android:text="@string/audio_technical_fixture" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/audio_analysis_cancel" style="@style/UiButton.Text"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"
+                android:text="@string/audio_analysis_cancel" />
+            <TextView style="@style/UiSection" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/recording_saved_heading" android:accessibilityHeading="true" android:textAppearance="@style/UiText.Section" />
+            <LinearLayout android:id="@+id/recording_saved_list" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:orientation="vertical" />
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="@dimen/ui_space_3" android:orientation="vertical">
+        <TextView android:id="@+id/recording_status" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:accessibilityLiveRegion="polite" android:textAppearance="@style/UiText.Body" />
+        <ProgressBar android:id="@+id/recording_level" style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:max="1000"
+            android:importantForAccessibility="no" />
+        <TextView android:id="@+id/recording_level_text" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textAppearance="@style/UiText.Meta" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/recording_stop" style="@style/UiButton.Danger"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone" android:text="@string/recording_stop" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/recording_cancel" style="@style/UiButton.Text"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/recording_cancel" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="@string/recording_disclaimer" android:textAppearance="@style/UiText.Meta" />
+    </LinearLayout>
+</LinearLayout>

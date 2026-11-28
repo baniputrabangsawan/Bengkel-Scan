@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="obd_return_result" />
+    <string name="obd_section">Bukti OBD — opsional</string>
+    <string name="obd_optional_help">Untuk kendaraan ber-ECU yang mendukung OBD. Tetap parkir dengan aman; jangan mengoperasikan ponsel sambil mengemudi. Untuk karburator, kendaraan lama tanpa OBD, atau tanpa adapter, lanjutkan tanpa OBD.</string>
+    <string name="obd_open_scanner">Hubungkan / sambungkan ulang adapter</string>
+    <string name="obd_return_result">Kembali ke hasil diagnosis</string>
+    <string name="obd_read_codes">Baca ulang DTC</string>
+    <string name="obd_read_pids">Pantau PID utama</string>
+    <string name="obd_confirm_vehicle">Saya memastikan ECU dan adapter sesi ini terhubung ke kendaraan yang sedang diperiksa. Gunakan bukti sesi ini.</string>
+    <string name="obd_confirm_title">Cocokkan kendaraan sebelum memakai OBD</string>
+    <string name="obd_confirm_message">Pastikan adapter, ECU terpilih, dan kendaraan ini benar. Jangan gunakan data pelanggan sebelumnya. Persetujuan ini hanya untuk penggabungan lokal, bukan izin ekspor. Setelah putus atau berganti sesi/ECU, konfirmasi kembali.</string>
+    <string name="obd_confirm_use">Gunakan sesi ini</string>
+    <string name="obd_without">Tanpa OBD</string>
+    <string name="obd_unavailable">Adapter belum terhubung. Anda tetap dapat memakai keluhan teks atau audio tanpa OBD.</string>
+    <string name="obd_not_used">OBD belum digunakan untuk urutan kemungkinan penyebab. Konfirmasi kendaraan bila ingin memakai data sesi aktif.</string>
+    <string name="obd_used">Urutan kemungkinan penyebab memakai bukti OBD yang disebut dalam alasan tiap kandidat. Bobot aturan masih draf, bukan persentase atau kepastian kerusakan.</string>
+    <string name="obd_excluded">Bukti OBD tidak dipakai: sesi terputus/berganti, data kedaluwarsa, atau konteks kendaraan tidak sesuai. Panduan tanpa OBD tetap tersedia; peringatan keselamatan tidak dibatalkan.</string>
+    <string name="obd_carburetor">Konteks karburator: bukti OBD tidak dipakai. Gunakan jalur keluhan, pemeriksaan mekanik, dan audio opsional.</string>
+    <string name="obd_no_codes">Belum ada DTC diterima dalam sesi ini. Tidak ada kode bukan bukti kendaraan normal.</string>
+    <string name="obd_unknown_code">Kode khusus/tidak tersedia dalam katalog; periksa dokumentasi pabrikan untuk kendaraan ini.</string>
+    <string name="obd_pid_unread">Belum dibaca / tidak tersedia; bukan nol</string>
+    <string name="obd_pid_stale">Kedaluwarsa; tidak digunakan</string>
+    <string name="obd_status_misfires">Monitor misfire (dukungan/kesiapan), bukan jumlah misfire</string>
+    <string name="obd_misfire_limits">Penghitung misfire per silinder/Mode 06 khusus pabrikan belum tersedia melalui pembacaan generik ini. Jangan menafsirkan kesiapan monitor sebagai hasil hitung misfire atau tidak adanya kerusakan.</string>
+    <string name="obd_fuel_status">Status sistem bahan bakar 1 (nilai bit)</string>
+    <string name="obd_feedback_notice">Tanggapan menyimpan salinan hasil dan alasan bukti OBD yang terlihat saat tombol ditekan. Tidak ada rekaman ulang atau pengiriman otomatis.</string>
+    <string name="obd_without_recording">Hasil gabungan — rekaman audio tidak wajib</string>
+    <string name="obd_scanner_failed">Pemindai tidak tersedia. Kembali ke beranda untuk menghubungkan adapter; diagnosis tanpa OBD tetap dapat digunakan.</string>
+    <string name="obd_rejected_audio">Rekaman audio ditolak; skor audio tidak dipakai. Petunjuk OBD/keluhan dinilai terpisah.</string>
+</resources>

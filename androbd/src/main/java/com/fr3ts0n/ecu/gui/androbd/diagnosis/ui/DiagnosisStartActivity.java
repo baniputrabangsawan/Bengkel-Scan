@@ -107,6 +107,11 @@ public class DiagnosisStartActivity extends AppCompatActivity
     {
         LinearLayout root = DiagnosisUi.screen(this, R.string.diagnosis_start_title);
         DiagnosisUi.text(this, root, getString(R.string.diagnosis_start_intro), false);
+        DiagnosisUi.button(this, root, getString(R.string.context_entry), view -> {
+            Intent intent = new Intent(this, VehicleContextActivity.class);
+            DiagnosisUi.serviceExtra(getIntent(), intent);
+            startActivity(intent);
+        });
         renderCases(root);
         if (knowledge == null)
         {

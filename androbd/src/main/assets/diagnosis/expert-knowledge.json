@@ -1,0 +1,592 @@
+{
+  "schema_version": 1,
+  "revision": "phase7-obd-draft-1",
+  "disclaimer": "Informasi ini hanya membantu memilah keluhan, bukan diagnosis atau jaminan kendaraan aman. Bunyi serupa dapat berasal dari komponen berbeda. Pemeriksaan dan keputusan perbaikan harus dilakukan mekanik yang kompeten. Skor adalah bobot aturan, bukan peluang kerusakan.",
+  "review_notice": "Seluruh 14 entri masih draf dan memerlukan verifikasi mekanik. Semua bobot dan urutan dugaan adalah heuristik tanpa sumber pembobotan, belum dikalibrasi atau divalidasi pada kendaraan. Rujukan bacaan tidak berarti aturan telah diverifikasi mekanik. Entri OBD bukan kelas model audio baru.",
+  "scoring": {
+    "max_results": 3,
+    "minimum_score": 1,
+    "minimum_margin": 1,
+    "manual_symptom_weight": 2,
+    "audio_weight": 2,
+    "audio_min_probability": 0.6,
+    "trigger_match_weight": 1,
+    "location_match_weight": 1,
+    "base_reason": "Bobot awal heuristik draf tanpa sumber pembobotan; bukan ukuran peluang atau kepastian kerusakan.",
+    "manual_reason": "Keluhan bunyi ini dipilih pengguna; pilihan tersebut belum membuktikan sumbernya.",
+    "audio_reason": "Petunjuk kelas bunyi dari model menambah bobot aturan, bukan memastikan komponen rusak.",
+    "trigger_reason": "Kondisi munculnya bunyi yang dilaporkan sesuai dengan salah satu pemicu entri.",
+    "location_reason": "Lokasi bunyi yang dilaporkan sesuai dengan lokasi umum entri.",
+    "missing_context_reason": "Konteks untuk membatasi dugaan belum tersedia; dugaan dipertahankan dengan ketidakpastian, bukan dianggap cocok.",
+    "uncertain_message": "Hasil belum pasti. Seluruh aturan bawaan masih draf dan memerlukan verifikasi mekanik; konteks yang kurang atau bobot yang berdekatan juga membatasi urutan dugaan. Ikuti peringatan keselamatan meskipun dugaan tidak muncul.",
+    "ranked_message": "Urutan dugaan berdasarkan petunjuk yang tersedia, bukan diagnosis atau jaminan aman. Pemeriksaan mekanik tetap diperlukan.",
+    "no_match_message": "Belum ada dugaan kerusakan yang dapat diurutkan dari petunjuk ini. Ini bukan bukti kendaraan sehat; lengkapi keluhan dan minta pemeriksaan bila bunyi baru, memburuk, atau disertai perubahan fungsi."
+  },
+  "safety_rules": [
+    {
+      "when": [{"field": "flags", "operator": "contains", "value": "heavy_engine_knock"}],
+      "severity": "stop",
+      "reason": "Ketukan mesin berat dapat menandakan masalah serius. Hentikan berkendara di tempat aman, matikan mesin setelah aman, dan hubungi bantuan atau mekanik; jangan menyalakan ulang untuk menguji bunyi."
+    },
+    {
+      "when": [{"field": "flags", "operator": "contains", "value": "overheating"}],
+      "severity": "stop",
+      "reason": "Indikasi mesin terlalu panas memerlukan penghentian berkendara di tempat aman. Matikan mesin setelah aman, jangan membuka tutup sistem pendingin yang panas, dan hubungi bantuan."
+    },
+    {
+      "when": [{"field": "flags", "operator": "contains", "value": "brake_change"}],
+      "severity": "stop",
+      "reason": "Perubahan kemampuan atau rasa pengereman adalah tanda keselamatan terlepas dari bunyi. Hentikan berkendara di tempat aman dan minta bantuan; jangan melakukan uji pengereman di jalan."
+    },
+    {
+      "when": [{"field": "flags", "operator": "contains", "value": "steering_change"}],
+      "severity": "stop",
+      "reason": "Kemudi yang berubah berat, tersendat, atau sulit dikendalikan memerlukan penghentian berkendara di tempat aman dan bantuan pemeriksaan; jangan menguji dengan berkendara lagi."
+    },
+    {
+      "when": [{"field": "flags", "operator": "contains", "value": "wheel_play"}],
+      "severity": "stop",
+      "reason": "Keluhan roda terasa longgar atau goyah memerlukan penghentian berkendara di tempat aman dan bantuan pemeriksaan. Jangan mendongkrak atau menggoyang roda sendiri untuk membuktikannya."
+    },
+    {
+      "when": [{"field": "flags", "operator": "contains", "value": "steam"}],
+      "severity": "stop",
+      "reason": "Uap dari ruang mesin yang dilaporkan memerlukan tindakan pencegahan: hentikan berkendara di tempat aman, matikan mesin setelah aman, dan hubungi bantuan. Jangan membuka kap saat masih beruap atau membuka tutup sistem pendingin yang panas. Ini bukan diagnosis kebocoran cairan pendingin."
+    },
+    {
+      "when": [{"field": "flags", "operator": "contains", "value": "temperature_rising"}],
+      "severity": "stop",
+      "reason": "Indikator suhu yang dilaporkan terus naik memerlukan tindakan pencegahan: hentikan berkendara di tempat aman, matikan mesin setelah aman, dan hubungi bantuan. Jangan membuka tutup sistem pendingin yang panas atau menyalakan ulang untuk menguji. Laporan ini belum menetapkan suhu terukur atau penyebabnya."
+    }
+  ],
+  "entries": [
+    {
+      "id": "normal_idle",
+      "symptom_name": "Bunyi langsam teratur",
+      "layman_sound_description": "Dengung atau detak mesin yang teratur saat langsam, tanpa perubahan yang sudah dikenali pengguna.",
+      "trigger_conditions": ["idle"],
+      "location": ["under_hood", "cabin"],
+      "candidate_causes": [],
+      "severity": "monitor",
+      "verification_tests": [
+        "Bandingkan dengan bunyi kendaraan yang sama yang sudah biasa Anda dengar; jangan menganggap rekaman yang terdengar teratur sebagai bukti semua komponen sehat.",
+        "Catat indikator peringatan atau perubahan getaran yang sudah terlihat dari kabin saat kendaraan terparkir aman."
+      ],
+      "recommended_action": "Tidak ada penyebab kerusakan yang ditetapkan dari kelas ini. Jumlah silinder dapat memengaruhi irama normal, termasuk mesin tiga silinder, dan bukan bukti kerusakan. Periksakan bila bunyi baru atau fungsi berubah; peringatan keselamatan tetap berlaku.",
+      "cost_category": "none",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": false
+    },
+    {
+      "id": "belt_squeal",
+      "symptom_name": "Decit dari area sabuk aksesori",
+      "layman_sound_description": "Decit tinggi seperti karet tergesek dari ruang mesin; sumber bunyi belum dapat dipastikan hanya dari suara.",
+      "trigger_conditions": ["cold", "idle", "throttle", "turning"],
+      "location": ["under_hood", "front"],
+      "candidate_causes": [
+        {
+          "id": "belt_squeal.belt_slip",
+          "name": "Selip atau masalah kondisi sabuk aksesori",
+          "base_weight": 4,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "cold"}], "delta": 2, "reason": "Decit yang sudah diamati ketika mesin dingin mendukung pemeriksaan sabuk, tetapi tidak membuktikan selip."}
+          ]
+        },
+        {
+          "id": "belt_squeal.pulley_bearing",
+          "name": "Masalah bantalan puli atau penegang sabuk",
+          "base_weight": 3,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "warm"}], "delta": 2, "reason": "Bunyi yang tetap dilaporkan saat mesin hangat mengarahkan pemeriksaan juga ke puli dan penegang, bukan hanya selip sesaat."}
+          ]
+        },
+        {
+          "id": "belt_squeal.accessory_load",
+          "name": "Beban atau gangguan aksesori yang digerakkan sabuk",
+          "base_weight": 2,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "power_steering_type", "operator": "eq", "value": "hydraulic"}, {"field": "trigger_conditions", "operator": "contains", "value": "turning"}], "delta": 4, "reason": "Decit yang sudah terjadi saat berbelok pada kemudi hidraulik mendukung pemeriksaan beban aksesori; sistem kemudi listrik tidak memakai penjelasan beban pompa hidraulik ini."}
+          ]
+        }
+      ],
+      "severity": "inspect",
+      "verification_tests": [
+        "Catat apakah bunyi sebelumnya muncul saat dingin, saat aksesori digunakan, atau saat berbelok; jangan sengaja mengulang kondisi tersebut.",
+        "Catat lokasi umum dari kabin atau tempat aman; jangan mendekati atau menyentuh sabuk, puli, dan kipas yang bergerak."
+      ],
+      "recommended_action": "Jadwalkan pemeriksaan sabuk, penegang, dan aksesori oleh mekanik. Jangan menyemprot cairan atau mengatur sabuk sendiri. Bila disertai panas berlebih atau perubahan kemudi, hentikan berkendara dan minta bantuan.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": true
+    },
+    {
+      "id": "valvetrain_tick",
+      "symptom_name": "Detik berulang dari mesin",
+      "layman_sound_description": "Bunyi tik-tik berirama dari ruang mesin, berbeda dari ketukan berat; suara saja belum membedakan katup, injektor, atau bagian dalam mesin.",
+      "trigger_conditions": ["cold", "warm", "idle"],
+      "location": ["under_hood", "front"],
+      "candidate_causes": [
+        {
+          "id": "valvetrain_tick.valve_clearance",
+          "name": "Mekanisme katup atau celah katup perlu diperiksa",
+          "base_weight": 3,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "cold"}], "delta": 1, "reason": "Detik saat dingin dapat melibatkan mekanisme katup; perubahan saat hangat perlu dicatat tanpa menyimpulkan celah tertentu."},
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "warm"}], "delta": 1, "reason": "Detik yang masih ada saat hangat mendukung pemeriksaan mekanisme katup, tetapi bukan ukuran celah atau bukti keausan."},
+            {"when": [{"field": "fuel_type", "operator": "eq", "value": "petrol"}, {"field": "fuel_system", "operator": "eq", "value": "carburetor"}], "delta": 2, "reason": "Pada mesin bensin berkarburator, bunyi injektor bukan penjelasan yang sesuai; mekanisme katup tetap perlu dibedakan dari sumber lain."}
+          ]
+        },
+        {
+          "id": "valvetrain_tick.injector_tick",
+          "name": "Bunyi kerja atau gangguan injektor yang perlu dibedakan",
+          "base_weight": 1,
+          "applicability": [{"field": "fuel_system", "operator": "eq", "value": "injection"}],
+          "context_modifiers": [
+            {"when": [{"field": "fuel_system", "operator": "eq", "value": "injection"}], "delta": 5, "reason": "Sistem injeksi memiliki injektor yang dapat berdetak saat bekerja; bunyi tersebut belum membuktikan kerusakan dan harus dibandingkan dengan kebiasaan kendaraan."},
+            {"when": [{"field": "fuel_type", "operator": "eq", "value": "diesel"}], "delta": 1, "reason": "Pada diesel injeksi, bunyi injektor dan pembakaran perlu dibedakan dari mekanisme katup tanpa menganggap semuanya normal."}
+          ]
+        },
+        {
+          "id": "valvetrain_tick.piston_clearance",
+          "name": "Bunyi terkait kelonggaran piston yang perlu diperiksa",
+          "base_weight": 2,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "cold"}], "delta": 1, "reason": "Bunyi saat dingin memberi petunjuk lemah untuk pemeriksaan kelonggaran piston; belum ada bukti bahwa bunyi mereda saat hangat."},
+            {"when": [{"field": "temperature_pattern", "operator": "eq", "value": "fades_when_warm"}], "delta": 3, "reason": "Pola bunyi yang dari kejadian sebelumnya diketahui mereda saat mesin menghangat memberi petunjuk draf untuk pemeriksaan kelonggaran piston; ini bukan pengukuran suhu, bukti sumber bunyi, atau jaminan mesin aman."},
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "warm"}], "delta": -1, "reason": "Bunyi yang masih dilaporkan saat hangat mengurangi dukungan terhadap pola yang hanya muncul saat dingin, tetapi tidak menyingkirkan masalah piston."}
+          ]
+        },
+        {
+          "id": "valvetrain_tick.internal_knock",
+          "name": "Ketukan bagian dalam mesin yang harus disingkirkan mekanik",
+          "base_weight": 1,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "warm"}], "delta": 2, "reason": "Bunyi yang menetap saat hangat tetap memerlukan pembedaan dari ketukan bagian dalam mesin; mereda saat dingin atau hangat tidak menjamin aman."},
+            {"when": [{"field": "flags", "operator": "contains", "value": "heavy_engine_knock"}], "delta": 8, "reason": "Ketukan berat memperkuat kebutuhan pemeriksaan segera, dan peringatan berhenti berlaku terlepas dari urutan dugaan."},
+            {"when": [{"field": "cylinder_count", "operator": "eq", "value": 3}], "delta": 0, "reason": "Mesin tiga silinder memiliki irama kerja tersendiri; jumlah silinder tidak menambah bukti kerusakan. Bunyi baru tetap perlu dibandingkan dengan kebiasaan kendaraan."}
+          ]
+        }
+      ],
+      "severity": "inspect",
+      "verification_tests": [
+        "Catat dari pengalaman sebelumnya apakah detik hanya terdengar saat dingin atau tetap ada saat hangat; jangan memanaskan atau menggeber mesin untuk mengujinya.",
+        "Catat adanya indikator peringatan, getaran baru, atau ketukan berat dari kabin; jangan membuka atau menyetel bagian mesin."
+      ],
+      "recommended_action": "Minta mekanik membedakan bunyi katup, injektor, piston, dan ketukan internal sesuai desain mesin. Jangan memakai irama mesin tiga silinder atau bunyi yang mereda sebagai jaminan aman. Bila ketukan berat muncul, hentikan berkendara dan jangan menyalakan ulang untuk pengujian.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": true
+    },
+    {
+      "id": "brake_grinding",
+      "symptom_name": "Gesekan kasar dari rem",
+      "layman_sound_description": "Bunyi gerus atau gesekan logam yang sudah terdengar dari area roda, terutama saat pengereman.",
+      "trigger_conditions": ["braking"],
+      "location": ["wheel", "front", "rear"],
+      "candidate_causes": [
+        {
+          "id": "brake_grinding.friction_wear",
+          "name": "Masalah permukaan atau keausan komponen gesek rem",
+          "base_weight": 4,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "trigger_conditions", "operator": "contains", "value": "braking"}], "delta": 2, "reason": "Gesekan kasar yang sudah muncul saat mengerem mendukung pemeriksaan komponen gesek rem; suara tidak menunjukkan sisa ketebalan."}
+          ]
+        },
+        {
+          "id": "brake_grinding.trapped_debris",
+          "name": "Benda asing atau kotoran terjepit di area rem",
+          "base_weight": 2,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "flags", "operator": "contains", "value": "recent_debris"}], "delta": 5, "reason": "Riwayat baru melewati kotoran atau kerikil mendukung pemeriksaan benda asing, tetapi tidak menyingkirkan kerusakan rem."}
+          ]
+        },
+        {
+          "id": "brake_grinding.hardware_issue",
+          "name": "Gangguan dudukan, pelindung, atau komponen rem lain",
+          "base_weight": 1,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "flags", "operator": "contains", "value": "brake_change"}], "delta": 5, "reason": "Perubahan rasa atau kemampuan pengereman memperkuat pemeriksaan seluruh perangkat rem; kendaraan tidak boleh diuji di jalan."}
+          ]
+        }
+      ],
+      "severity": "stop",
+      "verification_tests": [
+        "Catat roda atau sisi yang sebelumnya terdengar tanpa mengulang pengereman untuk mencari bunyi.",
+        "Saat sudah berhenti aman, catat indikator rem yang terlihat di panel; jangan menyentuh rem panas, melepas roda, atau mendongkrak kendaraan."
+      ],
+      "recommended_action": "Hentikan berkendara di tempat aman dan minta bantuan untuk pemeriksaan rem sebelum digunakan lagi. Jangan menganggap kotoran sebagai penyebab pasti atau mencoba uji pengereman sendiri.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": true
+    },
+    {
+      "id": "wheel_bearing_hum",
+      "symptom_name": "Dengung dari area roda",
+      "layman_sound_description": "Dengung atau gemuruh dari roda yang sudah terdengar saat kendaraan digunakan; ban dan penggerak dapat menghasilkan suara serupa.",
+      "trigger_conditions": ["turning"],
+      "location": ["wheel", "front", "rear"],
+      "candidate_causes": [
+        {
+          "id": "wheel_bearing_hum.bearing_wear",
+          "name": "Gangguan bantalan roda",
+          "base_weight": 4,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "trigger_conditions", "operator": "contains", "value": "turning"}], "delta": 2, "reason": "Perubahan dengung yang sudah diamati saat berbelok mendukung pemeriksaan bantalan, tetapi tidak memastikan roda atau komponen tertentu."},
+            {"when": [{"field": "flags", "operator": "contains", "value": "wheel_play"}], "delta": 3, "reason": "Keluhan roda terasa goyah meningkatkan perhatian pada bantalan dan dudukan; hentikan berkendara tanpa mencoba menggoyang roda sendiri."}
+          ]
+        },
+        {
+          "id": "wheel_bearing_hum.tyre_noise",
+          "name": "Bunyi terkait ban atau pola permukaannya",
+          "base_weight": 3,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "flags", "operator": "contains", "value": "tyre_recent_change"}], "delta": 4, "reason": "Dengung yang mulai setelah perubahan ban mendukung pemeriksaan ban dan pemasangannya; kaitan waktu saja belum membuktikan penyebab."}
+          ]
+        },
+        {
+          "id": "wheel_bearing_hum.driveline_noise",
+          "name": "Bunyi dari sistem penggerak yang menyerupai dengung roda",
+          "base_weight": 1,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "trigger_conditions", "operator": "contains", "value": "throttle"}], "delta": 4, "reason": "Dengung yang sebelumnya berubah saat beban mesin berubah juga mengarahkan pemeriksaan sistem penggerak; jangan mengulangnya sebagai uji jalan."}
+          ]
+        }
+      ],
+      "severity": "inspect",
+      "verification_tests": [
+        "Catat sisi bunyi, perubahan ban terakhir, dan kondisi ketika bunyi sebelumnya terdengar tanpa berkendara ulang untuk mengujinya.",
+        "Dari tempat berdiri yang aman saat kendaraan terparkir dan mesin mati, amati ban yang terlihat tanpa merangkak di bawah kendaraan atau menyentuh bagian panas."
+      ],
+      "recommended_action": "Minta mekanik memeriksa ban, bantalan, dan penggerak sebelum penggunaan lebih lanjut bila dengung baru atau memburuk. Bila roda terasa goyah atau kemudi berubah, hentikan berkendara dan minta bantuan; jangan mendongkrak kendaraan sendiri.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": true
+    },
+    {
+      "id": "power_steering_whine",
+      "symptom_name": "Dengung melengking terkait kemudi",
+      "layman_sound_description": "Bunyi nging atau melengking yang sebelumnya terdengar dari depan ketika kemudi digunakan; sumbernya bergantung pada jenis bantuan kemudi.",
+      "trigger_conditions": ["turning", "cold", "warm"],
+      "location": ["front", "under_hood", "cabin"],
+      "candidate_causes": [
+        {
+          "id": "power_steering_whine.hydraulic_fluid",
+          "name": "Masalah cairan atau aliran sistem kemudi hidraulik",
+          "base_weight": 4,
+          "applicability": [{"field": "power_steering_type", "operator": "eq", "value": "hydraulic"}],
+          "context_modifiers": [
+            {"when": [{"field": "trigger_conditions", "operator": "contains", "value": "turning"}], "delta": 2, "reason": "Bunyi yang sudah diamati saat berbelok sesuai dengan beban sistem hidraulik, tetapi tidak memastikan kondisi cairan."},
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "cold"}], "delta": 2, "reason": "Bunyi hidraulik saat dingin mendukung pemeriksaan aliran dan cairan oleh mekanik; jangan membuka atau menambah cairan untuk mencoba menghilangkan bunyi."}
+          ]
+        },
+        {
+          "id": "power_steering_whine.pump_wear",
+          "name": "Gangguan pompa kemudi hidraulik",
+          "base_weight": 3,
+          "applicability": [{"field": "power_steering_type", "operator": "eq", "value": "hydraulic"}],
+          "context_modifiers": [
+            {"when": [{"field": "trigger_conditions", "operator": "contains", "value": "turning"}], "delta": 1, "reason": "Hubungan bunyi dengan gerakan kemudi hidraulik mendukung pemeriksaan pompa tanpa memastikan keausan."},
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "warm"}], "delta": 3, "reason": "Bunyi hidraulik yang tetap dilaporkan saat hangat mendukung pemeriksaan pompa serta aliran, bukan langsung memutuskan penggantian pompa."}
+          ]
+        },
+        {
+          "id": "power_steering_whine.other_accessory",
+          "name": "Sumber nonhidraulik, motor kemudi listrik, atau aksesori lain",
+          "base_weight": 2,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "power_steering_type", "operator": "eq", "value": "eps"}], "delta": 3, "reason": "Kemudi bantuan listrik tidak menggunakan pompa atau cairan kemudi hidraulik; bunyi perlu dibedakan dari motor bantuan dan aksesori lain, bukan dianggap kerusakan pompa hidraulik."}
+          ]
+        }
+      ],
+      "severity": "inspect",
+      "verification_tests": [
+        "Lihat jenis bantuan kemudi pada buku kendaraan bila tersedia; jangan menebak dari suara atau mencari reservoir dengan mesin menyala.",
+        "Catat apakah kemudi sebelumnya terasa lebih berat atau tersendat dan apakah indikator kemudi menyala; jangan memutar kemudi sampai mentok untuk menguji bunyi."
+      ],
+      "recommended_action": "Minta pemeriksaan sesuai jenis kemudi. Jangan menambah cairan pada sistem yang belum dikenali atau menangani kabel dan komponen listrik. Jika kemampuan kemudi berubah, hentikan berkendara di tempat aman dan minta bantuan.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": true
+    },
+    {
+      "id": "background_noise",
+      "symptom_name": "Bunyi lingkungan dominan",
+      "layman_sound_description": "Angin, percakapan, lalu lintas, atau bunyi sekitar lebih menonjol sehingga sumber kendaraan belum jelas.",
+      "trigger_conditions": [],
+      "location": [],
+      "candidate_causes": [],
+      "severity": "inspect",
+      "verification_tests": [
+        "Catat sumber suara sekitar yang sudah dikenali tanpa mendekati lalu lintas atau komponen bergerak.",
+        "Jelaskan keluhan kendaraan dengan kata-kata dari tempat aman; jangan menyalakan mesin atau berkendara hanya untuk memperoleh suara yang lebih jelas."
+      ],
+      "recommended_action": "Tidak ada dugaan kerusakan dari kelas bunyi lingkungan. Gunakan keluhan yang sudah diamati dan minta mekanik menilai bila ada bunyi baru atau perubahan fungsi; peringatan keselamatan tidak dibatalkan oleh kelas ini.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": false
+    },
+    {
+      "id": "unknown",
+      "symptom_name": "Bunyi belum dikenali",
+      "layman_sound_description": "Bunyi belum cocok dengan kelas yang tersedia atau petunjuknya tidak cukup untuk membedakan sumber.",
+      "trigger_conditions": [],
+      "location": [],
+      "candidate_causes": [],
+      "severity": "inspect",
+      "verification_tests": [
+        "Catat lokasi umum, kondisi saat bunyi sebelumnya muncul, dan perubahan fungsi yang sudah dirasakan tanpa mengulang kejadian.",
+        "Catat indikator peringatan yang terlihat dari kabin saat sudah berhenti aman."
+      ],
+      "recommended_action": "Jangan menyimpulkan kendaraan sehat atau memilih komponen pengganti dari hasil tidak dikenal. Minta pemeriksaan mekanik, dan hentikan berkendara bila ada tanda keselamatan seperti rem atau kemudi berubah, ketukan berat, panas berlebih, atau roda goyah.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": false
+    },
+    {
+      "id": "detonation_pinging",
+      "symptom_name": "Bunyi ngelitik atau ketukan pembakaran",
+      "layman_sound_description": "Bunyi gemerincing logam atau ketukan yang sebelumnya terdengar saat mesin bekerja; ngelitik bensin berbeda dari bunyi pembakaran diesel dan ketukan mekanis.",
+      "trigger_conditions": ["throttle", "warm", "cold"],
+      "location": ["under_hood", "front"],
+      "candidate_causes": [
+        {
+          "id": "detonation_pinging.petrol_detonation",
+          "name": "Dugaan ngelitik pembakaran pada mesin bensin",
+          "base_weight": 4,
+          "applicability": [{"field": "fuel_type", "operator": "eq", "value": "petrol"}],
+          "context_modifiers": [
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "warm"}], "delta": 2, "reason": "Ngelitik yang dilaporkan ketika mesin bensin hangat mendukung pemeriksaan pembakaran; bukan diagnosis dari suhu saja."},
+            {"when": [{"field": "trigger_conditions", "operator": "contains", "value": "throttle"}], "delta": 2, "reason": "Hubungan ngelitik bensin dengan beban mesin yang sudah diamati mendukung pemeriksaan pembakaran; jangan menggeber mesin atau melakukan uji jalan."}
+          ]
+        },
+        {
+          "id": "detonation_pinging.diesel_combustion",
+          "name": "Bunyi pembakaran atau injeksi diesel yang perlu dibedakan",
+          "base_weight": 4,
+          "applicability": [{"field": "fuel_type", "operator": "eq", "value": "diesel"}],
+          "context_modifiers": [
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "cold"}], "delta": 2, "reason": "Pada diesel dingin, bunyi pembakaran dapat lebih menonjol; perubahan dari kebiasaan tetap perlu diperiksa dan bukan disebut detonasi bensin."},
+            {"when": [{"field": "trigger_conditions", "operator": "contains", "value": "throttle"}], "delta": 1, "reason": "Ketukan diesel yang sebelumnya berubah dengan beban mendukung pemeriksaan pembakaran atau injeksi oleh mekanik, bukan pekerjaan sistem bahan bakar sendiri."}
+          ]
+        },
+        {
+          "id": "detonation_pinging.mechanical_knock",
+          "name": "Ketukan mekanis yang menyerupai bunyi pembakaran",
+          "base_weight": 2,
+          "applicability": [],
+          "context_modifiers": [
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "warm"}], "delta": 1, "reason": "Ketukan yang tetap dilaporkan saat hangat memerlukan pembedaan dari masalah mekanis pada bensin maupun diesel."},
+            {"when": [{"field": "flags", "operator": "contains", "value": "heavy_engine_knock"}], "delta": 8, "reason": "Ketukan berat meningkatkan perhatian pada kerusakan mekanis; instruksi berhenti berlaku meskipun sumber pembakaran masih menjadi dugaan lain."}
+          ]
+        }
+      ],
+      "severity": "inspect",
+      "verification_tests": [
+        "Lihat jenis bahan bakar yang tercatat pada kendaraan atau buku kendaraan bila tersedia; jangan menyamakan bunyi diesel dengan ngelitik bensin.",
+        "Catat apakah bunyi sebelumnya muncul saat dingin, hangat, atau perubahan beban, serta adanya ketukan berat atau indikator suhu; jangan mengulang beban tersebut."
+      ],
+      "recommended_action": "Minta mekanik membedakan pembakaran bensin, pembakaran diesel, dan ketukan mekanis. Jangan mengubah bahan bakar, menyetel pengapian, atau menangani injektor sebagai percobaan. Jika ketukan berat atau panas berlebih muncul, hentikan berkendara dan minta bantuan.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": true
+    },
+    {
+      "id": "vacuum_leak",
+      "symptom_name": "Desis dari saluran udara mesin",
+      "layman_sound_description": "Bunyi sss atau desis dari ruang mesin, kadang disertai langsam tidak biasa; suara saja tidak membuktikan kebocoran vakum.",
+      "trigger_conditions": ["idle", "throttle"],
+      "location": ["under_hood", "front"],
+      "candidate_causes": [
+        {
+          "id": "vacuum_leak.intake_leak",
+          "name": "Kebocoran udara masuk atau vakum pada mesin bensin",
+          "base_weight": 4,
+          "applicability": [{"field": "fuel_type", "operator": "eq", "value": "petrol"}],
+          "context_modifiers": [
+            {"when": [{"field": "fuel_system", "operator": "eq", "value": "injection"}], "delta": 3, "reason": "Pada bensin injeksi, desis dan perubahan langsam mendukung pemeriksaan udara yang masuk tanpa terukur; suara tidak menentukan titik kebocoran."},
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "warm"}], "delta": 1, "reason": "Desis yang masih dilaporkan saat hangat mendukung pemeriksaan saluran udara, tetapi tidak membuktikan kebocoran."}
+          ]
+        },
+        {
+          "id": "vacuum_leak.carburetor_metering",
+          "name": "Gangguan pengukuran campuran atau saluran karburator",
+          "base_weight": 3,
+          "applicability": [{"field": "fuel_type", "operator": "eq", "value": "petrol"}, {"field": "fuel_system", "operator": "eq", "value": "carburetor"}],
+          "context_modifiers": [
+            {"when": [{"field": "fuel_system", "operator": "eq", "value": "carburetor"}], "delta": 4, "reason": "Pada bensin berkarburator, gangguan campuran atau saluran karburator dapat menyerupai kebocoran vakum; jangan menyetel sekrup campuran dari suara saja."}
+          ]
+        },
+        {
+          "id": "vacuum_leak.ignition_misfire",
+          "name": "Gangguan pengapian bensin yang menyerupai masalah udara masuk",
+          "base_weight": 2,
+          "applicability": [{"field": "fuel_type", "operator": "eq", "value": "petrol"}],
+          "context_modifiers": [
+            {"when": [{"field": "engine_temp_state", "operator": "eq", "value": "cold"}], "delta": 1, "reason": "Langsam tidak biasa saat dingin juga dapat berkaitan dengan pengapian bensin, sehingga kebocoran udara bukan satu-satunya dugaan."}
+          ]
+        },
+        {
+          "id": "vacuum_leak.diesel_air_path",
+          "name": "Gangguan saluran udara atau tekanan masuk diesel",
+          "base_weight": 3,
+          "applicability": [{"field": "fuel_type", "operator": "eq", "value": "diesel"}],
+          "context_modifiers": [
+            {"when": [{"field": "trigger_conditions", "operator": "contains", "value": "throttle"}], "delta": 2, "reason": "Desis diesel yang sebelumnya berubah dengan beban mengarahkan pemeriksaan jalur udara sesuai desain mesin, bukan karburator atau pengapian bensin."}
+          ]
+        }
+      ],
+      "severity": "inspect",
+      "verification_tests": [
+        "Catat jenis bahan bakar dan apakah kendaraan memakai karburator atau injeksi dari buku kendaraan bila tersedia.",
+        "Catat desis dan perubahan langsam yang sebelumnya terdengar dari tempat aman; jangan mencabut selang, menyemprot cairan, mendekati mesin bergerak, atau mencoba mencari kebocoran dengan api."
+      ],
+      "recommended_action": "Minta mekanik memeriksa jalur udara serta membedakan masalah karburator, injeksi, dan pengapian sesuai kendaraan. Jangan menyetel campuran atau menangani bahan bakar sendiri. Bila rem atau kemudi berubah, panas berlebih, atau ketukan berat muncul, hentikan berkendara dan minta bantuan.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": true
+    },
+    {
+      "id": "brake_squeal",
+      "symptom_name": "Decit saat pengereman",
+      "layman_sound_description": "Bunyi cit-cit atau decit tinggi yang sudah terdengar saat mengerem, bukan bunyi gerus kasar. Decit saja belum menentukan komponen atau tingkat keausan.",
+      "trigger_conditions": ["braking"],
+      "location": ["wheel", "front", "rear"],
+      "candidate_causes": [
+        {
+          "id": "brake_squeal.friction_wear_indicator",
+          "name": "Indikator keausan atau kondisi komponen gesek rem perlu diperiksa",
+          "base_weight": 1,
+          "applicability": [],
+          "context_modifiers": []
+        },
+        {
+          "id": "brake_squeal.pad_hardware_vibration",
+          "name": "Getaran atau kondisi pemasangan kampas dan perangkat rem perlu diperiksa",
+          "base_weight": 1,
+          "applicability": [],
+          "context_modifiers": []
+        },
+        {
+          "id": "brake_squeal.dust_or_dirt",
+          "name": "Debu atau kotoran di area rem perlu dibedakan dari keausan",
+          "base_weight": 1,
+          "applicability": [],
+          "context_modifiers": []
+        }
+      ],
+      "severity": "inspect",
+      "verification_tests": [
+        "Catat dari kejadian sebelumnya apakah decit hanya saat mengerem atau juga tanpa pengereman, sisi yang terdengar, dan apakah keluhan baru atau menetap; jangan mengulangnya sebagai uji jalan.",
+        "Catat perubahan rasa atau kemampuan pengereman serta indikator rem yang sudah terlihat dari kabin saat berhenti aman; jangan menekan pedal untuk mencoba membuktikan gangguan.",
+        "Minta mekanik memeriksa indikator dan kondisi kampas atau sepatu rem, permukaan cakram atau tromol, perangkat pemasangan, serta debu atau kotoran sesuai desain kendaraan dan manual servisnya. Jangan melepas roda, membersihkan debu rem, melumasi rem, atau menyentuh bagian panas sendiri."
+      ],
+      "recommended_action": "Segera periksa rem ke mekanik; decit bukan diagnosis kampas aus dan belum menjamin rem aman. Ketiga calon pemeriksaan berbobot sama sebagai draf, bukan urutan penyebab yang tervalidasi. Bila pengereman berubah atau ada gesekan kasar, hentikan berkendara di tempat aman dan minta bantuan. Jangan melakukan uji pengereman sendiri.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": true
+    },
+    {
+      "id": "hiss",
+      "symptom_name": "Desis yang sumbernya belum diketahui",
+      "layman_sound_description": "Bunyi sss atau mendesis dari ruang mesin, termasuk saat langsam. Keluhan umum ini belum menunjukkan saluran masuk, vakum, cairan pendingin, atau komponen tertentu.",
+      "trigger_conditions": ["idle"],
+      "location": ["under_hood"],
+      "candidate_causes": [],
+      "severity": "inspect",
+      "verification_tests": [
+        "Dari kejadian yang sudah diamati atau dari tempat aman tanpa mendekati ruang mesin, catat apakah ada uap; jangan membuka kap saat masih beruap.",
+        "Catat apakah sebelumnya tercium bau manis tanpa mendekat untuk mengendus, menyentuh, atau mencicipi cairan. Bau saja belum membuktikan cairan pendingin bocor.",
+        "Catat apakah indikator suhu sebelumnya terus naik atau lampu suhu menyala dari kabin saat berhenti aman. Jangan memanaskan, menyalakan ulang, atau menggeber mesin untuk mencari jawabannya; jawaban yang belum diketahui tetap belum diketahui."
+      ],
+      "recommended_action": "Belum ada penyebab yang ditetapkan dari desis umum. Minta pemeriksaan mekanik dan lengkapi pengamatan tentang uap, bau manis, serta indikator suhu. Bila ada uap atau indikator suhu terus naik, hentikan berkendara di tempat aman, matikan mesin setelah aman, dan hubungi bantuan sebagai tindakan pencegahan, bukan diagnosis kebocoran. Jangan membuka kap saat beruap, membuka tutup sistem pendingin panas, mencabut selang, atau menyemprot cairan untuk mencari sumber desis.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": false
+    }
+    ,
+    {
+      "id": "obd_misfire",
+      "symptom_name": "Petunjuk OBD pembakaran tidak merata",
+      "layman_sound_description": "Kode misfire memberi petunjuk pembakaran tidak merata; kode ini bukan bukti busi, koil, injektor, atau silinder tertentu rusak dan bukan kelas model audio.",
+      "trigger_conditions": [],
+      "location": ["under_hood"],
+      "candidate_causes": [
+        {
+          "id": "obd_misfire.ignition",
+          "name": "Sistem pengapian bensin perlu diperiksa",
+          "base_weight": 2,
+          "applicability": [{"field": "fuel_type", "operator": "eq", "value": "petrol"}],
+          "context_modifiers": []
+        },
+        {
+          "id": "obd_misfire.injector",
+          "name": "Pengiriman bahan bakar melalui injektor perlu diperiksa",
+          "base_weight": 2,
+          "applicability": [{"field": "fuel_system", "operator": "eq", "value": "injection"}],
+          "context_modifiers": []
+        },
+        {
+          "id": "obd_misfire.compression",
+          "name": "Kompresi dan mekanisme mesin perlu dibedakan dari pengapian atau bahan bakar",
+          "base_weight": 2,
+          "applicability": [],
+          "context_modifiers": []
+        }
+      ],
+      "severity": "inspect",
+      "verification_tests": [
+        "Catat kode beserta status stored, pending, atau permanent dan ECU yang membacanya; kode tidak menunjukkan suku cadang yang harus langsung diganti.",
+        "Minta mekanik mengikuti manual servis kendaraan untuk membedakan pengapian pada bensin, suplai injektor, dan kompresi atau mekanisme mesin; jangan mencabut koil atau injektor, menggeber, atau membuka mesin sendiri."
+      ],
+      "recommended_action": "Periksakan pembakaran tidak merata ke mekanik. Kode misfire tidak mengonfirmasi kerusakan komponen. Bila lampu mesin berkedip, getaran berat, ketukan berat, atau panas berlebih terjadi, hentikan berkendara di tempat aman dan minta bantuan; jangan mengulang kondisi sebagai uji.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": true
+    },
+    {
+      "id": "obd_fuel_metering",
+      "symptom_name": "Petunjuk OBD koreksi campuran bahan bakar",
+      "layman_sound_description": "Kode campuran atau pola koreksi bahan bakar membantu memilih pemeriksaan udara dan bahan bakar; bukan kelas audio, ukuran tekanan bahan bakar, atau diagnosis sensor.",
+      "trigger_conditions": [],
+      "location": ["under_hood"],
+      "candidate_causes": [
+        {
+          "id": "obd_fuel_metering.delivery",
+          "name": "Pasokan bahan bakar kurang atau pengukuran udara perlu dibedakan",
+          "base_weight": 2,
+          "applicability": [{"field": "fuel_type", "operator": "eq", "value": "petrol"}, {"field": "fuel_system", "operator": "eq", "value": "injection"}],
+          "context_modifiers": []
+        },
+        {
+          "id": "obd_fuel_metering.excess",
+          "name": "Pasokan bahan bakar berlebih atau pengukuran campuran perlu diperiksa",
+          "base_weight": 2,
+          "applicability": [{"field": "fuel_type", "operator": "eq", "value": "petrol"}, {"field": "fuel_system", "operator": "eq", "value": "injection"}],
+          "context_modifiers": []
+        }
+      ],
+      "severity": "inspect",
+      "verification_tests": [
+        "Catat kode, status, bank, ECU, serta STFT dan LTFT yang tersedia; nilai positif berarti ECU menambah bahan bakar dan nilai negatif berarti mengurangi.",
+        "Minta mekanik menilai saluran udara, pengukuran campuran dan pasokan bahan bakar sesuai manual servis; jangan membuka saluran bahan bakar, menyemprot cairan, atau menyetel campuran sendiri."
+      ],
+      "recommended_action": "Minta pemeriksaan mekanik sesuai kendaraan. Ambang dan bobot aplikasi adalah draf rekayasa, bukan batas servis universal. Kode dan koreksi campuran tidak membuktikan pompa, injektor, atau sensor rusak. Peringatan keselamatan tetap berlaku walaupun tidak ada kode.",
+      "cost_category": "unknown",
+      "review_status": "needs_mechanic_verification",
+      "diagnostic": true
+    }
+  ]
+}

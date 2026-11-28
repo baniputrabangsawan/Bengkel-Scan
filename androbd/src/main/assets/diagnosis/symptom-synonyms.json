@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "rules": [
+    {
+      "kind": "symptom", "id": "normal_idle",
+      "phrases": ["langsam normal", "idle normal", "stasioner normal"],
+      "required_any": [], "excluded_any": [],
+      "explanation": "Putaran langsam disebut normal; ini pengamatan pengguna, bukan jaminan mesin sehat."
+    },
+    {
+      "kind": "symptom", "id": "belt_squeal",
+      "phrases": ["cit cit", "mencicit", "berdecit", "decit", "menderit"],
+      "required_any": ["mesin", "sabuk", "belt", "tali kipas"],
+      "excluded_any": ["rem", "ngerem", "mengerem", "pengereman", "direm"],
+      "explanation": "Decit dalam konteks mesin atau sabuk dipetakan sebagai petunjuk bunyi sabuk, bukan konfirmasi komponen rusak."
+    },
+    {
+      "kind": "symptom", "id": "brake_squeal",
+      "phrases": ["cit cit", "mencicit", "berdecit", "decit", "menderit"],
+      "required_any": ["rem", "ngerem", "mengerem", "pengereman", "direm"], "excluded_any": [],
+      "explanation": "Decit saat pengereman dipetakan sebagai bunyi decit rem, bukan gesekan kasar atau kepastian penyebab. Segera periksa rem."
+    },
+    {
+      "kind": "symptom", "id": "valvetrain_tick",
+      "phrases": ["tek tek", "tik tik", "ketukan klep", "klep berisik", "bunyi klep"],
+      "required_any": [], "excluded_any": [],
+      "explanation": "Ketukan ringan berulang dipetakan sebagai petunjuk bunyi mekanisme klep, bukan kepastian kerusakan klep."
+    },
+    {
+      "kind": "symptom", "id": "brake_grinding",
+      "phrases": ["gesekan logam kasar", "gesekan kasar", "gerinda", "gredeg kasar", "tergerus", "grek grek kasar"],
+      "required_any": ["rem", "ngerem", "mengerem", "pengereman", "direm"], "excluded_any": [],
+      "explanation": "Gesekan kasar dalam konteks pengereman dipetakan sebagai petunjuk gesekan rem; bukan diagnosis kampas atau cakram."
+    },
+    {
+      "kind": "symptom", "id": "wheel_bearing_hum",
+      "phrases": ["berdengung", "mendengung", "dengung", "gemuruh"],
+      "required_any": ["roda", "ban", "bearing", "laher"],
+      "excluded_any": ["power steering", "setir", "kemudi"],
+      "explanation": "Dengung dengan konteks roda dipetakan sebagai petunjuk bunyi area roda, bukan konfirmasi kerusakan bearing."
+    },
+    {
+      "kind": "symptom", "id": "power_steering_whine",
+      "phrases": ["mendengung", "berdengung", "dengung", "merengek", "mendenging"],
+      "required_any": ["power steering", "setir", "kemudi"], "excluded_any": [],
+      "explanation": "Dengung atau rengekan dalam konteks kemudi dipetakan sebagai petunjuk bunyi kemudi, bukan kepastian pompa rusak."
+    },
+    {
+      "kind": "symptom", "id": "background_noise",
+      "phrases": ["suara angin", "suara jalan", "suara obrolan", "suara radio"],
+      "required_any": [], "excluded_any": [],
+      "explanation": "Bunyi lingkungan disebut secara langsung; bukan petunjuk kerusakan komponen tertentu."
+    },
+    {
+      "kind": "symptom", "id": "detonation_pinging",
+      "phrases": ["ngelitik", "mengelitik", "pinging", "detonasi"],
+      "required_any": [], "excluded_any": [],
+      "explanation": "Istilah ngelitik dipetakan sebagai petunjuk bunyi pinging, bukan kepastian penyebab atau jenis bahan bakar."
+    },
+    {
+      "kind": "symptom", "id": "hiss",
+      "phrases": ["mendesis", "desis", "desisan"],
+      "required_any": [], "excluded_any": [],
+      "explanation": "Desis dilaporkan tanpa menyimpulkan sumber atau penyebab. Perjelas apakah ada uap, bau manis, atau suhu mesin naik."
+    },
+    {
+      "kind": "symptom", "id": "unknown",
+      "phrases": ["klotak", "gredeg", "cit cit", "mencicit", "berdecit", "decit", "menderit", "berdengung", "mendengung", "dengung", "gemuruh", "merengek", "mendenging", "mendesis", "desis", "desisan", "gesekan logam", "gesekan kasar", "gerinda", "tergerus", "grek grek"],
+      "required_any": [], "excluded_any": [],
+      "explanation": "Bunyi ini memerlukan penjelasan tambahan tentang lokasi dan kondisi; bukan diagnosis komponen."
+    },
+    {
+      "kind": "trigger", "id": "cold", "phrases": ["dingin"],
+      "required_any": [], "excluded_any": [], "explanation": "Kondisi dingin disebut secara langsung."
+    },
+    {
+      "kind": "trigger", "id": "warm", "phrases": ["panas", "hangat"],
+      "required_any": [], "excluded_any": [], "explanation": "Kondisi panas atau hangat disebut secara langsung."
+    },
+    {
+      "kind": "trigger", "id": "idle", "phrases": ["langsam", "idle", "stasioner", "mesin langsam"],
+      "required_any": [], "excluded_any": [], "explanation": "Kondisi langsam disebut secara langsung."
+    },
+    {
+      "kind": "trigger", "id": "throttle", "phrases": ["digas", "injak gas", "menginjak gas", "gas dibuka", "akselerasi"],
+      "required_any": [], "excluded_any": [], "explanation": "Kondisi menambah gas disebut secara langsung."
+    },
+    {
+      "kind": "trigger", "id": "braking", "phrases": ["ngerem", "mengerem", "pengereman", "direm"],
+      "required_any": [], "excluded_any": [], "explanation": "Kondisi pengereman disebut secara langsung."
+    },
+    {
+      "kind": "trigger", "id": "turning", "phrases": ["belok", "berbelok", "membelok", "putar setir", "memutar setir"],
+      "required_any": [], "excluded_any": [], "explanation": "Kondisi berbelok disebut secara langsung."
+    },
+    {
+      "kind": "location", "id": "front", "phrases": ["di depan", "dari depan", "roda depan"],
+      "required_any": [], "excluded_any": [], "explanation": "Lokasi depan disebut secara langsung."
+    },
+    {
+      "kind": "location", "id": "rear", "phrases": ["di belakang", "dari belakang", "roda belakang"],
+      "required_any": [], "excluded_any": [], "explanation": "Lokasi belakang disebut secara langsung."
+    },
+    {
+      "kind": "location", "id": "wheel", "phrases": ["di roda", "dari roda", "roda depan", "roda belakang", "roda berdengung", "roda mendengung", "roda oblak", "di ban", "dari ban"],
+      "required_any": [], "excluded_any": [], "explanation": "Lokasi area roda disebut secara langsung."
+    },
+    {
+      "kind": "location", "id": "under_hood", "phrases": ["ruang mesin", "bawah kap", "dalam kap"],
+      "required_any": [], "excluded_any": [], "explanation": "Lokasi ruang mesin disebut secara langsung."
+    },
+    {
+      "kind": "location", "id": "cabin", "phrases": ["kabin", "dalam mobil"],
+      "required_any": [], "excluded_any": [], "explanation": "Lokasi kabin disebut secara langsung."
+    },
+    {
+      "kind": "flag", "id": "heavy_engine_knock", "phrases": ["ketukan mesin keras", "mesin mengetuk keras", "ketukan mesin berat", "mesin knocking keras"],
+      "required_any": [], "excluded_any": [], "explanation": "Ketukan mesin keras dilaporkan. Utamakan keselamatan dan minta pemeriksaan langsung."
+    },
+    {
+      "kind": "flag", "id": "overheating", "phrases": ["overheat", "overheating", "mesin terlalu panas", "suhu mesin berlebih"],
+      "required_any": [], "excluded_any": [], "explanation": "Panas mesin berlebihan dilaporkan. Utamakan keselamatan dan minta pemeriksaan langsung."
+    },
+    {
+      "kind": "flag", "id": "brake_change", "phrases": ["rem tidak pakem", "rem nggak pakem", "rem gak pakem", "rem kurang pakem", "rem blong", "pedal rem ambles", "rem berubah", "daya pengereman berkurang"],
+      "required_any": [], "excluded_any": [], "explanation": "Perubahan kemampuan rem dilaporkan. Jangan mengandalkan pemetaan bunyi untuk menyatakan rem aman."
+    },
+    {
+      "kind": "flag", "id": "steering_change", "phrases": ["setir mendadak berat", "kemudi mendadak berat", "setir berubah berat", "kemudi berubah berat", "setir macet", "kemudi macet"],
+      "required_any": [], "excluded_any": [], "explanation": "Perubahan kemudi dilaporkan. Utamakan keselamatan dan minta pemeriksaan langsung."
+    },
+    {
+      "kind": "flag", "id": "wheel_play", "phrases": ["roda oblak", "roda goyang", "roda longgar"],
+      "required_any": [], "excluded_any": [], "explanation": "Kelonggaran roda dilaporkan. Utamakan keselamatan dan minta pemeriksaan langsung."
+    },
+    {
+      "kind": "flag", "id": "fades_when_warm", "phrases": ["hilang saat panas", "hilang setelah mesin hangat", "hilang saat mesin panas", "hilang waktu panas", "hilang ketika panas", "hilang setelah panas", "hilang setelah hangat", "hilang saat hangat", "berkurang saat panas"],
+      "required_any": [], "excluded_any": [], "explanation": "Bunyi disebut mereda ketika hangat; bukan bukti bahwa penyebabnya aman."
+    },
+    {
+      "kind": "temperature_pattern", "id": "cold_only",
+      "phrases": ["hanya saat dingin", "cuma saat dingin", "hanya ketika dingin", "hanya saat mesin dingin", "cuma saat mesin dingin", "hanya waktu dingin", "hanya ketika mesin dingin", "saat dingin saja", "saat mesin dingin saja"],
+      "required_any": [], "excluded_any": [],
+      "explanation": "Bunyi disebut hanya muncul saat dingin; ini pola pengamatan, bukan konfirmasi penyebab."
+    },
+    {
+      "kind": "flag", "id": "recent_debris", "phrases": ["habis lewat kerikil", "setelah lewat kerikil", "baru kena kerikil", "ada kerikil", "setelah kena pasir", "ada benda asing"],
+      "required_any": [], "excluded_any": [], "explanation": "Paparan kerikil atau benda asing disebut secara langsung; bukan konfirmasi penyebab bunyi."
+    },
+    {
+      "kind": "flag", "id": "steam",
+      "phrases": ["uap dari ruang mesin", "uap dari kap", "uap dari bawah kap", "keluar uap", "ada uap"],
+      "required_any": [], "excluded_any": [],
+      "explanation": "Uap dilaporkan. Berhenti di tempat aman dan minta bantuan; jangan membuka tutup sistem pendingin saat panas. Sumber uap belum dipastikan."
+    },
+    {
+      "kind": "flag", "id": "sweet_smell",
+      "phrases": ["bau manis", "berbau manis", "aroma manis"],
+      "required_any": [], "excluded_any": [],
+      "explanation": "Bau manis dilaporkan; ini pengamatan tambahan, bukan kepastian sumber atau penyebab."
+    },
+    {
+      "kind": "flag", "id": "temperature_rising",
+      "phrases": ["suhu mesin naik", "suhu terus naik", "temperatur mesin naik", "indikator suhu naik", "suhu meningkat"],
+      "required_any": [], "excluded_any": [],
+      "explanation": "Suhu meningkat dilaporkan. Berhenti di tempat aman dan minta bantuan; penyebab belum dipastikan."
+    },
+    {
+      "kind": "flag", "id": "engine_stalled",
+      "phrases": ["mesin mendadak mati", "mesin tiba tiba mati", "mesin mati", "mesin mogok"],
+      "required_any": [], "excluded_any": [],
+      "explanation": "Mesin mati dilaporkan; kaitannya dengan perubahan rem atau kemudi belum dipastikan dan bergantung pada sistem kendaraan."
+    },
+    {
+      "kind": "flag", "id": "tyre_recent_change", "phrases": ["baru ganti ban", "habis ganti ban", "setelah ganti ban", "baru mengganti ban"],
+      "required_any": [], "excluded_any": [], "explanation": "Penggantian ban baru disebut secara langsung; bukan konfirmasi penyebab bunyi."
+    }
+  ]
+}

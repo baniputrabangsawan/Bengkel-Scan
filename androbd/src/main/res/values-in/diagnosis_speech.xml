@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="speech_unavailable">Pengenalan suara di perangkat tidak tersedia. Fitur ini memerlukan Android 12 atau lebih baru dan layanan pengenal di perangkat. Silakan ketik keluhan.</string>
+    <string name="speech_permission_required">Izin mikrofon belum diberikan. Izinkan mikrofon melalui pengaturan aplikasi untuk menggunakan suara, atau ketik keluhan.</string>
+    <string name="speech_checking_language">Memeriksa ketersediaan Bahasa Indonesia di perangkat. Anda tetap dapat mengetik keluhan.</string>
+    <string name="speech_starting">Menyiapkan mikrofon untuk Bahasa Indonesia di perangkat. Tunggu hingga siap, atau ketik keluhan.</string>
+    <string name="speech_starting_unverified">Dukungan Bahasa Indonesia belum dapat diperiksa. Mencoba pengenal di perangkat saja; jika gagal, ketik keluhan.</string>
+    <string name="speech_listening">Mikrofon aktif. Ucapkan keluhan dalam Bahasa Indonesia, lalu tekan berhenti setelah selesai.</string>
+    <string name="speech_processing">Menunggu hasil pengenalan di perangkat. Anda dapat membatalkan dan mengetik keluhan.</string>
+    <string name="speech_cancelled">Masukan suara dibatalkan. Silakan ketik keluhan atau mulai lagi.</string>
+    <string name="speech_transcript_ready">Teks ucapan tersedia. Periksa dan perbaiki teks sebelum melanjutkan; hasil ini bukan diagnosis.</string>
+    <string name="speech_language_unsupported">Layanan pengenal di perangkat tidak mendukung Bahasa Indonesia (id-ID). Silakan ketik keluhan.</string>
+    <string name="speech_language_unavailable">Bahasa Indonesia (id-ID) belum siap digunakan di perangkat. Pasang paket bahasa melalui pengaturan pengenal suara jika tersedia, lalu coba lagi, atau ketik keluhan. Aplikasi tidak mengunduh paket bahasa.</string>
+    <string name="speech_network_timeout">Layanan pengenal di perangkat melaporkan batas waktu jaringan. Aplikasi tidak beralih ke layanan daring. Silakan ketik keluhan.</string>
+    <string name="speech_network_error">Layanan pengenal di perangkat melaporkan masalah jaringan. Aplikasi tidak beralih ke layanan daring. Silakan ketik keluhan.</string>
+    <string name="speech_no_speech">Ucapan belum terdengar. Coba lagi dengan berbicara dekat mikrofon di tempat tenang, atau ketik keluhan.</string>
+    <string name="speech_no_match">Ucapan belum dapat dikenali. Coba lagi dengan kalimat yang lebih jelas, atau ketik keluhan.</string>
+    <string name="speech_busy">Pengenal suara sedang sibuk. Tunggu sejenak sebelum mencoba lagi, atau ketik keluhan.</string>
+    <string name="speech_audio_error">Mikrofon tidak dapat digunakan. Tutup aplikasi lain yang memakai mikrofon dan periksa akses mikrofon perangkat, atau ketik keluhan.</string>
+    <string name="speech_client_error">Masukan suara tidak dapat dijalankan. Mulai lagi secara manual, atau ketik keluhan.</string>
+    <string name="speech_server_error">Layanan pengenal di perangkat mengalami kesalahan. Coba lagi nanti, atau ketik keluhan. Tidak ada pengalihan ke layanan daring.</string>
+    <string name="speech_disconnected">Sambungan ke layanan pengenal di perangkat terputus. Mulai lagi secara manual, atau ketik keluhan.</string>
+    <string name="speech_too_many_requests">Terlalu banyak permintaan pengenalan suara. Tunggu sebelum mencoba lagi, atau ketik keluhan.</string>
+    <string name="speech_support_unavailable">Kemampuan layanan pengenal di perangkat tidak dapat diperiksa. Silakan ketik keluhan; aplikasi tidak mengunduh paket atau memakai layanan daring.</string>
+    <string name="speech_unknown_error">Pengenalan suara gagal. Silakan ketik keluhan atau coba lagi secara manual.</string>
+    <string name="speech_session_timeout">Batas sesi suara tercapai. Mikrofon dihentikan; silakan ketik keluhan atau mulai lagi secara manual.</string>
+</resources>

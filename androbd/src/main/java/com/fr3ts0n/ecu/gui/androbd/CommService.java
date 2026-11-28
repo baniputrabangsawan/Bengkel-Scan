@@ -62,7 +62,7 @@ public abstract class CommService
 
 	static final Logger log = Logger.getLogger(TAG);
 
-	public static final ElmProt elm = new ElmProt();
+	public static final ElmProt elm = new TransportElmProtocol();
 
 	Context mContext;
 	private Handler mHandler = null;

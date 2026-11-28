@@ -16,6 +16,19 @@
         <item name="android:scrollbars">none</item>
         <item name="android:scrollbarStyle">insideOverlay</item>
         <item name="android:scrollbarFadeDuration">0</item>
+        <item name="android:scrollbarThumbVertical">@null</item>
+        <item name="android:scrollbarThumbHorizontal">@null</item>
+        <item name="android:scrollbarTrackVertical">@null</item>
+        <item name="android:scrollbarTrackHorizontal">@null</item>
+        <item name="android:scrollViewStyle">@style/UiScrollView</item>
+        <item name="android:horizontalScrollViewStyle">@style/UiHorizontalScrollView</item>
+        <item name="android:listViewStyle">@style/UiListView</item>
+        <item name="textInputStyle">@style/UiField</item>
+        <item name="textInputOutlinedStyle">@style/UiField</item>
+        <item name="textInputFilledStyle">@style/UiField</item>
+        <item name="android:spinnerStyle">@style/UiSpinner</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipStrokeColor">@android:color/transparent</item>
 
         <item name="colorPrimary">@color/workshop_primary</item>
         <item name="colorOnPrimary">@color/workshop_on_primary</item>

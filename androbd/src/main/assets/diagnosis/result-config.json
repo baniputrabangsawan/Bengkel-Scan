@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "confident_probability": 0.75,
+  "noise_probability": 0.6,
+  "conflict_probability": 0.6,
+  "stop_probability": 0.2,
+  "consent_text_version": "feedback-export-id-v1"
+}

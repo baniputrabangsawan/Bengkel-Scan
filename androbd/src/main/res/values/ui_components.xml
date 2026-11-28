@@ -41,8 +41,8 @@
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
         <item name="cornerRadius">@dimen/ui_card_corner</item>
-        <item name="strokeColor">@color/workshop_outline</item>
-        <item name="strokeWidth">1dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="backgroundTint">@color/workshop_surface_variant</item>
         <item name="android:textColor">@color/workshop_primary</item>
     </style>
 
@@ -81,7 +81,6 @@
         <item name="cardElevation">0dp</item>
         <item name="cardUseCompatPadding">false</item>
         <item name="cardPreventCornerOverlap">false</item>
-        <item name="strokeColor">@color/workshop_outline</item>
         <item name="strokeWidth">@dimen/ui_card_stroke</item>
     </style>
 
@@ -93,15 +92,16 @@
     </style>
 
     <!-- ============================ Text fields ============================ -->
-
-    <style name="UiField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+    <!-- Filled, not outlined: text fields carry no stroke on any screen or dialog. -->
+    <style name="UiField" parent="Widget.Material3.TextInputLayout.FilledBox">
         <item name="boxCornerRadiusTopStart">@dimen/ui_card_corner</item>
         <item name="boxCornerRadiusTopEnd">@dimen/ui_card_corner</item>
         <item name="boxCornerRadiusBottomStart">@dimen/ui_card_corner</item>
         <item name="boxCornerRadiusBottomEnd">@dimen/ui_card_corner</item>
-        <item name="boxStrokeWidth">1dp</item>
-        <item name="boxStrokeWidthFocused">2dp</item>
-        <item name="boxStrokeColor">@color/workshop_outline</item>
+        <item name="boxBackgroundColor">@color/ui_field_surface</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxStrokeColor">@android:color/transparent</item>
         <item name="hintTextColor">@color/workshop_secondary_text</item>
         <item name="android:textColorHint">@color/workshop_secondary_text</item>
         <item name="helperTextTextColor">@color/workshop_secondary_text</item>
@@ -167,6 +167,7 @@
 
     <!-- Applied to the scrolling root of every screen: one padding rule, one page colour. -->
     <style name="UiScreen">
+        <item name="android:scrollbars">none</item>
         <item name="android:background">@color/workshop_page_background</item>
         <item name="android:paddingStart">@dimen/ui_screen_padding_horizontal</item>
         <item name="android:paddingEnd">@dimen/ui_screen_padding_horizontal</item>
@@ -190,5 +191,37 @@
         <item name="android:paddingStart">@dimen/ui_space_4</item>
         <item name="android:paddingEnd">@dimen/ui_space_4</item>
         <item name="android:accessibilityLiveRegion">polite</item>
+    </style>
+
+    <!-- Widget defaults also cover scroll containers and lists created in code or dialogs. -->
+    <style name="UiScrollView" parent="@android:style/Widget.ScrollView">
+        <item name="android:scrollbars">none</item>
+        <item name="android:scrollbarThumbVertical">@null</item>
+        <item name="android:scrollbarTrackVertical">@null</item>
+    </style>
+
+    <style name="UiHorizontalScrollView" parent="">
+        <item name="android:scrollbars">none</item>
+        <item name="android:scrollbarThumbHorizontal">@null</item>
+        <item name="android:scrollbarTrackHorizontal">@null</item>
+    </style>
+
+    <!-- Rounded fill and a chevron replace the framework underline. -->
+    <style name="UiSpinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/ui_spinner_background</item>
+        <item name="android:paddingStart">@dimen/ui_space_3</item>
+        <item name="android:paddingEnd">@dimen/ui_space_3</item>
+        <item name="android:minHeight">@dimen/ui_touch_primary</item>
+        <item name="android:popupBackground">@color/workshop_surface</item>
+    </style>
+
+    <style name="UiListView" parent="@android:style/Widget.ListView">
+        <item name="android:scrollbars">none</item>
+        <item name="android:scrollbarThumbVertical">@null</item>
+        <item name="android:scrollbarThumbHorizontal">@null</item>
+        <item name="android:scrollbarTrackVertical">@null</item>
+        <item name="android:scrollbarTrackHorizontal">@null</item>
+        <item name="android:fastScrollEnabled">false</item>
+        <item name="android:fastScrollAlwaysVisible">false</item>
     </style>
 </resources>

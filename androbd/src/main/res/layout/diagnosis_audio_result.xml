@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical"
+    android:background="@color/workshop_page_background">
+    <ScrollView android:id="@+id/result_scroll" android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout style="@style/UiScreen" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:id="@+id/result_example" style="@style/UiChip.Warning" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:visibility="gone" android:maxLines="100" android:text="@string/result_example" />
+            <TextView android:id="@+id/result_outcome_title" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:accessibilityHeading="true" android:textAppearance="@style/UiText.Section" />
+            <TextView android:id="@+id/result_outcome_message" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/UiText.Body" android:accessibilityLiveRegion="polite" />
+            <TextView android:id="@+id/result_severity" style="@style/UiChip" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:drawablePadding="@dimen/ui_space_2" />
+            <TextView android:id="@+id/result_stop_warning" style="@style/UiChip.Danger" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:accessibilityHeading="true" android:accessibilityLiveRegion="assertive"
+                android:visibility="gone" android:maxLines="100" android:drawablePadding="@dimen/ui_space_2" />
+            <TextView android:id="@+id/result_probability_notice" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/UiText.Meta" android:text="@string/result_probability_unavailable" />
+            <LinearLayout android:id="@+id/result_causes" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" />
+            <include layout="@layout/diagnosis_obd_panel" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/result_nearby" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/result_nearby" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textAppearance="@style/UiText.Meta"
+                android:text="@string/result_nearby_privacy" />
+            <TextView style="@style/UiSection" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/UiText.Section" android:accessibilityHeading="true" android:text="@string/result_description_heading" />
+            <com.google.android.material.textfield.TextInputLayout style="@style/UiField.Multiline"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/result_description_hint">
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/result_description" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:inputType="textMultiLine|textNoSuggestions" android:gravity="top"
+                    android:minLines="2" android:maxLength="4000" android:saveEnabled="false" android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.button.MaterialButton android:id="@+id/result_review_description" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/result_review_description" />
+            <TextView style="@style/UiSection" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/UiText.Section" android:accessibilityHeading="true" android:text="@string/result_feedback_heading" />
+            <TextView android:id="@+id/result_feedback_status" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/UiText.Body" />
+            <com.google.android.material.checkbox.MaterialCheckBox android:id="@+id/result_mechanic_verified" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary" android:checked="false"
+                android:saveEnabled="false" android:text="@string/result_mechanic_verified" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/result_feedback_correct" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/result_feedback_correct" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/result_feedback_incorrect" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/result_feedback_incorrect" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/result_feedback_actual" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/result_feedback_actual" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textAppearance="@style/UiText.Meta"
+                android:text="@string/result_consent_disclosure" />
+            <com.google.android.material.checkbox.MaterialCheckBox android:id="@+id/result_export_consent" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:minHeight="@dimen/ui_touch_primary" android:saveEnabled="false"
+                android:checked="false" android:text="@string/result_export_consent" />
+            <TextView android:id="@+id/result_consent_version" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/UiText.Meta" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/result_export" style="@style/UiButton.Secondary"
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:enabled="false" android:text="@string/result_export" />
+            <TextView android:id="@+id/result_notice" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textAppearance="@style/UiText.Body" android:accessibilityLiveRegion="polite" />
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/ui_space_3">
+        <ProgressBar android:id="@+id/result_loading" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <TextView android:id="@+id/result_disclaimer" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="@string/result_disclaimer" android:textAppearance="@style/UiText.Meta" />
+    </LinearLayout>
+</LinearLayout>
